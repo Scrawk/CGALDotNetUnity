@@ -6,6 +6,7 @@ using UnityEngine;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
+using Common.Unity.Utility;
 
 namespace Common.VisualTest
 {
@@ -19,7 +20,7 @@ namespace Common.VisualTest
 
         private void Start()
         {
-            Common.Unity.Utility.ConsoleRedirect.Redirect();
+            ConsoleRedirect.Redirect();
         }
 
         protected override void OnPolygonComplete()
