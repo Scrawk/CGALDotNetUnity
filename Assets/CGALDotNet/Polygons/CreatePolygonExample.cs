@@ -16,6 +16,8 @@ namespace Common.VisualTest
 
         private CGAL_ORIENTED_SIDE orientedSide;
 
+        private bool containsPoint;
+
         private bool isSimple;
 
         private Point2d? point;
@@ -23,7 +25,9 @@ namespace Common.VisualTest
         protected override void OnPolygonComplete()
         {
             polygon = new Polygon2_EIK(Points.ToArray());
-            isSimple = polygon.IsSimple();
+            isSimple = polygon.IsSimple;
+
+            AddPolygon(polygon, isSimple ? Color.green : Color.red, Color.yellow);
         }
 
         protected override void OnPolygonCleared()
@@ -38,22 +42,22 @@ namespace Common.VisualTest
             {
                 this.point = point;
                 orientedSide = polygon.OrientedSide(point);
+                containsPoint = polygon.ContainsPoint(point);
+                SetPoint(this.point.Value, Color.blue);
             }
         }
 
-        protected override void OnPostRender()
+        private void OnPostRender()
         {
 
             if (!MadePolygon)
             {
-                base.OnPostRender();
+                DrawInput();
             }
             else
             {
-                DrawPolygon(polygon, Color.blue, Color.yellow);
-
-                if (point != null)
-                    DrawPoint(point.Value, Color.green, 0.02f);
+                DrawPolygons();
+                DrawPoint();
             }
 
         }
@@ -78,12 +82,15 @@ namespace Common.VisualTest
 
                 if (isSimple)
                 {
-                    GUI.Label(new Rect(10, 70, textLen, textHeight), "Is Convex = " + polygon.IsConvex());
-                    GUI.Label(new Rect(10, 90, textLen, textHeight), "Area = " + polygon.Area());
-                    GUI.Label(new Rect(10, 110, textLen, textHeight), "Orientation = " + polygon.Orientation());
+                    GUI.Label(new Rect(10, 70, textLen, textHeight), "Is Convex = " + polygon.FindIfConvex());
+                    GUI.Label(new Rect(10, 90, textLen, textHeight), "Area = " + polygon.FindArea());
+                    GUI.Label(new Rect(10, 110, textLen, textHeight), "Orientation = " + polygon.FindOrientation());
 
                     if (point != null)
+                    {
                         GUI.Label(new Rect(10, 130, textLen, textHeight), "Point oriented side = " + orientedSide);
+                        GUI.Label(new Rect(10, 150, textLen, textHeight), "Contains point = " + containsPoint);
+                    }
                     else
                         GUI.Label(new Rect(10, 130, textLen, textHeight), "Click to test point oriented side.");
                 }

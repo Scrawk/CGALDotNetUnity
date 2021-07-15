@@ -33,20 +33,20 @@ namespace Common.Unity.Drawing
 
             if (Orientation == DRAW_ORIENTATION.XY)
             {
-                m_vertices.Add(a.xy01());
-                m_vertices.Add(b.xy01());
-                m_vertices.Add(c.xy01());
+                Vertices.Add(a.xy01());
+                Vertices.Add(b.xy01());
+                Vertices.Add(c.xy01());
             }
             else if (Orientation == DRAW_ORIENTATION.XZ)
             {
-                m_vertices.Add(a.x0y1());
-                m_vertices.Add(b.x0y1());
-                m_vertices.Add(c.x0y1());
+                Vertices.Add(a.x0y1());
+                Vertices.Add(b.x0y1());
+                Vertices.Add(c.x0y1());
             }
 
-            m_colors.Add(Color);
-            m_colors.Add(Color);
-            m_colors.Add(Color);
+            Colors.Add(Color);
+            Colors.Add(Color);
+            Colors.Add(Color);
         }
 
         public  void Load(IList<Vector2> vertices, IList<int> indices = null)
@@ -56,11 +56,11 @@ namespace Common.Unity.Drawing
             foreach (var v in vertices)
             {
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    m_vertices.Add(v.xy01());
+                    Vertices.Add(v.xy01());
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    m_vertices.Add(v.x0y1());
+                    Vertices.Add(v.x0y1());
    
-                m_colors.Add(Color);
+                Colors.Add(Color);
             }
         }
 
@@ -68,13 +68,13 @@ namespace Common.Unity.Drawing
         {
             SetFaceIndices(3, null);
 
-            m_vertices.Add(a);
-            m_vertices.Add(b);
-            m_vertices.Add(c);
+            Vertices.Add(a);
+            Vertices.Add(b);
+            Vertices.Add(c);
 
-            m_colors.Add(Color);
-            m_colors.Add(Color);
-            m_colors.Add(Color);
+            Colors.Add(Color);
+            Colors.Add(Color);
+            Colors.Add(Color);
         }
 
         public void Load(IList<Vector3> vertices, IList<int> indices = null)
@@ -83,8 +83,8 @@ namespace Common.Unity.Drawing
 
             foreach (var v in vertices)
             {
-                m_vertices.Add(v);
-                m_colors.Add(Color);
+                Vertices.Add(v);
+                Colors.Add(Color);
             }
         }
 
@@ -117,28 +117,28 @@ namespace Common.Unity.Drawing
             Material.SetPass(0);
             GL.Begin(GL.QUADS);
 
-            int vertexCount = m_vertices.Count;
+            int vertexCount = Vertices.Count;
 
-            for (int i = 0; i < m_indices.Count / stride; i++)
+            for (int i = 0; i < Indices.Count / stride; i++)
             {
-                int i0 = m_indices[i * stride + 0];
-                int i1 = m_indices[i * stride + 1];
-                int i2 = m_indices[i * stride + 2];
-                int i3 = m_indices[i * stride + 3];
+                int i0 = Indices[i * stride + 0];
+                int i1 = Indices[i * stride + 1];
+                int i2 = Indices[i * stride + 2];
+                int i3 = Indices[i * stride + 3];
 
                 if (i0 < 0 || i0 >= vertexCount) continue;
                 if (i1 < 0 || i1 >= vertexCount) continue;
                 if (i2 < 0 || i2 >= vertexCount) continue;
                 if (i3 < 0 || i3 >= vertexCount) continue;
 
-                GL.Color(m_colors[i0]);
-                GL.Vertex(m_vertices[i0]);
-                GL.Color(m_colors[i1]);
-                GL.Vertex(m_vertices[i1]);
-                GL.Color(m_colors[i2]);
-                GL.Vertex(m_vertices[i2]);
-                GL.Color(m_colors[i3]);
-                GL.Vertex(m_vertices[i3]);
+                GL.Color(Colors[i0]);
+                GL.Vertex(Vertices[i0]);
+                GL.Color(Colors[i1]);
+                GL.Vertex(Vertices[i1]);
+                GL.Color(Colors[i2]);
+                GL.Vertex(Vertices[i2]);
+                GL.Color(Colors[i3]);
+                GL.Vertex(Vertices[i3]);
             }
 
             GL.End();
@@ -160,24 +160,24 @@ namespace Common.Unity.Drawing
             GL.Begin(GL.TRIANGLES);
             GL.Color(Color);
 
-            int vertexCount = m_vertices.Count;
+            int vertexCount = Vertices.Count;
 
-            for (int i = 0; i < m_indices.Count / stride; i++)
+            for (int i = 0; i < Indices.Count / stride; i++)
             {
-                int i0 = m_indices[i * stride + 0];
-                int i1 = m_indices[i * stride + 1];
-                int i2 = m_indices[i * stride + 2];
+                int i0 = Indices[i * stride + 0];
+                int i1 = Indices[i * stride + 1];
+                int i2 = Indices[i * stride + 2];
 
                 if (i0 < 0 || i0 >= vertexCount) continue;
                 if (i1 < 0 || i1 >= vertexCount) continue;
                 if (i2 < 0 || i2 >= vertexCount) continue;
 
-                GL.Color(m_colors[i0]);
-                GL.Vertex(m_vertices[i0]);
-                GL.Color(m_colors[i1]);
-                GL.Vertex(m_vertices[i1]);
-                GL.Color(m_colors[i2]);
-                GL.Vertex(m_vertices[i2]);
+                GL.Color(Colors[i0]);
+                GL.Vertex(Vertices[i0]);
+                GL.Color(Colors[i1]);
+                GL.Vertex(Vertices[i1]);
+                GL.Color(Colors[i2]);
+                GL.Vertex(Vertices[i2]);
             }
 
             GL.End();

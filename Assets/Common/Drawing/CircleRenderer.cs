@@ -37,18 +37,18 @@ namespace Common.Unity.Drawing
             m_radii.Add(radius);
 
             if (Orientation == DRAW_ORIENTATION.XY)
-                m_vertices.Add(position.xy01());
+                Vertices.Add(position.xy01());
             else if (Orientation == DRAW_ORIENTATION.XZ)
-                m_vertices.Add(position.x0y1());
+                Vertices.Add(position.x0y1());
 
-            m_colors.Add(Color);
+            Colors.Add(Color);
         }
 
         public void Load(Vector3 position, float radius)
         {
             m_radii.Add(radius);
-            m_vertices.Add(position);
-            m_colors.Add(Color);
+            Vertices.Add(position);
+            Colors.Add(Color);
         }
 
         public override void Draw(Camera camera, Matrix4x4 localToWorld)
@@ -62,10 +62,10 @@ namespace Common.Unity.Drawing
             Material.SetPass(0);
             GL.Begin(GL.LINES);
 
-            for (int j = 0; j < m_vertices.Count; j++)
+            for (int j = 0; j < Vertices.Count; j++)
             {
-                Vector4 center = m_vertices[j];
-                Color color = m_colors[j];
+                Vector4 center = Vertices[j];
+                Color color = Colors[j];
                 float radius = m_radii[j];
                 if (radius <= 0) continue;
 

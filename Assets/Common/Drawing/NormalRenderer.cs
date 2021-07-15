@@ -35,11 +35,11 @@ namespace Common.Unity.Drawing
             foreach (var v in vertices)
             {
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    m_vertices.Add(v);
+                    Vertices.Add(v);
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    m_vertices.Add(new Vector4(v.x, 0, v.y, 1));
+                    Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-                m_colors.Add(Color);
+                Colors.Add(Color);
             }
 
             foreach (var n in normals)
@@ -55,8 +55,8 @@ namespace Common.Unity.Drawing
         {
             foreach (var v in vertices)
             {
-                m_vertices.Add(v);
-                m_colors.Add(Color);
+                Vertices.Add(v);
+                Colors.Add(Color);
             }
 
             foreach (var n in normals)
@@ -74,12 +74,12 @@ namespace Common.Unity.Drawing
             Material.SetPass(0);
             GL.Begin(GL.LINES);
 
-            int vertexCount = m_vertices.Count;
+            int vertexCount = Vertices.Count;
             for (int i = 0; i < vertexCount; i++)
             {
-                GL.Color(m_colors[i]);
-                GL.Vertex(m_vertices[i]);
-                GL.Vertex(m_vertices[i] + m_normals[i] * Length);
+                GL.Color(Colors[i]);
+                GL.Vertex(Vertices[i]);
+                GL.Vertex(Vertices[i] + m_normals[i] * Length);
             }
 
             GL.End();

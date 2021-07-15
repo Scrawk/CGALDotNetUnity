@@ -16,29 +16,77 @@ namespace Common.VisualTest
 
         private Polygon2_EEK polygon1, polygon2;
 
-        private PolygonWithHoles2_EEK result;
+        private List<PolygonWithHoles2_EEK> result;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             ConsoleRedirect.Redirect();
+            result = new List<PolygonWithHoles2_EEK>();
         }
 
         protected override void OnPolygonComplete()
         {
             if (polygon1 == null)
             {
-                polygon1 = new Polygon2_EEK(Points.ToArray());
+                var input = CreateInputPolygon();
+
                 ResetInput();
+                ClearRenderers();
+
+                if (input != null)
+                {
+                    polygon1 = input;
+                    AddPolygon(polygon1, Color.green, Color.yellow);
+                }
             }
             else if (polygon2 == null)
             {
-                polygon2 = new Polygon2_EEK(Points.ToArray());
+                var input = CreateInputPolygon();
 
-                PolygonBoolean2.Join(polygon1, polygon2, out result);
+                ResetInput();
+                ClearRenderers();
 
-                if (result != null)
-                    result.Print();
+                if (input != null)
+                {
+                    polygon2 = input;
+
+                    result.Clear();
+                    PolygonBoolean2.Intersect(polygon1, polygon2, result);
+
+                    foreach (var pwh in result)
+                    {
+                        var polygons = pwh.ToList();
+
+                        foreach (var poly in polygons)
+                        {
+                            poly.Print();
+                            AddPolygon(poly, Color.green, Color.yellow);
+                        }
+                    }
+                }
   
+            }
+            else
+            {
+                ResetInput();
+            }
+        }
+
+        private Polygon2_EEK CreateInputPolygon()
+        {
+            var input = new Polygon2_EEK(Points.ToArray());
+
+            if (input.IsSimple)
+            {
+                if (input.IsClockWise)
+                    input.Reverse();
+
+                return input;
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -48,12 +96,10 @@ namespace Common.VisualTest
             polygon2 = null;
         }
 
-        protected override void OnPostRender()
+        private void OnPostRender()
         {
-            base.OnPostRender();
-
-            DrawPolygon(polygon1, Color.blue, Color.yellow);
-            DrawPolygon(polygon2, Color.green, Color.yellow);
+            DrawInput();
+            DrawPolygons();
         }
 
         protected void OnGUI()

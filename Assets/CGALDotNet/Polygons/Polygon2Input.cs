@@ -20,7 +20,7 @@ namespace Common.VisualTest
 
         private List<int> Indices { get; set; }
 
-        protected Color LineColor = Color.red;
+        protected Color LineColor = Color.blue;
 
         protected bool MadePolygon { get; set; }
 
@@ -35,6 +35,17 @@ namespace Common.VisualTest
             Color.green,
             Color.yellow
         };
+
+        private List<BaseRenderer> PolygonRenderers { get; set; }
+
+        private VertexRenderer PointRenderer { get; set; }
+
+        protected virtual void Start()
+        {
+            PolygonRenderers = new List<BaseRenderer>();
+            PointRenderer = new VertexRenderer(0.02f);
+            PointRenderer.Orientation = DRAW_ORIENTATION.XY;
+        }
 
         protected virtual void OnPolygonComplete()
         {
@@ -64,6 +75,7 @@ namespace Common.VisualTest
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 ResetInput();
+                ClearRenderers();
                 OnPolygonCleared();
             }
             else if (!MadePolygon)
@@ -101,10 +113,8 @@ namespace Common.VisualTest
 
         }
 
-        protected virtual void OnPostRender()
+        protected void DrawInput()
         {
-            Camera cam = Camera.current;
-            if (cam == null) return;
             if (Points == null) return;
             if (Indices == null) return;
 
@@ -123,7 +133,26 @@ namespace Common.VisualTest
             points.Draw();
         }
 
-        protected void DrawPolygon(Polygon2 polygon, Color lineColor, Color vertColor)
+        protected void DrawPolygons()
+        {
+            foreach (var renderer in PolygonRenderers)
+                renderer.Draw();
+        }
+
+        protected void DrawPoint()
+        {
+            PointRenderer.Draw();
+        }
+
+        protected void AddPolygon(PolygonWithHoles2_EEK polygon, Color lineColor, Color vertColor)
+        {
+            if (polygon == null) return;
+
+            foreach (var poly in polygon.ToList())
+                AddPolygon(poly, lineColor, vertColor);
+        }
+
+        protected void AddPolygon(Polygon2 polygon, Color lineColor, Color vertColor)
         {
             if (polygon == null) return;
             int count = polygon.Count;
@@ -133,24 +162,19 @@ namespace Common.VisualTest
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.Color = lineColor;
             lines.Load(ToVector2(polygon, count + 1));
+            PolygonRenderers.Add(lines);
 
             var points = new VertexRenderer(0.02f);
             points.Orientation = DRAW_ORIENTATION.XY;
             points.Color = vertColor;
             points.Load(ToVector2(polygon, count));
-
-            lines.Draw();
-            points.Draw();
+            PolygonRenderers.Add(points);
         }
 
-        protected void DrawPoint(Point2d point, Color color, float size)
+        protected void SetPoint(Point2d point, Color color)
         {
-            var points = new VertexRenderer(size);
-            points.Orientation = DRAW_ORIENTATION.XY;
-            points.Color = color;
-            points.Load(new Vector2((float)point.x, (float)point.y));
-
-            points.Draw();
+            PointRenderer.Clear();
+            PointRenderer.Load(new Vector2((float)point.x, (float)point.y), color);
         }
 
         protected void ResetInput()
@@ -158,6 +182,12 @@ namespace Common.VisualTest
             MadePolygon = false;
             Points = null;
             Indices = null;
+        }
+
+        protected void ClearRenderers()
+        {
+            PolygonRenderers.Clear();
+            PointRenderer.Clear();
         }
 
         private Point2d GetMousePosition()

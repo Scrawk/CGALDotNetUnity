@@ -25,16 +25,19 @@ namespace Common.Unity.Drawing
             0, 1, 1, 2, 2, 3, 3, 0
         };
 
-        protected List<Vector4> m_vertices = new List<Vector4>();
+        protected List<Vector4> Vertices { get; set; }
 
-        protected List<Color> m_colors = new List<Color>();
+        protected List<Color> Colors { get; set; }
 
-        protected List<int> m_indices = new List<int>();
+        protected List<int> Indices { get; set; }
 
         private Material m_material;
 
         public BaseRenderer()
         {
+            Vertices = new List<Vector4>();
+            Colors = new List<Color>();
+            Indices = new List<int>();
             LocalToWorld = Matrix4x4.identity;
             Orientation = DRAW_ORIENTATION.XY;
             Color = Color.white;
@@ -80,9 +83,9 @@ namespace Common.Unity.Drawing
 
         public virtual void Clear()
         {
-            m_vertices.Clear();
-            m_colors.Clear();
-            m_indices.Clear();
+            Vertices.Clear();
+            Colors.Clear();
+            Indices.Clear();
         }
 
         public void SetLocalToWorld(Matrix4x4f m)
@@ -97,36 +100,36 @@ namespace Common.Unity.Drawing
 
         public void SetSegmentIndices(int vertexCount, IList<int> indices)
         {
-            int current = m_vertices.Count;
+            int current = Vertices.Count;
 
             if (indices == null)
             {
                 for (int i = 0; i < vertexCount - 1; i++)
                 {
-                    m_indices.Add(i + current);
-                    m_indices.Add(i + 1 + current);
+                    Indices.Add(i + current);
+                    Indices.Add(i + 1 + current);
                 }
             }
             else
             {
                 for (int i = 0; i < indices.Count; i++)
-                        m_indices.Add(indices[i] + current);
+                        Indices.Add(indices[i] + current);
             }
         }
 
         public void SetFaceIndices(int vertexCount, IList<int> indices)
         {
-            int current = m_vertices.Count;
+            int current = Vertices.Count;
 
             if (indices == null)
             {
                 for (int i = 0; i < vertexCount; i++)
-                    m_indices.Add(i + current);
+                    Indices.Add(i + current);
             }
             else
             {
                 for (int i = 0; i < indices.Count; i++)
-                    m_indices.Add(indices[i] + current);
+                    Indices.Add(indices[i] + current);
             }
 
         }

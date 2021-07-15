@@ -30,11 +30,11 @@ namespace Common.Unity.Drawing
             var v = vertex;
 
             if (Orientation == DRAW_ORIENTATION.XY)
-                m_vertices.Add(v);
+                Vertices.Add(v);
             else if (Orientation == DRAW_ORIENTATION.XZ)
-                m_vertices.Add(new Vector4(v.x, 0, v.y, 1));
+                Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-            m_colors.Add(Color);
+            Colors.Add(Color);
         }
 
         public void Load(Vector2 vertex, Color color)
@@ -42,11 +42,11 @@ namespace Common.Unity.Drawing
             var v = vertex;
 
             if (Orientation == DRAW_ORIENTATION.XY)
-                m_vertices.Add(v);
+                Vertices.Add(v);
             else if (Orientation == DRAW_ORIENTATION.XZ)
-                m_vertices.Add(new Vector4(v.x, 0, v.y, 1));
+                Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-            m_colors.Add(color);
+            Colors.Add(color);
         }
 
         public void Load(IList<Vector2> vertices)
@@ -56,11 +56,11 @@ namespace Common.Unity.Drawing
                 var v = vertices[i];
 
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    m_vertices.Add(v);
+                    Vertices.Add(v);
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    m_vertices.Add(new Vector4(v.x, 0, v.y, 1));
+                    Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-                m_colors.Add(Color);
+                Colors.Add(Color);
             }
         }
 
@@ -71,11 +71,11 @@ namespace Common.Unity.Drawing
                 var v = vertices[i];
 
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    m_vertices.Add(v);
+                    Vertices.Add(v);
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    m_vertices.Add(new Vector4(v.x, 0, v.y, 1));
+                    Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-                m_colors.Add(colors[i]);
+                Colors.Add(colors[i]);
             }
         }
 
@@ -86,32 +86,32 @@ namespace Common.Unity.Drawing
                 var v = vertices[i];
 
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    m_vertices.Add(v);
+                    Vertices.Add(v);
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    m_vertices.Add(new Vector4(v.x, 0, v.y, 1));
+                    Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-                m_colors.Add(color);
+                Colors.Add(color);
             }
         }
 
         public void Load(Vector3 vertex)
         {
-            m_vertices.Add(vertex);
-            m_colors.Add(Color);
+            Vertices.Add(vertex);
+            Colors.Add(Color);
         }
 
         public void Load(Vector3 vertex, Color color)
         {
-            m_vertices.Add(vertex);
-            m_colors.Add(color);
+            Vertices.Add(vertex);
+            Colors.Add(color);
         }
 
         public  void Load(IList<Vector3> vertices)
         {
             for (int i = 0; i < vertices.Count; i++)
             {
-                m_vertices.Add(vertices[i]);
-                m_colors.Add(Color);
+                Vertices.Add(vertices[i]);
+                Colors.Add(Color);
             }
         }
 
@@ -119,8 +119,8 @@ namespace Common.Unity.Drawing
         {
             for (int i = 0; i < vertices.Count; i++)
             {
-                m_vertices.Add(vertices[i]);
-                m_colors.Add(colors[i]);
+                Vertices.Add(vertices[i]);
+                Colors.Add(colors[i]);
             }
         }
 
@@ -128,29 +128,29 @@ namespace Common.Unity.Drawing
         {
             for (int i = 0; i < vertices.Count; i++)
             {
-                m_vertices.Add(vertices[i]);
-                m_colors.Add(color);
+                Vertices.Add(vertices[i]);
+                Colors.Add(color);
             }
         }
 
         public void Load(Vector4 vertex)
         {
-            m_vertices.Add(vertex);
-            m_colors.Add(Color);
+            Vertices.Add(vertex);
+            Colors.Add(Color);
         }
 
         public void Load(Vector4 vertex, Color color)
         {
-            m_vertices.Add(vertex);
-            m_colors.Add(color);
+            Vertices.Add(vertex);
+            Colors.Add(color);
         }
 
         public void Load(IList<Vector4> vertices)
         {
             for (int i = 0; i < vertices.Count; i++)
             {
-                m_vertices.Add(vertices[i]);
-                m_colors.Add(Color);
+                Vertices.Add(vertices[i]);
+                Colors.Add(Color);
             }
         }
 
@@ -158,8 +158,8 @@ namespace Common.Unity.Drawing
         {
             for (int i = 0; i < vertices.Count; i++)
             {
-                m_vertices.Add(vertices[i]);
-                m_colors.Add(colors[i]);
+                Vertices.Add(vertices[i]);
+                Colors.Add(colors[i]);
             }
         }
 
@@ -167,8 +167,8 @@ namespace Common.Unity.Drawing
         {
             for (int i = 0; i < vertices.Count; i++)
             {
-                m_vertices.Add(vertices[i]);
-                m_colors.Add(color);
+                Vertices.Add(vertices[i]);
+                Colors.Add(color);
             }
         }
 
@@ -207,12 +207,12 @@ namespace Common.Unity.Drawing
         private  void DrawXY(float size)
         {
             float half = size * 0.5f;
-            for (int i = 0; i < m_vertices.Count; i++)
+            for (int i = 0; i < Vertices.Count; i++)
             {
-                float x = m_vertices[i].x;
-                float y = m_vertices[i].y;
-                float z = m_vertices[i].z;
-                Color color = m_colors[i];
+                float x = Vertices[i].x;
+                float y = Vertices[i].y;
+                float z = Vertices[i].z;
+                Color color = Colors[i];
 
                 GL.Color(color);
                 GL.Vertex3(x + half, y + half, z);
@@ -225,12 +225,12 @@ namespace Common.Unity.Drawing
         private  void DrawXZ(float size)
         {
             float half = size * 0.5f;
-            for (int i = 0; i < m_vertices.Count; i++)
+            for (int i = 0; i < Vertices.Count; i++)
             {
-                float x = m_vertices[i].x;
-                float y = m_vertices[i].y;
-                float z = m_vertices[i].z;
-                Color color = m_colors[i];
+                float x = Vertices[i].x;
+                float y = Vertices[i].y;
+                float z = Vertices[i].z;
+                Color color = Colors[i];
 
                 GL.Color(color);
                 GL.Vertex3(x + half, y, z + half);
