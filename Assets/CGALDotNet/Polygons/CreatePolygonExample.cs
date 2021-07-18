@@ -6,7 +6,7 @@ using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
 
-namespace Common.VisualTest
+namespace CGALDotNetUnity.Polygons
 {
 
     public class CreatePolygonExample : Polygon2Input
@@ -24,7 +24,7 @@ namespace Common.VisualTest
 
         protected override void OnPolygonComplete()
         {
-            polygon = new Polygon2_EIK(Points.ToArray());
+            polygon = new Polygon2<EEK>(Points.ToArray());
             isSimple = polygon.IsSimple;
 
             AddPolygon(polygon, isSimple ? Color.green : Color.red, Color.yellow);

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Unity.Drawing;
+using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
 
-namespace Common.VisualTest
+namespace CGALDotNetUnity.Polygons
 {
 
     public abstract class Polygon2Input : MonoBehaviour
@@ -144,7 +145,7 @@ namespace Common.VisualTest
             PointRenderer.Draw();
         }
 
-        protected void AddPolygon(PolygonWithHoles2_EEK polygon, Color lineColor, Color vertColor)
+        protected void AddPolygon(PolygonWithHoles2<EEK> polygon, Color lineColor, Color vertColor)
         {
             if (polygon == null) return;
 

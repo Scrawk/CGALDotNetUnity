@@ -8,21 +8,21 @@ using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
 using Common.Unity.Utility;
 
-namespace Common.VisualTest
+namespace CGALDotNetUnity.Polygons
 {
 
     public class PolygonBooleanExample : Polygon2Input
     {
 
-        private Polygon2_EEK polygon1, polygon2;
+        private Polygon2<EEK> polygon1, polygon2;
 
-        private List<PolygonWithHoles2_EEK> result;
+        private List<PolygonWithHoles2<EEK>> result;
 
         protected override void Start()
         {
             base.Start();
             ConsoleRedirect.Redirect();
-            result = new List<PolygonWithHoles2_EEK>();
+            result = new List<PolygonWithHoles2<EEK>>();
         }
 
         protected override void OnPolygonComplete()
@@ -52,7 +52,7 @@ namespace Common.VisualTest
                     polygon2 = input;
 
                     result.Clear();
-                    PolygonBoolean2.Intersect(polygon1, polygon2, result);
+                    PolygonBoolean2<EEK>.Intersect(polygon1, polygon2, result);
 
                     foreach (var pwh in result)
                     {
@@ -73,9 +73,9 @@ namespace Common.VisualTest
             }
         }
 
-        private Polygon2_EEK CreateInputPolygon()
+        private Polygon2<EEK> CreateInputPolygon()
         {
-            var input = new Polygon2_EEK(Points.ToArray());
+            var input = new Polygon2<EEK>(Points.ToArray());
 
             if (input.IsSimple)
             {

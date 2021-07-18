@@ -8,13 +8,13 @@ using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
 using Common.Unity.Utility;
 
-namespace Common.VisualTest
+namespace CGALDotNetUnity.Polygons
 {
 
     public class CreatePolygonWithHolesExample : Polygon2Input
     {
 
-        private PolygonWithHoles2_EEK polygon;
+        private PolygonWithHoles2<EEK> polygon;
 
         private Point2d? point;
 
@@ -72,16 +72,16 @@ namespace Common.VisualTest
             }
         }
 
-        private PolygonWithHoles2_EEK CreateInputPolygon()
+        private PolygonWithHoles2<EEK> CreateInputPolygon()
         {
-            var input = new Polygon2_EEK(Points.ToArray());
+            var input = new Polygon2<EEK>(Points.ToArray());
 
             if (input.IsSimple)
             {
                 if (input.IsClockWise)
                     input.Reverse();
 
-                return new PolygonWithHoles2_EEK(input);
+                return new PolygonWithHoles2<EEK>(input);
             }
             else
             {
@@ -89,9 +89,9 @@ namespace Common.VisualTest
             }
         }
 
-        private Polygon2_EEK CreateInputHole()
+        private Polygon2<EEK> CreateInputHole()
         {
-            var input = new Polygon2_EEK(Points.ToArray());
+            var input = new Polygon2<EEK>(Points.ToArray());
 
             if (input.IsSimple && polygon.ContainsPolygon(input))
             {
