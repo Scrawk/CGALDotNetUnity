@@ -13,19 +13,23 @@ namespace CGALDotNetUnity.Polygons
     public abstract class Polygon2Input : MonoBehaviour
     {
 
-        private const float SNAP_DIST = 0.1f;
-
         private const int MIN_POINTS = 3;
 
         protected List<Point2d> Points { get; private set; }
 
         private List<int> Indices { get; set; }
 
-        protected Color LineColor = Color.blue;
+        protected Color LineColor = Color.black;
+
+        protected Color PointColor = Color.black;
 
         protected bool MadePolygon { get; set; }
 
         protected float SnapPoint { get; set; }
+
+        protected float SnapDist { get; set; }
+
+        protected float PointSize { get; set; }
 
         protected Color[] Colors = new Color[]
         {
@@ -39,13 +43,27 @@ namespace CGALDotNetUnity.Polygons
 
         private List<BaseRenderer> PolygonRenderers { get; set; }
 
-        private VertexRenderer PointRenderer { get; set; }
+        private CircleRenderer PointRenderer { get; set; }
+
+        private GridRenderer Grid { get; set; }
 
         protected virtual void Start()
         {
+            SnapDist = 0.5f;
+            PointSize = 0.2f;
+
             PolygonRenderers = new List<BaseRenderer>();
-            PointRenderer = new VertexRenderer(0.02f);
+
+            PointRenderer = new CircleRenderer();
             PointRenderer.Orientation = DRAW_ORIENTATION.XY;
+            PointRenderer.Fill = true;
+            PointRenderer.Radius = PointSize * 0.5f;
+
+            Grid = new GridRenderer();
+            Grid.DrawAxis = true;
+            Grid.Range = 100;
+            Grid.PointSize = 0.1f;
+            Grid.Create();
         }
 
         protected virtual void OnPolygonComplete()
@@ -116,22 +134,31 @@ namespace CGALDotNetUnity.Polygons
 
         protected void DrawInput()
         {
+            DrawInput(LineColor, PointColor);
+        }
+
+        protected void DrawInput(Color lineColor, Color vertColor)
+        {
             if (Points == null) return;
             if (Indices == null) return;
+
+            var points = ToVector2(Points);
 
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
-            lines.Color = LineColor;
-            lines.Load(Points.ConvertAll(p => new Vector2((float)p.x, (float)p.y)));
+            lines.Color = lineColor;
+            lines.Load(points);
 
-            var points = new VertexRenderer(0.02f);
-            points.Orientation = DRAW_ORIENTATION.XY;
-            points.Color = Color.yellow;
-            points.Load(Points.ConvertAll(p => new Vector2((float)p.x, (float)p.y)));
+            var circles = new CircleRenderer();
+            circles.Orientation = DRAW_ORIENTATION.XY;
+            circles.Radius = PointSize * 0.5f;
+            circles.Fill = true;
+            circles.Color = vertColor;
+            circles.Load(points);
 
             lines.Draw();
-            points.Draw();
+            circles.Draw();
         }
 
         protected void DrawPolygons()
@@ -143,6 +170,13 @@ namespace CGALDotNetUnity.Polygons
         protected void DrawPoint()
         {
             PointRenderer.Draw();
+        }
+
+        protected void DrawGrid(Color lineColor, Color axisColor)
+        {
+            Grid.LineColor = lineColor;
+            Grid.AxisColor = axisColor;
+            Grid.Draw();
         }
 
         protected void AddPolygon(PolygonWithHoles2<EEK> polygon, Color lineColor, Color vertColor)
@@ -165,17 +199,20 @@ namespace CGALDotNetUnity.Polygons
             lines.Load(ToVector2(polygon, count + 1));
             PolygonRenderers.Add(lines);
 
-            var points = new VertexRenderer(0.02f);
-            points.Orientation = DRAW_ORIENTATION.XY;
-            points.Color = vertColor;
-            points.Load(ToVector2(polygon, count));
-            PolygonRenderers.Add(points);
+            var circles = new CircleRenderer();
+            circles.Orientation = DRAW_ORIENTATION.XY;
+            circles.Color = vertColor;
+            circles.Fill = true;
+            circles.Radius = PointSize * 0.5f;
+            circles.Load(ToVector2(polygon, count));
+            PolygonRenderers.Add(circles);
         }
 
         protected void SetPoint(Point2d point, Color color)
         {
             PointRenderer.Clear();
-            PointRenderer.Load(new Vector2((float)point.x, (float)point.y), color);
+            PointRenderer.Color = color;
+            PointRenderer.Load(new Vector2((float)point.x, (float)point.y));
         }
 
         protected void ResetInput()
@@ -248,7 +285,7 @@ namespace CGALDotNetUnity.Polygons
 
             var dist = Math.Sqrt(x * x + y * y);
 
-            if (dist <= SNAP_DIST)
+            if (dist <= SnapDist)
             {
                 point.x = Points[0].x;
                 point.y = Points[0].y;
@@ -267,7 +304,7 @@ namespace CGALDotNetUnity.Polygons
             var x = Points[0].x - Points[count - 1].x;
             var y = Points[0].y - Points[count - 1].y;
 
-            return Math.Sqrt(x * x + y * y) <= SNAP_DIST;
+            return Math.Sqrt(x * x + y * y) <= SnapDist;
         }
 
         private void ClosePolygon()
@@ -292,6 +329,11 @@ namespace CGALDotNetUnity.Polygons
             }
 
             return array;
+        }
+
+        private List<Vector2> ToVector2(List<Point2d> points)
+        {
+            return points.ConvertAll(p => new Vector2((float)p.x, (float)p.y));
         }
 
     }

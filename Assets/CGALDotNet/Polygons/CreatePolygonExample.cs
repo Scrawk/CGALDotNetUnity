@@ -12,6 +12,8 @@ namespace CGALDotNetUnity.Polygons
     public class CreatePolygonExample : Polygon2Input
     {
 
+        private Color outLineColor;
+
         private Polygon2 polygon;
 
         private CGAL_ORIENTED_SIDE orientedSide;
@@ -22,12 +24,19 @@ namespace CGALDotNetUnity.Polygons
 
         private Point2d? point;
 
+        protected override void Start()
+        {
+            base.Start();
+
+            outLineColor = new Color32(20, 20, 20, 255);
+        }
+
         protected override void OnPolygonComplete()
         {
             polygon = new Polygon2<EEK>(Points.ToArray());
             isSimple = polygon.IsSimple;
 
-            AddPolygon(polygon, isSimple ? Color.green : Color.red, Color.yellow);
+            AddPolygon(polygon, isSimple ? outLineColor : Color.red, outLineColor);
         }
 
         protected override void OnPolygonCleared()
@@ -43,16 +52,17 @@ namespace CGALDotNetUnity.Polygons
                 this.point = point;
                 orientedSide = polygon.OrientedSide(point);
                 containsPoint = polygon.ContainsPoint(point);
-                SetPoint(this.point.Value, Color.blue);
+                SetPoint(this.point.Value, outLineColor);
             }
         }
 
         private void OnPostRender()
         {
+            DrawGrid(new Color32(180, 180, 180, 255), outLineColor);
 
             if (!MadePolygon)
             {
-                DrawInput();
+                DrawInput(outLineColor, outLineColor);
             }
             else
             {
@@ -66,6 +76,8 @@ namespace CGALDotNetUnity.Polygons
         {
             int textLen = 400;
             int textHeight = 25;
+
+            GUI.color = Color.black;
 
             if (!MadePolygon)
             {

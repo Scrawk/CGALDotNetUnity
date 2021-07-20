@@ -16,31 +16,41 @@ namespace Common.Unity.Drawing
 
         private VertexRenderer m_vertices;
 
+        private Color32 m_lineColor = new Color32(180, 180, 180, 255);
+
+        private Color32 m_axisColor = new Color32(64, 64, 64, 255);
+
         public int Range = 50;
 
         public float PointSize = 0.1f;
 
         public float Spacing = 1.0f;
 
-        public Color32 BackgroundColor = new Color32(180, 180, 180, 255);
-
-        public Color32 AxisColor = new Color32(64, 64, 64, 255);
-
-        public Color32 PointColor = new Color32(32, 32, 32, 255);
-
         public bool DrawAxis = true;
 
         public bool ScaleOnZoom;
+
+        public Color32 LineColor
+        {
+            get => m_lineColor;
+            set => SetLineColor(value);
+        }
+
+        public Color32 AxisColor
+        {
+            get => m_axisColor;
+            set => SetAxisColor(value);
+        }
 
         public void Create()
         {
 
             m_vertical = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
-            m_vertical.Color = BackgroundColor;
+            m_vertical.Color = LineColor;
             m_vertical.Load(new Vector2(0, -Range), new Vector2(0, Range));
 
             m_horizontal = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
-            m_horizontal.Color = BackgroundColor;
+            m_horizontal.Color = LineColor;
             m_horizontal.Load(new Vector2(-Range, 0), new Vector2(Range, 0));
 
             m_yaxis = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
@@ -52,7 +62,7 @@ namespace Common.Unity.Drawing
             m_xaxis.Load(new Vector2(-Range, 0), new Vector2(Range, 0));
 
             m_vertices = new VertexRenderer(PointSize, DRAW_ORIENTATION.XY);
-            m_vertices.Color = PointColor;
+            m_vertices.Color = AxisColor;
 
             for (int i = -Range; i < Range; i++)
             {
@@ -86,6 +96,20 @@ namespace Common.Unity.Drawing
                 m_yaxis.Draw(cam);
                 m_vertices.Draw(cam);
             }
+        }
+
+        private void SetLineColor(Color color)
+        {
+            m_lineColor = color;
+            m_vertical.SetAllColors(color);
+            m_horizontal.SetAllColors(color);
+        }
+
+        private void SetAxisColor(Color color)
+        {
+            m_axisColor = color;
+            m_xaxis.SetAllColors(color);
+            m_yaxis.SetAllColors(color);
         }
 
     }

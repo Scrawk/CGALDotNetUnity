@@ -88,6 +88,13 @@ namespace Common.Unity.Drawing
             Indices.Clear();
         }
 
+        public void SetAllColors(Color color)
+        {
+            Color = color;
+            for (int i = 0; i < Colors.Count; i++)
+                Colors[i] = color;
+        }
+
         public void SetLocalToWorld(Matrix4x4f m)
         {
             LocalToWorld = m.ToMatrix4x4();
