@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
+using CGALDotNet.Triangulations;
 
 namespace CGALDotNetUnity.Polygons
 {
@@ -19,9 +21,9 @@ namespace CGALDotNetUnity.Polygons
 
         private List<int> Indices { get; set; }
 
-        protected Color LineColor = Color.black;
+        protected Color LineColor { get; set; }
 
-        protected Color PointColor = Color.black;
+        protected Color PointColor { get; set; }
 
         protected bool MadePolygon { get; set; }
 
@@ -30,16 +32,6 @@ namespace CGALDotNetUnity.Polygons
         protected float SnapDist { get; set; }
 
         protected float PointSize { get; set; }
-
-        protected Color[] Colors = new Color[]
-        {
-            Color.red,
-            Color.magenta,
-            Color.blue,
-            Color.cyan,
-            Color.green,
-            Color.yellow
-        };
 
         private List<BaseRenderer> PolygonRenderers { get; set; }
 
@@ -64,6 +56,7 @@ namespace CGALDotNetUnity.Polygons
             Grid.Range = 100;
             Grid.PointSize = 0.1f;
             Grid.Create();
+
         }
 
         protected virtual void OnPolygonComplete()
@@ -192,12 +185,30 @@ namespace CGALDotNetUnity.Polygons
             if (polygon == null) return;
             int count = polygon.Count;
 
+            var indices = Triangulate(polygon);
+
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.Color = new Color32(120, 120, 120, 128);
+            triangles.Load(ToVector2(polygon, count), indices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+            PolygonRenderers.Add(triangles);
+
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.Color = lineColor;
             lines.Load(ToVector2(polygon, count + 1));
             PolygonRenderers.Add(lines);
+
+            var lines2 = new SegmentRenderer();
+            lines2.LineMode = LINE_MODE.TRIANGLES;
+            lines2.Orientation = DRAW_ORIENTATION.XY;
+            lines2.Color = Color.red;
+            lines2.Load(ToVector2(polygon, count), indices);
+            PolygonRenderers.Add(lines2);
 
             var circles = new CircleRenderer();
             circles.Orientation = DRAW_ORIENTATION.XY;
@@ -334,6 +345,33 @@ namespace CGALDotNetUnity.Polygons
         private List<Vector2> ToVector2(List<Point2d> points)
         {
             return points.ConvertAll(p => new Vector2((float)p.x, (float)p.y));
+        }
+
+        private int[] Triangulate(Polygon2 polygon)
+        {
+            var points = new Point2d[polygon.Count];
+            polygon.GetPoints(points);
+
+            var tri = new Triangulation2<EEK>(points);
+            tri.SetIndices();
+
+            var indices = new int[tri.IndiceCount];
+            tri.GetIndices(indices);
+
+            return indices;
+        }
+
+        private List<int> TriangulateNew(Polygon2 polygon)
+        {
+            var poly = polygon as Polygon2<EEK>;
+
+            var tri = new Triangulation2<EEK>(poly);
+            tri.SetIndices();
+
+            var indices = new List<int>();
+            tri.GetPolygonIndices(poly, indices);
+
+            return indices;
         }
 
     }

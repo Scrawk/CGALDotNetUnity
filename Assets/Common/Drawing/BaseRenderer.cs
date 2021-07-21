@@ -70,6 +70,24 @@ namespace Common.Unity.Drawing
             set { Material.SetInt("_ZWrite", value == false ? 0 : 1); }
         }
 
+        public BlendMode SrcBlend
+        {
+            get { return (BlendMode)Material.GetInt("_SrcBlend"); }
+            set { Material.SetInt("_SrcBlend", (int)value); }
+        }
+
+        public BlendMode DstBlend
+        {
+            get { return (BlendMode)Material.GetInt("_DstBlend"); }
+            set { Material.SetInt("_DstBlend", (int)value); }
+        }
+
+        public int Renderqueue
+        {
+            get { return Material.renderQueue; }
+            set { Material.renderQueue = value; }
+        }
+
         protected Material Material
         {
             get
