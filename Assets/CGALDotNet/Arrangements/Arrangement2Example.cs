@@ -9,15 +9,17 @@ using CGALDotNet.Arrangements;
 
 namespace CGALDotNetUnity.Polygons
 {
-    public class Arrangement2Example : MonoBehaviour
+    public class Arrangement2Example : InputBehaviour
     {
 
         private Arrangement2<EEK> arrangement;
 
         private List<BaseRenderer> Renderers { get; set; }
 
-        void Start()
+        protected override void Start()
         {
+            base.Start();
+
             Point2d p1 = new Point2d(-2, -2);
             Point2d p2 = new Point2d(-2, 2);
             Point2d p3 = new Point2d(2, -2);
@@ -42,13 +44,10 @@ namespace CGALDotNetUnity.Polygons
             AddPoints(points, Color.yellow);
         }
 
-        private void Update()
-        {
-
-        }
-
         private void OnRenderObject()
         {
+            DrawGrid();
+
             foreach (var renderer in Renderers)
                 renderer.Draw();
         }
@@ -58,7 +57,7 @@ namespace CGALDotNetUnity.Polygons
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
-            lines.Color = color;
+            lines.DefaultColor = color;
             lines.Load(ToVector2(segments));
             Renderers.Add(lines);
         }
@@ -67,7 +66,7 @@ namespace CGALDotNetUnity.Polygons
         {
             var verts = new VertexRenderer(0.02f);
             verts.Orientation = DRAW_ORIENTATION.XY;
-            verts.Color = color;
+            verts.DefaultColor = color;
             verts.Load(ToVector2(points));
             Renderers.Add(verts);
         }

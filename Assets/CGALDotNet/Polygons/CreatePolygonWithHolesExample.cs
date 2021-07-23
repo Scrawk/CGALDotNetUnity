@@ -11,8 +11,12 @@ using Common.Unity.Utility;
 namespace CGALDotNetUnity.Polygons
 {
 
-    public class CreatePolygonWithHolesExample : Polygon2Input
+    public class CreatePolygonWithHolesExample : InputBehaviour
     {
+
+        private Color outLineColor = new Color32(20, 20, 20, 255);
+
+        private Color faceColor = new Color32(120, 120, 120, 128);
 
         private PolygonWithHoles2<EEK> polygon;
 
@@ -23,58 +27,58 @@ namespace CGALDotNetUnity.Polygons
         protected override void Start()
         {
             base.Start();
-            ConsoleRedirect.Redirect();
+            SetInputMode(INPUT_MODE.POLYGON);
         }
 
-        protected override void OnPolygonComplete()
+        protected override void OnInputComplete(List<Point2d> points)
         {
             if (polygon == null)
             {
-                var input = CreateInputPolygon();
+                var input = CreateInputPolygon(points);
 
                 ResetInput();
-                ClearRenderers();
+                ClearShapeRenderers();
 
                 if (input != null)
                 {
                     polygon = input;
                 }
 
-                AddPolygon(polygon, Color.green, Color.yellow);
+                AddPolygon(polygon, outLineColor, faceColor);
             }
             else if(polygon.HoleCount < 2)
             {
-                var input = CreateInputHole();
+                var input = CreateInputHole(points);
 
                 ResetInput();
-                ClearRenderers();
+                ClearShapeRenderers();
 
                 if (input != null)
                 {
                     polygon.AddHole(input);
 
-                    if(polygon.HoleCount == 2)
-                        MadePolygon = true;
+                    if (polygon.HoleCount == 2)
+                        SetInputMode(INPUT_MODE.POINT_CLICK);
                 }
 
-                AddPolygon(polygon, Color.green, Color.yellow);
+                AddPolygon(polygon, outLineColor, faceColor);
             }
      
         }
 
         protected override void OnLeftClick(Point2d point)
         {
-            if (MadePolygon)
+            if (polygon != null)
             {
                 this.point = point;
                 containsPoint = polygon.ContainsPoint(point);
-                SetPoint(this.point.Value, Color.blue);
+                SetPoint(this.point.Value, outLineColor);
             }
         }
 
-        private PolygonWithHoles2<EEK> CreateInputPolygon()
+        private PolygonWithHoles2<EEK> CreateInputPolygon(List<Point2d> points)
         {
-            var input = new Polygon2<EEK>(Points.ToArray());
+            var input = new Polygon2<EEK>(points.ToArray());
 
             if (input.IsSimple)
             {
@@ -89,9 +93,9 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
-        private Polygon2<EEK> CreateInputHole()
+        private Polygon2<EEK> CreateInputHole(List<Point2d> points)
         {
-            var input = new Polygon2<EEK>(Points.ToArray());
+            var input = new Polygon2<EEK>(points.ToArray());
 
             if (input.IsSimple && polygon.ContainsPolygon(input))
             {
@@ -106,7 +110,7 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
-        protected override void OnPolygonCleared()
+        protected override void OnCleared()
         {
             polygon = null;
             point = null;
@@ -114,8 +118,9 @@ namespace CGALDotNetUnity.Polygons
 
         private void OnPostRender()
         {
+            DrawGrid();
+            DrawShapes();
             DrawInput();
-            DrawPolygons();
             DrawPoint();
         }
 
@@ -123,6 +128,7 @@ namespace CGALDotNetUnity.Polygons
         {
             int textLen = 400;
             int textHeight = 25;
+            GUI.color = Color.black;
 
             GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
             GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
@@ -133,7 +139,7 @@ namespace CGALDotNetUnity.Polygons
                 GUI.Label(new Rect(10, 70, textLen, textHeight), "Add holes.");
                 GUI.Label(new Rect(10, 90, textLen, textHeight), "Holes = " + polygon.HoleCount);
 
-                if (MadePolygon)
+                if (Mode == INPUT_MODE.POINT_CLICK)
                 {
                     if (point != null)
                         GUI.Label(new Rect(10, 110, textLen, textHeight), "Contains point = " + containsPoint);

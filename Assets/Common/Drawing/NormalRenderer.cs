@@ -39,7 +39,7 @@ namespace Common.Unity.Drawing
                 else if (Orientation == DRAW_ORIENTATION.XZ)
                     Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
 
             foreach (var n in normals)
@@ -56,14 +56,14 @@ namespace Common.Unity.Drawing
             foreach (var v in vertices)
             {
                 Vertices.Add(v);
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
 
             foreach (var n in normals)
                 m_normals.Add(n);
         }
 
-        public override void Draw(Camera camera, Matrix4x4 localToWorld)
+        protected override void OnDraw(Camera camera, Matrix4x4 localToWorld)
         {
             GL.PushMatrix();
 

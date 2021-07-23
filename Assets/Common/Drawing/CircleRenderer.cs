@@ -21,14 +21,14 @@ namespace Common.Unity.Drawing
         {
             Orientation = orientation;
             Fill = fill;
-            Radius = radius;
+            DefaultRadius = radius;
         }
 
         public int Segments = 16;
 
         public bool Fill = false;
 
-        public float Radius = 0.1f;
+        public float DefaultRadius = 0.1f;
 
         public override void Clear()
         {
@@ -36,9 +36,16 @@ namespace Common.Unity.Drawing
             m_radii.Clear();
         }
 
+        public void SetRadius(float radius)
+        {
+            DefaultRadius = radius;
+            for (int i = 0; i < m_radii.Count; i++)
+                m_radii[i] = radius;
+        }
+
         public void Load(Vector2 position)
         {
-            Load(position, Radius);
+            Load(position, DefaultRadius);
         }
 
         public void Load(Vector2 position, float radius)
@@ -50,12 +57,12 @@ namespace Common.Unity.Drawing
             else if (Orientation == DRAW_ORIENTATION.XZ)
                 Vertices.Add(position.x0y1());
 
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(IList<Vector2> positions)
         {
-            Load(positions, Radius);
+            Load(positions, DefaultRadius);
         }
 
         public void Load(IList<Vector2> positions, float radius)
@@ -70,25 +77,25 @@ namespace Common.Unity.Drawing
                 else if (Orientation == DRAW_ORIENTATION.XZ)
                     Vertices.Add(positions[i].x0y1());
 
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
         public void Load(Vector3 position)
         {
-            Load(position, Radius);
+            Load(position, DefaultRadius);
         }
 
         public void Load(Vector3 position, float radius)
         {
             m_radii.Add(radius);
             Vertices.Add(position);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(IList<Vector3> positions)
         {
-            Load(positions, Radius);
+            Load(positions, DefaultRadius);
         }
 
         public void Load(IList<Vector3> positions, float radius)
@@ -97,11 +104,11 @@ namespace Common.Unity.Drawing
             {
                 m_radii.Add(radius);
                 Vertices.Add(positions[i]);
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
-        public override void Draw(Camera camera, Matrix4x4 localToWorld)
+        protected override void OnDraw(Camera camera, Matrix4x4 localToWorld)
         {
             if (Segments < 3) return;
 

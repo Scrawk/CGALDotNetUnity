@@ -41,9 +41,9 @@ namespace Common.Unity.Drawing
                 Vertices.Add(c.x0y1());
             }
 
-            Colors.Add(Color);
-            Colors.Add(Color);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
+            Colors.Add(DefaultColor);
+            Colors.Add(DefaultColor);
         }
 
         public  void Load(IList<Vector2> vertices, IList<int> indices = null)
@@ -57,7 +57,7 @@ namespace Common.Unity.Drawing
                 else if (Orientation == DRAW_ORIENTATION.XZ)
                     Vertices.Add(v.x0y1());
    
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
@@ -69,9 +69,9 @@ namespace Common.Unity.Drawing
             Vertices.Add(b);
             Vertices.Add(c);
 
-            Colors.Add(Color);
-            Colors.Add(Color);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
+            Colors.Add(DefaultColor);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(IList<Vector3> vertices, IList<int> indices = null)
@@ -81,11 +81,11 @@ namespace Common.Unity.Drawing
             foreach (var v in vertices)
             {
                 Vertices.Add(v);
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
-        public override void Draw(Camera camera, Matrix4x4 localToWorld)
+        protected override void OnDraw(Camera camera, Matrix4x4 localToWorld)
         {
 
             switch (FaceMode)
@@ -155,7 +155,7 @@ namespace Common.Unity.Drawing
 
             Material.SetPass(0);
             GL.Begin(GL.TRIANGLES);
-            GL.Color(Color);
+            GL.Color(DefaultColor);
 
             int vertexCount = Vertices.Count;
 

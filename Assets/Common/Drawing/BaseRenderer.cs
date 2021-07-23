@@ -40,17 +40,20 @@ namespace Common.Unity.Drawing
             Indices = new List<int>();
             LocalToWorld = Matrix4x4.identity;
             Orientation = DRAW_ORIENTATION.XY;
-            Color = Color.white;
+            DefaultColor = Color.white;
             CullMode = CullMode.Off;
+            Enabled = true;
         }
 
         public Matrix4x4 LocalToWorld { get; set; }
 
         public DRAW_ORIENTATION Orientation { get; set;  }
 
-        public Color Color { get; set; }
+        public Color DefaultColor { get; set; }
 
         public bool ScaleOnZoom { get; set; }
+
+        public bool Enabled { get; set; }
 
         public CompareFunction ZTest
         {
@@ -106,9 +109,9 @@ namespace Common.Unity.Drawing
             Indices.Clear();
         }
 
-        public void SetAllColors(Color color)
+        public void SetColor(Color color)
         {
-            Color = color;
+            DefaultColor = color;
             for (int i = 0; i < Colors.Count; i++)
                 Colors[i] = color;
         }
@@ -161,20 +164,29 @@ namespace Common.Unity.Drawing
 
         public void Draw()
         {
-            Draw(Camera.current);
+            if (Enabled)
+                Draw(Camera.current);
         }
 
         public void Draw(Camera camera)
         {
-            Draw(camera, LocalToWorld);
+            if (Enabled)
+                OnDraw(camera, LocalToWorld);
         }
 
         public void Draw(Camera camera, Matrix4x4f localToWorld)
         {
-            Draw(camera, localToWorld.ToMatrix4x4());
+            if (Enabled)
+                OnDraw(camera, localToWorld.ToMatrix4x4());
         }
 
-        public abstract void Draw(Camera camera, Matrix4x4 localToWorld);
+        public void Draw(Camera camera, Matrix4x4 localToWorld)
+        {
+            if (Enabled)
+                OnDraw(camera, localToWorld);
+        }
+
+        protected abstract void OnDraw(Camera camera, Matrix4x4 localToWorld);
 
     }
 

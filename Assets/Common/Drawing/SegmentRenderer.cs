@@ -39,7 +39,7 @@ namespace Common.Unity.Drawing
                 else if (Orientation == DRAW_ORIENTATION.XZ)
                     Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
@@ -92,8 +92,8 @@ namespace Common.Unity.Drawing
                 Vertices.Add(new Vector4(b.x, 0, b.y, 1));
             }
 
-            Colors.Add(Color);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(Vector2 a, Vector2 b, Color color)
@@ -122,7 +122,7 @@ namespace Common.Unity.Drawing
             for (int i = 0; i < vertices.Count; i++)
             {
                 Vertices.Add(vertices[i]);
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
@@ -153,9 +153,9 @@ namespace Common.Unity.Drawing
             SetSegmentIndices(2, null);
 
             Vertices.Add(a);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
             Vertices.Add(b);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(Vector3 a, Vector3 b, Color color)
@@ -175,7 +175,7 @@ namespace Common.Unity.Drawing
             for (int i = 0; i < vertices.Count; i++)
             {
                 Vertices.Add(vertices[i]);
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
@@ -206,9 +206,9 @@ namespace Common.Unity.Drawing
             SetSegmentIndices(2, null);
 
             Vertices.Add(a);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
             Vertices.Add(b);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(Vector4 a, Vector4 b, Color color)
@@ -221,7 +221,7 @@ namespace Common.Unity.Drawing
             Colors.Add(color);
         }
 
-        public override void Draw(Camera camera, Matrix4x4 localToWorld)
+        protected override void OnDraw(Camera camera, Matrix4x4 localToWorld)
         {
             switch (LineMode)
             {
@@ -281,7 +281,7 @@ namespace Common.Unity.Drawing
 
             Material.SetPass(0);
             GL.Begin(GL.LINES);
-            GL.Color(Color);
+            GL.Color(DefaultColor);
 
             int vertexCount = Vertices.Count;
 
@@ -326,7 +326,7 @@ namespace Common.Unity.Drawing
 
             Material.SetPass(0);
             GL.Begin(GL.LINES);
-            GL.Color(Color);
+            GL.Color(DefaultColor);
 
             int vertexCount = Vertices.Count;
 

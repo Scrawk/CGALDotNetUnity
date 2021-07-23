@@ -46,23 +46,23 @@ namespace Common.Unity.Drawing
         {
 
             m_vertical = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
-            m_vertical.Color = LineColor;
+            m_vertical.DefaultColor = LineColor;
             m_vertical.Load(new Vector2(0, -Range), new Vector2(0, Range));
 
             m_horizontal = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
-            m_horizontal.Color = LineColor;
+            m_horizontal.DefaultColor = LineColor;
             m_horizontal.Load(new Vector2(-Range, 0), new Vector2(Range, 0));
 
             m_yaxis = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
-            m_yaxis.Color = AxisColor;
+            m_yaxis.DefaultColor = AxisColor;
             m_yaxis.Load(new Vector2(0, -Range), new Vector2(0, Range));
 
             m_xaxis = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
-            m_xaxis.Color = AxisColor;
+            m_xaxis.DefaultColor = AxisColor;
             m_xaxis.Load(new Vector2(-Range, 0), new Vector2(Range, 0));
 
             m_vertices = new VertexRenderer(PointSize, DRAW_ORIENTATION.XY);
-            m_vertices.Color = AxisColor;
+            m_vertices.DefaultColor = AxisColor;
 
             for (int i = -Range; i < Range; i++)
             {
@@ -101,15 +101,15 @@ namespace Common.Unity.Drawing
         private void SetLineColor(Color color)
         {
             m_lineColor = color;
-            m_vertical.SetAllColors(color);
-            m_horizontal.SetAllColors(color);
+            m_vertical.SetColor(color);
+            m_horizontal.SetColor(color);
         }
 
         private void SetAxisColor(Color color)
         {
             m_axisColor = color;
-            m_xaxis.SetAllColors(color);
-            m_yaxis.SetAllColors(color);
+            m_xaxis.SetColor(color);
+            m_yaxis.SetColor(color);
         }
 
     }

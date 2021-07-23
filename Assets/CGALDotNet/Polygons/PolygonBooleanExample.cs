@@ -11,8 +11,12 @@ using Common.Unity.Utility;
 namespace CGALDotNetUnity.Polygons
 {
 
-    public class PolygonBooleanExample : Polygon2Input
+    public class PolygonBooleanExample : InputBehaviour
     {
+
+        private Color outLineColor = new Color32(20, 20, 20, 255);
+
+        private Color faceColor = new Color32(120, 120, 120, 128);
 
         private Polygon2<EEK> polygon1, polygon2;
 
@@ -21,31 +25,32 @@ namespace CGALDotNetUnity.Polygons
         protected override void Start()
         {
             base.Start();
+            SetInputMode(INPUT_MODE.POLYGON);
             ConsoleRedirect.Redirect();
             result = new List<PolygonWithHoles2<EEK>>();
         }
 
-        protected override void OnPolygonComplete()
+        protected override void OnInputComplete(List<Point2d> points)
         {
             if (polygon1 == null)
             {
-                var input = CreateInputPolygon();
+                var input = CreateInputPolygon(points);
 
                 ResetInput();
-                ClearRenderers();
+                ClearShapeRenderers();
 
                 if (input != null)
                 {
                     polygon1 = input;
-                    AddPolygon(polygon1, Color.green, Color.yellow);
+                    AddPolygon(polygon1, outLineColor, faceColor);
                 }
             }
             else if (polygon2 == null)
             {
-                var input = CreateInputPolygon();
+                var input = CreateInputPolygon(points);
 
                 ResetInput();
-                ClearRenderers();
+                ClearShapeRenderers();
 
                 if (input != null)
                 {
@@ -61,7 +66,7 @@ namespace CGALDotNetUnity.Polygons
                         foreach (var poly in polygons)
                         {
                             poly.Print();
-                            AddPolygon(poly, Color.green, Color.yellow);
+                            AddPolygon(poly, outLineColor, faceColor);
                         }
                     }
                 }
@@ -73,9 +78,12 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
-        private Polygon2<EEK> CreateInputPolygon()
+        private Polygon2<EEK> CreateInputPolygon(List<Point2d> points)
         {
-            var input = new Polygon2<EEK>(Points.ToArray());
+            if (points == null) 
+                return null;
+
+            var input = new Polygon2<EEK>(points.ToArray());
 
             if (input.IsSimple)
             {
@@ -90,7 +98,7 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
-        protected override void OnPolygonCleared()
+        protected override void OnCleared()
         {
             polygon1 = null;
             polygon2 = null;
@@ -98,22 +106,24 @@ namespace CGALDotNetUnity.Polygons
 
         private void OnPostRender()
         {
+            DrawGrid();
+            DrawShapes();
             DrawInput();
-            DrawPolygons();
         }
 
         protected void OnGUI()
         {
             int textLen = 400;
             int textHeight = 25;
+            GUI.color = Color.black;
 
-            if (!MadePolygon)
+            //if (!MadeInput)
             {
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
                 GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
             }
-            else
+            //else
             {
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
                 //GUI.Label(new Rect(10, 30, textLen, textHeight), "Count = " + polygon.Count);

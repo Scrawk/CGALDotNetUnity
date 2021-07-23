@@ -9,12 +9,14 @@ using CGALDotNet.Polygons;
 namespace CGALDotNetUnity.Polygons
 {
 
-    public class CreatePolygonExample : Polygon2Input
+    public class CreatePolygonExample : InputBehaviour
     {
 
-        private Color outLineColor;
+        private Color outLineColor  = new Color32(20, 20, 20, 255);
 
-        private Polygon2 polygon;
+        private Color faceColor = new Color32(120, 120, 120, 128);
+
+        private Polygon2<EEK> polygon;
 
         private CGAL_ORIENTED_SIDE orientedSide;
 
@@ -28,26 +30,30 @@ namespace CGALDotNetUnity.Polygons
         {
             base.Start();
 
-            outLineColor = new Color32(20, 20, 20, 255);
+            SetInputMode(INPUT_MODE.POLYGON);
         }
 
-        protected override void OnPolygonComplete()
+        protected override void OnInputComplete(List<Point2d> points)
         {
-            polygon = new Polygon2<EEK>(Points.ToArray());
+            polygon = new Polygon2<EEK>(points.ToArray());
             isSimple = polygon.IsSimple;
 
-            AddPolygon(polygon, isSimple ? outLineColor : Color.red, outLineColor);
+            AddPolygon<EEK>(polygon, isSimple ? outLineColor : Color.red, faceColor);
+
+            SetInputMode(INPUT_MODE.POINT_CLICK);
         }
 
-        protected override void OnPolygonCleared()
+        protected override void OnCleared()
         {
+            polygon = null;
             point = null;
             isSimple = false;
+            SetInputMode(INPUT_MODE.POLYGON);
         }
 
         protected override void OnLeftClick(Point2d point)
         {
-            if (MadePolygon && isSimple)
+            if (isSimple && polygon != null)
             {
                 this.point = point;
                 orientedSide = polygon.OrientedSide(point);
@@ -58,18 +64,10 @@ namespace CGALDotNetUnity.Polygons
 
         private void OnPostRender()
         {
-            DrawGrid(new Color32(180, 180, 180, 255), outLineColor);
-
-            if (!MadePolygon)
-            {
-                DrawInput(outLineColor, outLineColor);
-            }
-            else
-            {
-                DrawPolygons();
-                DrawPoint();
-            }
-
+            DrawGrid();
+            DrawShapes();
+            DrawInput();
+            DrawPoint();
         }
 
         protected void OnGUI()
@@ -79,7 +77,7 @@ namespace CGALDotNetUnity.Polygons
 
             GUI.color = Color.black;
 
-            if (!MadePolygon)
+            if (polygon == null)
             {
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");

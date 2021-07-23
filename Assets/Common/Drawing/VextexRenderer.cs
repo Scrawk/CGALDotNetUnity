@@ -34,7 +34,7 @@ namespace Common.Unity.Drawing
             else if (Orientation == DRAW_ORIENTATION.XZ)
                 Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(Vector2 vertex, Color color)
@@ -60,7 +60,7 @@ namespace Common.Unity.Drawing
                 else if (Orientation == DRAW_ORIENTATION.XZ)
                     Vertices.Add(new Vector4(v.x, 0, v.y, 1));
 
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Common.Unity.Drawing
         public void Load(Vector3 vertex)
         {
             Vertices.Add(vertex);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(Vector3 vertex, Color color)
@@ -111,7 +111,7 @@ namespace Common.Unity.Drawing
             for (int i = 0; i < vertices.Count; i++)
             {
                 Vertices.Add(vertices[i]);
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
@@ -136,7 +136,7 @@ namespace Common.Unity.Drawing
         public void Load(Vector4 vertex)
         {
             Vertices.Add(vertex);
-            Colors.Add(Color);
+            Colors.Add(DefaultColor);
         }
 
         public void Load(Vector4 vertex, Color color)
@@ -150,7 +150,7 @@ namespace Common.Unity.Drawing
             for (int i = 0; i < vertices.Count; i++)
             {
                 Vertices.Add(vertices[i]);
-                Colors.Add(Color);
+                Colors.Add(DefaultColor);
             }
         }
 
@@ -172,7 +172,7 @@ namespace Common.Unity.Drawing
             }
         }
 
-        public override void Draw(Camera camera, Matrix4x4 localToWorld)
+        protected override void OnDraw(Camera camera, Matrix4x4 localToWorld)
         {
             float size = Size;
 
