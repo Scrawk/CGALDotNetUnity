@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using Common.Core.Numerics;
-using Common.Core.Colors;
-
 namespace Common.Unity.Drawing
 {
 
@@ -49,7 +46,7 @@ namespace Common.Unity.Drawing
             Colors.Add(color);
         }
 
-        public void Load(IList<Vector2> vertices)
+        public override void Load(IList<Vector2> vertices)
         {
             for(int i = 0; i < vertices.Count; i++)
             {
@@ -106,7 +103,7 @@ namespace Common.Unity.Drawing
             Colors.Add(color);
         }
 
-        public  void Load(IList<Vector3> vertices)
+        public override void Load(IList<Vector3> vertices)
         {
             for (int i = 0; i < vertices.Count; i++)
             {
@@ -174,6 +171,7 @@ namespace Common.Unity.Drawing
 
         protected override void OnDraw(Camera camera, Matrix4x4 localToWorld)
         {
+            if (Size <= 0) return;
             float size = Size;
 
             if (camera.orthographic && ScaleOnZoom)

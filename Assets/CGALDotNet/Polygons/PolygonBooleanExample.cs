@@ -14,7 +14,9 @@ namespace CGALDotNetUnity.Polygons
     public class PolygonBooleanExample : InputBehaviour
     {
 
-        private Color outLineColor = new Color32(20, 20, 20, 255);
+        private Color lineColor = new Color32(20, 20, 20, 255);
+
+        private Color pointColor = new Color32(20, 20, 20, 255);
 
         private Color faceColor = new Color32(120, 120, 120, 128);
 
@@ -42,7 +44,7 @@ namespace CGALDotNetUnity.Polygons
                 if (input != null)
                 {
                     polygon1 = input;
-                    AddPolygon(polygon1, outLineColor, faceColor);
+                    AddPolygon("", polygon1, lineColor, pointColor, faceColor);
                 }
             }
             else if (polygon2 == null)
@@ -66,7 +68,7 @@ namespace CGALDotNetUnity.Polygons
                         foreach (var poly in polygons)
                         {
                             poly.Print();
-                            AddPolygon(poly, outLineColor, faceColor);
+                            AddPolygon("", poly, lineColor, pointColor, faceColor);
                         }
                     }
                 }

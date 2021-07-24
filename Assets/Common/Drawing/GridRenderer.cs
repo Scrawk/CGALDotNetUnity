@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using Common.Core.Numerics;
-
 namespace Common.Unity.Drawing
 {
 
@@ -81,10 +79,10 @@ namespace Common.Unity.Drawing
 
             for (double i = -Range; i < Range; i += Spacing)
             {
-                var m = Matrix4x4f.Translate(new Vector3f(i, 0, 0));
+                var m = Matrix4x4.Translate(new Vector3((float)i, 0, 0));
                 m_vertical.Draw(cam, m);
 
-                m = Matrix4x4f.Translate(new Vector3f(0, i, 0));
+                m = Matrix4x4.Translate(new Vector3(0, (float)i, 0));
                 m_horizontal.Draw(cam, m);
             }
 

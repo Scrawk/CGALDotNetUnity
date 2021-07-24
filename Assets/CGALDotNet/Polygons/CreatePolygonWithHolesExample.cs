@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
-
-using CGALDotNet;
+﻿using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
-using Common.Unity.Utility;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace CGALDotNetUnity.Polygons
 {
@@ -14,7 +10,9 @@ namespace CGALDotNetUnity.Polygons
     public class CreatePolygonWithHolesExample : InputBehaviour
     {
 
-        private Color outLineColor = new Color32(20, 20, 20, 255);
+        private Color lineColor = new Color32(20, 20, 20, 255);
+
+        private Color pointColor = new Color32(20, 20, 20, 255);
 
         private Color faceColor = new Color32(120, 120, 120, 128);
 
@@ -44,7 +42,7 @@ namespace CGALDotNetUnity.Polygons
                     polygon = input;
                 }
 
-                AddPolygon(polygon, outLineColor, faceColor);
+                AddPolygon("", polygon, lineColor, pointColor, faceColor);
             }
             else if(polygon.HoleCount < 2)
             {
@@ -61,7 +59,7 @@ namespace CGALDotNetUnity.Polygons
                         SetInputMode(INPUT_MODE.POINT_CLICK);
                 }
 
-                AddPolygon(polygon, outLineColor, faceColor);
+                AddPolygon("", polygon, lineColor, pointColor, faceColor);
             }
      
         }
@@ -72,7 +70,7 @@ namespace CGALDotNetUnity.Polygons
             {
                 this.point = point;
                 containsPoint = polygon.ContainsPoint(point);
-                SetPoint(this.point.Value, outLineColor);
+                SetPoint(this.point.Value);
             }
         }
 

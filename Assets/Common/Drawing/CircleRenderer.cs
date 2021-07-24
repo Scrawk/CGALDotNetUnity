@@ -60,7 +60,7 @@ namespace Common.Unity.Drawing
             Colors.Add(DefaultColor);
         }
 
-        public void Load(IList<Vector2> positions)
+        public override void Load(IList<Vector2> positions)
         {
             Load(positions, DefaultRadius);
         }
@@ -93,7 +93,7 @@ namespace Common.Unity.Drawing
             Colors.Add(DefaultColor);
         }
 
-        public void Load(IList<Vector3> positions)
+        public override void Load(IList<Vector3> positions)
         {
             Load(positions, DefaultRadius);
         }

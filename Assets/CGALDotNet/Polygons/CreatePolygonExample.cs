@@ -12,7 +12,9 @@ namespace CGALDotNetUnity.Polygons
     public class CreatePolygonExample : InputBehaviour
     {
 
-        private Color outLineColor  = new Color32(20, 20, 20, 255);
+        private Color lineColor  = new Color32(20, 20, 20, 255);
+
+        private Color pointColor = new Color32(20, 20, 20, 255);
 
         private Color faceColor = new Color32(120, 120, 120, 128);
 
@@ -38,7 +40,10 @@ namespace CGALDotNetUnity.Polygons
             polygon = new Polygon2<EEK>(points.ToArray());
             isSimple = polygon.IsSimple;
 
-            AddPolygon<EEK>(polygon, isSimple ? outLineColor : Color.red, faceColor);
+            var lineCol = isSimple ? lineColor : Color.red;
+            var pointCol = isSimple ? pointColor : Color.red;
+
+            AddPolygon<EEK>("", polygon, lineCol, pointCol, faceColor);
 
             SetInputMode(INPUT_MODE.POINT_CLICK);
         }
@@ -58,7 +63,7 @@ namespace CGALDotNetUnity.Polygons
                 this.point = point;
                 orientedSide = polygon.OrientedSide(point);
                 containsPoint = polygon.ContainsPoint(point);
-                SetPoint(this.point.Value, outLineColor);
+                SetPoint(this.point.Value);
             }
         }
 

@@ -22,21 +22,33 @@ namespace CGALDotNetUnity
     public abstract class InputBehaviour : MonoBehaviour
     {
 
+        private const int POINT_SEGMENTS = 16;
+
+        private const string POINT_OUTLINE_NAME = "pointOutline";
+
         protected float SnapPoint { get; set; }
 
         protected float SnapDist { get; set; }
 
         protected float PointSize { get; private set; }
 
+        protected bool PointOutlineEnabled { get; private set; }
+
         protected INPUT_MODE Mode { get; private set; }
+
+        protected Color LineColor { get; private set; }
+
+        protected Color PointColor { get; private set; }
+
+        protected Color PointOutlineColor { get; private set; }
 
         private List<Point2d> InputPoints { get; set; }
 
-        private List<BaseRenderer> ShapeRenderers { get; set; }
+        private List<CompositeRenderer> ShapeRenderers { get; set; }
 
-        private List<BaseRenderer> InputRenderers { get; set; }
+        private List<CompositeRenderer> InputRenderers { get; set; }
 
-        private List<BaseRenderer> PointRenderer { get; set; }
+        private List<CompositeRenderer> PointRenderer { get; set; }
 
         private GridRenderer Grid { get; set; }
 
@@ -45,23 +57,25 @@ namespace CGALDotNetUnity
             SnapPoint = 0;
             SnapDist = 0.5f;
             PointSize = 0.2f;
+            PointOutlineEnabled = false;
 
             InputPoints = new List<Point2d>();
-            ShapeRenderers = new List<BaseRenderer>();
-            InputRenderers = new List<BaseRenderer>();
-            PointRenderer = new List<BaseRenderer>();
+            ShapeRenderers = new List<CompositeRenderer>();
+            InputRenderers = new List<CompositeRenderer>();
+            PointRenderer = new List<CompositeRenderer>();
 
             CreateInputRenderer();
             CreatePointRenderer();
             CreateGrid();
 
-            Color inputLineColor = new Color32(20, 20, 20, 255);
-            Color inputPointColor = new Color32(20, 20, 20, 255);
+            LineColor = new Color32(20, 20, 20, 255);
+            PointColor = new Color32(20, 20, 20, 255);
+            PointOutlineColor = new Color32(20, 20, 20, 255);
             Color gridAxixColor = new Color32(20, 20, 20, 255);
             Color gridLineColor = new Color32(180, 180, 180, 255);
 
             SetGridColor(gridLineColor, gridAxixColor);
-            SetInputColor(inputLineColor, inputPointColor);
+            SetInputColor(LineColor, PointColor);
         }
 
         protected void DrawGridAxis(bool draw)
@@ -75,10 +89,45 @@ namespace CGALDotNetUnity
             Grid.AxisColor = axisColor;
         }
 
-        protected void SetInputColor(Color lineColor, Color vertColor)
+        protected void SetInputColor(Color lineColor, Color pointColor)
         {
+            LineColor = lineColor;
+            PointColor = pointColor;
+            PointOutlineColor = pointColor;
+
             SetLineColor(InputRenderers, lineColor);
-            SetPointColor(InputRenderers, vertColor);
+            SetPointColor(InputRenderers, pointColor);
+            SetPointColor(PointRenderer, pointColor);
+        }
+
+        protected void SetPointSize(float size)
+        {
+            PointSize = size;
+            SetPointSize(InputRenderers, size);
+            SetPointSize(ShapeRenderers, size);
+            SetPointSize(PointRenderer, size);
+        }
+
+        protected void EnableInputPointOutline(bool enabled, Color color)
+        {
+            PointOutlineEnabled = enabled;
+            PointOutlineColor = color;
+            SetPointOutlineEnabled(InputRenderers, enabled);
+            SetPointOutlineEnabled(PointRenderer, enabled);
+            SetPointOutlineColor(InputRenderers, color);
+            SetPointOutlineColor(PointRenderer, color);
+        }
+
+        protected void EnableShapePointOutline(bool enabled, Color color)
+        {
+            SetPointOutlineEnabled(ShapeRenderers, enabled);
+            SetPointOutlineColor(ShapeRenderers, color);
+        }
+
+        protected void EnableShapePointOutline(string name, bool enabled, Color color)
+        {
+            SetPointOutlineEnabled(name, ShapeRenderers, enabled);
+            SetPointOutlineColor(name, ShapeRenderers, color);
         }
 
         protected void SetInputMode(INPUT_MODE mode)
@@ -217,28 +266,28 @@ namespace CGALDotNetUnity
             Grid.Draw();
         }
 
-        protected void AddPolygon<K>(PolygonWithHoles2<K> polygon, Color lineColor, Color faceColor)
+        protected void AddPolygon<K>(string name, PolygonWithHoles2<K> polygon, Color lineColor, Color pointColor, Color faceColor)
             where K : CGALKernel, new()
         {
             if (polygon == null) return;
 
             foreach (var poly in polygon.ToList())
-                AddPolygon(poly, lineColor, faceColor);
+                AddPolygon(name, poly, lineColor, pointColor, faceColor);
         }
 
-        protected void AddPolygon<K>(Polygon2<K> polygon, Color lineColor, Color faceColor)
+        protected void AddPolygon<K>(string name, Polygon2<K> polygon, Color lineColor, Color pointColor, Color faceColor)
             where K : CGALKernel, new()
         {
             if (polygon == null) return;
 
             var faceIndices = Triangulate(polygon);
-            var lineIndices = PolygonIndices(polygon.Count);
+            var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
             var points = polygon.ToArray();
 
-            AddShape(points, faceIndices, lineIndices, lineColor, faceColor, LINE_MODE.LINES);
+            AddShape(name, points, faceIndices, lineIndices, lineColor, pointColor, faceColor, LINE_MODE.LINES);
         }
 
-        protected void AddTriangulation<K>(Triangulation2<K> triangulation, Color lineColor, Color faceColor)
+        protected void AddTriangulation<K>(string name, Triangulation2<K> triangulation, Color lineColor, Color pointColor, Color faceColor)
             where K : CGALKernel, new()
         {
             if (triangulation == null) return;
@@ -249,10 +298,10 @@ namespace CGALDotNetUnity
             triangulation.GetPoints(points);
             triangulation.GetIndices(indices);
 
-            AddShape(points, indices, indices, lineColor, faceColor, LINE_MODE.TRIANGLES);
+            AddShape(name, points, indices, indices, lineColor, pointColor, faceColor, LINE_MODE.TRIANGLES);
         }
 
-        protected void AddShape(Point2d[] points, int[] faceIndices, int[] lineIndices, Color lineColor, Color faceColor, LINE_MODE lineMode)
+        protected void AddShape(string name, Point2d[] points, int[] faceIndices, int[] lineIndices, Color lineColor, Color pointColor, Color faceColor, LINE_MODE lineMode)
         {
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -261,30 +310,49 @@ namespace CGALDotNetUnity
             triangles.Load(ToVector2(points), faceIndices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
-            ShapeRenderers.Add(triangles);
 
             var lines = new SegmentRenderer();
             lines.LineMode = lineMode;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
             lines.Load(ToVector2(points), lineIndices);
-            ShapeRenderers.Add(lines);
 
-            var circles = new CircleRenderer();
-            circles.Orientation = DRAW_ORIENTATION.XY;
-            circles.DefaultColor = lineColor;
-            circles.Fill = true;
-            circles.DefaultRadius = PointSize * 0.5f;
-            circles.Load(ToVector2(points));
-            ShapeRenderers.Add(circles);
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = PointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Name = POINT_OUTLINE_NAME;
+            pointOutline.Enabled = false;
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = pointColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = PointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(triangles);
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            ShapeRenderers.Add(comp);
         }
 
-        protected void SetPoint(Point2d point, Color color)
+        protected void SetPoint(Point2d point)
         {
             var p = new Vector2((float)point.x, (float)point.y);
 
             SetPoints(PointRenderer, new Vector2[] { p });
-            SetPointColor(PointRenderer, color);
+            SetPointColor(PointRenderer, PointColor);
+            SetPointOutlineEnabled(PointRenderer, PointOutlineEnabled);
+            SetPointOutlineColor(PointRenderer, PointOutlineColor);
         }
 
         protected void ResetInput()
@@ -305,12 +373,25 @@ namespace CGALDotNetUnity
 
         private void CreatePointRenderer()
         {
-            var pointRenderer = new CircleRenderer();
-            pointRenderer.Orientation = DRAW_ORIENTATION.XY;
-            pointRenderer.Fill = true;
-            pointRenderer.DefaultRadius = PointSize * 0.5f;
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultRadius = PointSize * 0.5f;
+            pointBody.Fill = true;
 
-            PointRenderer.Add(pointRenderer);
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Name = POINT_OUTLINE_NAME;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultRadius = PointSize * 0.5f;
+            pointOutline.Fill = false;
+            pointOutline.Enabled = false;
+
+            var comp = new CompositeRenderer();
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            PointRenderer.Add(comp);
         }
 
         private void CreateInputRenderer()
@@ -319,13 +400,26 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
 
-            var circles = new CircleRenderer();
-            circles.Orientation = DRAW_ORIENTATION.XY;
-            circles.DefaultRadius = PointSize * 0.5f;
-            circles.Fill = true;
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultRadius = PointSize * 0.5f;
+            pointBody.Fill = true;
 
-            InputRenderers.Add(lines);
-            InputRenderers.Add(circles);
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Name = POINT_OUTLINE_NAME;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultRadius = PointSize * 0.5f;
+            pointOutline.Fill = false;
+            pointOutline.Enabled = false;
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            InputRenderers.Add(comp);
         }
 
         private void CreateGrid()
@@ -337,80 +431,90 @@ namespace CGALDotNetUnity
             Grid.Create();
         }
 
-        private void Clear(List<BaseRenderer> renderers)
+        private void Clear(List<CompositeRenderer> renderers)
         {
             foreach (var renderer in renderers)
-                renderer.Clear();
+                renderer.ClearRenderers();
         }
 
-        private void Draw(List<BaseRenderer> renderers)
+        private void Draw(List<CompositeRenderer> renderers)
         {
             foreach (var renderer in renderers)
                 renderer.Draw();
         }
 
-        private void SetPoints(List<BaseRenderer> renderers, IList<Vector2> points)
+        private void SetPoints(List<CompositeRenderer> renderers, IList<Vector2> points)
         {
             Clear(renderers);
 
             foreach (var renderer in renderers)
-            {
-                if (renderer is VertexRenderer vr)
-                    vr.Load(points);
-                else if (renderer is SegmentRenderer sr)
-                    sr.Load(points);
-                else if (renderer is CircleRenderer cr)
-                    cr.Load(points);
-            }
+                renderer.Load(points);
         }
 
-        private void SetPointSize(List<BaseRenderer> renderers, float size)
+        private void SetPointSize(List<CompositeRenderer> renderers, float size)
+        {
+            foreach (var renderer in renderers)
+                renderer.SetSize(size);
+
+            foreach (var renderer in renderers)
+                renderer.SetRadius(size * 0.5f);
+        }
+
+        private void SetPointColor(List<CompositeRenderer> renderers, Color color)
+        {
+            foreach (var renderer in renderers)
+                renderer.SetColor<VertexRenderer>(color);
+
+            foreach (var renderer in renderers)
+                renderer.SetColor<CircleRenderer>(color);
+        }
+
+        private void SetPointOutlineEnabled(List<CompositeRenderer> renderers, bool enabled)
+        {
+            foreach (var renderer in renderers)
+                renderer.SetEnabled<CircleRenderer>(enabled, POINT_OUTLINE_NAME);
+        }
+
+        private void SetPointOutlineColor(List<CompositeRenderer> renderers, Color color)
+        {
+            foreach (var renderer in renderers)
+                renderer.SetColor<CircleRenderer>(color, POINT_OUTLINE_NAME);
+        }
+
+        private void SetPointOutlineEnabled(string name, List<CompositeRenderer> renderers, bool enabled)
         {
             foreach (var renderer in renderers)
             {
-                if (renderer is VertexRenderer vr)
-                    vr.Size = size;
-                else if (renderer is CircleRenderer cr)
-                    cr.SetRadius(size * 0.5f);
-            }
+                if(renderer.Name == name)
+                    renderer.SetEnabled<CircleRenderer>(enabled, POINT_OUTLINE_NAME);
+            }  
         }
 
-        private void SetPointColor(List<BaseRenderer> renderers, Color color)
+        private void SetPointOutlineColor(string name, List<CompositeRenderer> renderers, Color color)
         {
             foreach (var renderer in renderers)
             {
-                if (renderer is VertexRenderer vr)
-                    vr.SetColor(color);
-                else if (renderer is CircleRenderer cr)
-                    cr.SetColor(color);
-            }
+                if (renderer.Name == name)
+                    renderer.SetColor<CircleRenderer>(color, POINT_OUTLINE_NAME);
+            }  
         }
 
-        private void SetLineColor(List<BaseRenderer> renderers, Color color)
+        private void SetLineColor(List<CompositeRenderer> renderers, Color color)
         {
             foreach (var renderer in renderers)
-            {
-                if (renderer is SegmentRenderer sr)
-                    sr.SetColor(color);
-            }
+                renderer.SetColor<SegmentRenderer>(color);
         }
 
-        private void SetFaceColor(List<BaseRenderer> renderers, Color color)
+        private void SetFaceColor(List<CompositeRenderer> renderers, Color color)
         {
             foreach (var renderer in renderers)
-            {
-                if (renderer is FaceRenderer fr)
-                    fr.SetColor(color);
-            }
+                renderer.SetColor<FaceRenderer>(color);
         }
 
-        private void SetLineEnable(List<BaseRenderer> renderers, bool enabled)
+        private void SetLineEnable(List<CompositeRenderer> renderers, bool enabled)
         {
             foreach (var renderer in renderers)
-            {
-                if (renderer is SegmentRenderer sr)
-                    sr.Enabled = enabled;
-            }
+                renderer.SetEnabled<SegmentRenderer>(enabled);
         }
 
         private Point2d GetMousePosition()
@@ -492,19 +596,6 @@ namespace CGALDotNetUnity
             }
 
             return array;
-        }
-
-        private int[] PolygonIndices(int count)
-        {
-            int[] indices = new int[count * 2];
-
-            for (int i = 0; i < count; i++)
-            {
-                indices[i * 2 + 0] = i;
-                indices[i * 2 + 1] = MathUtil.Wrap(i + 1, count);
-            }
-
-            return indices;
         }
 
         private Vector2[] ToVector2(Point2d[] points)

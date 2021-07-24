@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-using Common.Core.Numerics;
 
 namespace Common.Unity.Drawing
 {
@@ -30,7 +29,27 @@ namespace Common.Unity.Drawing
 
         public float Length = 1;
 
-        public void Load(IEnumerable<Vector2> vertices, IEnumerable<Vector2> normals)
+        public override void Load(IList<Vector2> vertices)
+        {
+            foreach (var v in vertices)
+            {
+                var n = v.normalized;
+                if (Orientation == DRAW_ORIENTATION.XY)
+                {
+                    Vertices.Add(v);
+                    m_normals.Add(n);
+                }
+                else if (Orientation == DRAW_ORIENTATION.XZ)
+                {
+                    Vertices.Add(new Vector4(v.x, 0, v.y, 1));
+                    m_normals.Add(new Vector4(n.x, 0, n.y, 1));
+                }
+                    
+                Colors.Add(DefaultColor);
+            }
+        }
+
+        public void Load(IList<Vector2> vertices, IList<Vector2> normals)
         {
             foreach (var v in vertices)
             {
@@ -51,7 +70,18 @@ namespace Common.Unity.Drawing
             }
         }
 
-        public void Load(IEnumerable<Vector3> vertices, IEnumerable<Vector3> normals)
+        public override void Load(IList<Vector3> vertices)
+        {
+            foreach (var v in vertices)
+            {
+                var n = v.normalized;
+                Vertices.Add(v);
+                m_normals.Add(n);
+                Colors.Add(DefaultColor);
+            }
+        }
+
+        public void Load(IList<Vector3> vertices, IList<Vector3> normals)
         {
             foreach (var v in vertices)
             {

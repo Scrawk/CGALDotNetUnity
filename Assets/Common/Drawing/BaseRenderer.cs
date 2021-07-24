@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-using Common.Core.Numerics;
-using Common.Core.Colors;
-
 namespace Common.Unity.Drawing
 {
 
@@ -25,12 +22,6 @@ namespace Common.Unity.Drawing
             0, 1, 1, 2, 2, 3, 3, 0
         };
 
-        protected List<Vector4> Vertices { get; set; }
-
-        protected List<Color> Colors { get; set; }
-
-        protected List<int> Indices { get; set; }
-
         private Material m_material;
 
         public BaseRenderer()
@@ -44,6 +35,14 @@ namespace Common.Unity.Drawing
             CullMode = CullMode.Off;
             Enabled = true;
         }
+
+        public string Name { get; set; }
+
+        protected List<Vector4> Vertices { get; set; }
+
+        protected List<Color> Colors { get; set; }
+
+        protected List<int> Indices { get; set; }
 
         public Matrix4x4 LocalToWorld { get; set; }
 
@@ -116,11 +115,6 @@ namespace Common.Unity.Drawing
                 Colors[i] = color;
         }
 
-        public void SetLocalToWorld(Matrix4x4f m)
-        {
-            LocalToWorld = m.ToMatrix4x4();
-        }
-
         public void SetLocalToWorld(float x, float y, float z)
         {
             LocalToWorld = Matrix4x4.TRS(new Vector3(x, y, z), Quaternion.identity, Vector3.one);
@@ -162,6 +156,40 @@ namespace Common.Unity.Drawing
 
         }
 
+        public static int[] PolygonIndices(int count)
+        {
+            int[] indices = new int[count * 2];
+
+            for (int i = 0; i < count; i++)
+            {
+                indices[i * 2 + 0] = i;
+
+                if (i == count - 1)
+                    indices[i * 2 + 1] = 0;
+                else
+                    indices[i * 2 + 1] = i + 1;
+            }
+
+            return indices;
+        }
+
+        public static int[] LineIndices(int count)
+        {
+            int[] indices = new int[(count -1) * 2];
+
+            for (int i = 0; i < count-1; i++)
+            {
+                indices[i * 2 + 0] = i;
+                indices[i * 2 + 1] = i + 1;
+            }
+
+            return indices;
+        }
+
+        public abstract void Load(IList<Vector2> points);
+
+        public abstract void Load(IList<Vector3> points);
+
         public void Draw()
         {
             if (Enabled)
@@ -172,12 +200,6 @@ namespace Common.Unity.Drawing
         {
             if (Enabled)
                 OnDraw(camera, LocalToWorld);
-        }
-
-        public void Draw(Camera camera, Matrix4x4f localToWorld)
-        {
-            if (Enabled)
-                OnDraw(camera, localToWorld.ToMatrix4x4());
         }
 
         public void Draw(Camera camera, Matrix4x4 localToWorld)

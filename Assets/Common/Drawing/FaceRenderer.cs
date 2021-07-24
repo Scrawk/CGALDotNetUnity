@@ -46,7 +46,12 @@ namespace Common.Unity.Drawing
             Colors.Add(DefaultColor);
         }
 
-        public  void Load(IList<Vector2> vertices, IList<int> indices = null)
+        public override void Load(IList<Vector2> vertices)
+        {
+            Load(vertices, null);
+        }
+
+        public  void Load(IList<Vector2> vertices, IList<int> indices)
         {
             SetFaceIndices(vertices.Count, indices);
 
@@ -74,7 +79,12 @@ namespace Common.Unity.Drawing
             Colors.Add(DefaultColor);
         }
 
-        public void Load(IList<Vector3> vertices, IList<int> indices = null)
+        public override void Load(IList<Vector3> vertices)
+        {
+            Load(vertices, null);
+        }
+
+        public void Load(IList<Vector3> vertices, IList<int> indices)
         {
             SetFaceIndices(vertices.Count, indices);
 

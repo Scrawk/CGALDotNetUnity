@@ -12,7 +12,9 @@ namespace CGALDotNetUnity.Triangulations
     public class TriangulationExample : InputBehaviour
     {
 
-        private Color outLineColor = new Color32(20, 20, 20, 255);
+        private Color lineColor = new Color32(20, 20, 20, 255);
+
+        private Color pointColor = new Color32(200, 80, 80, 255);
 
         private Color faceColor = new Color32(120, 120, 120, 128);
 
@@ -25,6 +27,10 @@ namespace CGALDotNetUnity.Triangulations
             SetInputMode(INPUT_MODE.POINT);
 
             triangulation = new Triangulation2<EEK>();
+
+            SetPointSize(0.5f);
+            SetInputColor(lineColor, pointColor);
+            EnableInputPointOutline(true, lineColor);
         }
 
         protected override void OnInputComplete(List<Point2d> points)
@@ -34,7 +40,8 @@ namespace CGALDotNetUnity.Triangulations
             triangulation.InsertPoint(p);
 
             ClearShapeRenderers();
-            AddTriangulation(triangulation, outLineColor, faceColor);
+            AddTriangulation("", triangulation, lineColor, pointColor, faceColor);
+            EnableShapePointOutline(true, lineColor);
         }
 
         protected override void OnCleared()
