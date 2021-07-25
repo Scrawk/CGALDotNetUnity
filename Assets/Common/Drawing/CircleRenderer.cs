@@ -81,6 +81,22 @@ namespace Common.Unity.Drawing
             }
         }
 
+        public void Load(IList<Vector2> positions, IList<float> radius)
+        {
+
+            for (int i = 0; i < positions.Count; i++)
+            {
+                m_radii.Add(radius[i]);
+
+                if (Orientation == DRAW_ORIENTATION.XY)
+                    Vertices.Add(positions[i].xy01());
+                else if (Orientation == DRAW_ORIENTATION.XZ)
+                    Vertices.Add(positions[i].x0y1());
+
+                Colors.Add(DefaultColor);
+            }
+        }
+
         public void Load(Vector3 position)
         {
             Load(position, DefaultRadius);

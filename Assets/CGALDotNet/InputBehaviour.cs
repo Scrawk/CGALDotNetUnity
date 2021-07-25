@@ -287,8 +287,7 @@ namespace CGALDotNetUnity
             AddShape(name, points, faceIndices, lineIndices, lineColor, pointColor, faceColor, LINE_MODE.LINES);
         }
 
-        protected void AddTriangulation<K>(string name, Triangulation2<K> triangulation, Color lineColor, Color pointColor, Color faceColor)
-            where K : CGALKernel, new()
+        protected void AddTriangulation(string name, BaseTriangulation2 triangulation, Color lineColor, Color pointColor, Color faceColor)
         {
             if (triangulation == null) return;
 
@@ -341,6 +340,78 @@ namespace CGALDotNetUnity
             comp.Add(lines);
             comp.Add(pointBody);
             comp.Add(pointOutline);
+
+            ShapeRenderers.Add(comp);
+        }
+
+        protected void AddPoints(string name, Point2d[] points, float size, Color pointColor)
+        {
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = size * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Name = POINT_OUTLINE_NAME;
+            pointOutline.Enabled = false;
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = pointColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = size * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            ShapeRenderers.Add(comp);
+        }
+
+        protected void AddPoints(string name, Circle2d[] points, float size, Color pointColor)
+        {
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = size * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Name = POINT_OUTLINE_NAME;
+            pointOutline.Enabled = false;
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = pointColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = size * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            ShapeRenderers.Add(comp);
+        }
+
+        protected void AddCircles(string name, Circle2d[] circles, Color color, int segments = 16, bool fill = false)
+        {
+            var renderer = new CircleRenderer();
+            renderer.Orientation = DRAW_ORIENTATION.XY;
+            renderer.Segments = segments;
+            renderer.DefaultColor = color;
+            renderer.Fill = fill;
+            renderer.Load(ToVector2(circles), ToFloat(circles));
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(renderer);
 
             ShapeRenderers.Add(comp);
         }
@@ -601,6 +672,16 @@ namespace CGALDotNetUnity
         private Vector2[] ToVector2(Point2d[] points)
         {
             return Array.ConvertAll(points, p => new Vector2((float)p.x, (float)p.y));
+        }
+
+        private Vector2[] ToVector2(Circle2d[] circles)
+        {
+            return Array.ConvertAll(circles, c => new Vector2((float)c.Center.x, (float)c.Center.y));
+        }
+
+        private float[] ToFloat(Circle2d[] circles)
+        {
+            return Array.ConvertAll(circles, c => (float)c.Radius);
         }
 
         private List<Vector2> ToVector2(List<Point2d> points)

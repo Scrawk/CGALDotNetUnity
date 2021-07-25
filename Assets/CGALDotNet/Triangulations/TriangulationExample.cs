@@ -16,9 +16,11 @@ namespace CGALDotNetUnity.Triangulations
 
         private Color pointColor = new Color32(200, 80, 80, 255);
 
+        private Color circumColor = new Color32(200, 80, 80, 255);
+
         private Color faceColor = new Color32(120, 120, 120, 128);
 
-        private Triangulation2<EEK> triangulation;
+        private BaseTriangulation2 triangulation;
 
         protected override void Start()
         {
@@ -26,7 +28,7 @@ namespace CGALDotNetUnity.Triangulations
 
             SetInputMode(INPUT_MODE.POINT);
 
-            triangulation = new Triangulation2<EEK>();
+            triangulation = new ConstrainedTriangulation2<EEK>();
 
             SetPointSize(0.5f);
             SetInputColor(lineColor, pointColor);
@@ -35,12 +37,28 @@ namespace CGALDotNetUnity.Triangulations
 
         protected override void OnInputComplete(List<Point2d> points)
         {
-            
             var p = points[0];
             triangulation.InsertPoint(p);
 
             ClearShapeRenderers();
             AddTriangulation("", triangulation, lineColor, pointColor, faceColor);
+            
+            /*
+            int count = triangulation.FaceCount;
+            if(count > 0)
+            {
+                var triangles = new Triangle2d[count];
+                triangulation.GetTriangles(triangles);
+
+                var circumcenters = new Circle2d[count];
+                for (int i = 0; i < count; i++)
+                    circumcenters[i] = triangles[i].CircumCircle();
+
+                AddPoints("", circumcenters, PointSize, new Color32(200, 200, 80, 255));
+                AddCircles("", circumcenters, circumColor, 64);
+            }
+            */
+
             EnableShapePointOutline(true, lineColor);
         }
 
