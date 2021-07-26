@@ -18,21 +18,37 @@ namespace CGALDotNetUnity.Triangulations
 
         private Color circumColor = new Color32(200, 80, 80, 255);
 
+        private Color constraintColor = new Color32(200, 80, 80, 255);
+
         private Color faceColor = new Color32(120, 120, 120, 128);
 
-        private BaseTriangulation2 triangulation;
+        private ConstrainedTriangulation2 triangulation;
 
         protected override void Start()
         {
             base.Start();
 
             SetInputMode(INPUT_MODE.POINT);
-
-            triangulation = new ConstrainedTriangulation2<EEK>();
-
             SetPointSize(0.5f);
             SetInputColor(lineColor, pointColor);
             EnableInputPointOutline(true, lineColor);
+
+            triangulation = new ConstrainedTriangulation2<EEK>();
+
+            var points = new Point2d[]
+            {
+                new Point2d(-5, -5),
+                new Point2d(5, -5),
+                new Point2d(5, 5),
+                new Point2d(-5, 5),
+            };
+
+            triangulation.InsertPoints(points);
+
+            triangulation.InsertSegmentConstraint(new Point2d(0, 0), new Point2d(2, -2));
+
+            AddTraingulation();
+
         }
 
         protected override void OnInputComplete(List<Point2d> points)
@@ -40,12 +56,22 @@ namespace CGALDotNetUnity.Triangulations
             var p = points[0];
             triangulation.InsertPoint(p);
 
+            AddTraingulation();
+        }
+
+        private void AddTraingulation()
+        {
             ClearShapeRenderers();
-            AddTriangulation("", triangulation, lineColor, pointColor, faceColor);
-            
-            /*
+            AddTriangulationFaces("", triangulation, lineColor, pointColor, faceColor);
+            AddConstraints();
+            AddTriangulationPoints("", triangulation, lineColor, pointColor, faceColor);
+            EnableShapePointOutline(true, lineColor);
+        }
+
+        private void AddCircumcircles()
+        {
             int count = triangulation.FaceCount;
-            if(count > 0)
+            if (count > 0)
             {
                 var triangles = new Triangle2d[count];
                 triangulation.GetTriangles(triangles);
@@ -54,12 +80,20 @@ namespace CGALDotNetUnity.Triangulations
                 for (int i = 0; i < count; i++)
                     circumcenters[i] = triangles[i].CircumCircle();
 
-                AddPoints("", circumcenters, PointSize, new Color32(200, 200, 80, 255));
+                AddPoints("", circumcenters, PointSize, circumColor);
                 AddCircles("", circumcenters, circumColor, 64);
             }
-            */
+        }
 
-            EnableShapePointOutline(true, lineColor);
+        private void AddConstraints()
+        {
+            int count = triangulation.ConstrainedEdgeCount;
+            if (count > 0)
+            {
+                var segments = new Segment2d[count];
+                triangulation.GetConstraints(segments);
+                AddSegments("", segments, constraintColor);
+            }
         }
 
         protected override void OnCleared()

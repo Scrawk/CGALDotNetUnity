@@ -173,19 +173,6 @@ namespace Common.Unity.Drawing
             return indices;
         }
 
-        public static int[] LineIndices(int count)
-        {
-            int[] indices = new int[(count -1) * 2];
-
-            for (int i = 0; i < count-1; i++)
-            {
-                indices[i * 2 + 0] = i;
-                indices[i * 2 + 1] = i + 1;
-            }
-
-            return indices;
-        }
-
         public abstract void Load(IList<Vector2> points);
 
         public abstract void Load(IList<Vector3> points);

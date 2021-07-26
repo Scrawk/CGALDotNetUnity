@@ -59,7 +59,7 @@ namespace CGALDotNetUnity.Polygons
                     polygon2 = input;
 
                     result.Clear();
-                    PolygonBoolean2<EEK>.Intersect(polygon1, polygon2, result);
+                    PolygonBoolean2<EEK>.Instance.Intersect(polygon1, polygon2, result);
 
                     foreach (var pwh in result)
                     {

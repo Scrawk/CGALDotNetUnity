@@ -271,8 +271,19 @@ namespace CGALDotNetUnity
         {
             if (polygon == null) return;
 
+            Point2d[] points;
+            List<int> indices;
+            Triangulate(polygon, out points, out indices);
+
+            AddShapeFacesAndPoints(name, points, indices.ToArray(), pointColor, faceColor);
+
             foreach (var poly in polygon.ToList())
-                AddPolygon(name, poly, lineColor, pointColor, faceColor);
+            {
+                var lineIndices = BaseRenderer.PolygonIndices(poly.Count);
+                points = poly.ToArray();
+                AddLines(name, points, lineIndices, lineColor, LINE_MODE.LINES);
+            }
+                
         }
 
         protected void AddPolygon<K>(string name, Polygon2<K> polygon, Color lineColor, Color pointColor, Color faceColor)
@@ -284,7 +295,7 @@ namespace CGALDotNetUnity
             var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
             var points = polygon.ToArray();
 
-            AddShape(name, points, faceIndices, lineIndices, lineColor, pointColor, faceColor, LINE_MODE.LINES);
+            AddShape(name, points, faceIndices.ToArray(), lineIndices, lineColor, pointColor, faceColor, LINE_MODE.LINES);
         }
 
         protected void AddTriangulation(string name, BaseTriangulation2 triangulation, Color lineColor, Color pointColor, Color faceColor)
@@ -298,6 +309,38 @@ namespace CGALDotNetUnity
             triangulation.GetIndices(indices);
 
             AddShape(name, points, indices, indices, lineColor, pointColor, faceColor, LINE_MODE.TRIANGLES);
+        }
+
+        protected void AddTriangulationFaces(string name, BaseTriangulation2 triangulation, Color lineColor, Color pointColor, Color faceColor)
+        {
+            if (triangulation == null) return;
+
+            var points = new Point2d[triangulation.VertexCount];
+            var indices = new int[triangulation.IndiceCount];
+
+            triangulation.GetPoints(points);
+            triangulation.GetIndices(indices);
+
+            AddShapeFacesAndLines(name, points, indices, indices, lineColor, faceColor, LINE_MODE.TRIANGLES);
+        }
+
+        protected void AddTriangulationPoints(string name, BaseTriangulation2 triangulation, Color lineColor, Color pointColor, Color faceColor)
+        {
+            if (triangulation == null) return;
+
+            var points = new Point2d[triangulation.VertexCount];
+            triangulation.GetPoints(points);
+
+            AddPoints(name, points, PointSize, pointColor);
+        }
+
+        protected void AddSegments(string name, Segment2d[] segments, Color lineColor)
+        {
+            if (segments == null) return;
+
+            var points = ToVector2(segments);
+
+            AddLines(name, points, null, lineColor, LINE_MODE.LINES);
         }
 
         protected void AddShape(string name, Point2d[] points, int[] faceIndices, int[] lineIndices, Color lineColor, Color pointColor, Color faceColor, LINE_MODE lineMode)
@@ -340,6 +383,97 @@ namespace CGALDotNetUnity
             comp.Add(lines);
             comp.Add(pointBody);
             comp.Add(pointOutline);
+
+            ShapeRenderers.Add(comp);
+        }
+
+        protected void AddShapeFacesAndLines(string name, Point2d[] points, int[] faceIndices, int[] lineIndices, Color lineColor, Color faceColor, LINE_MODE lineMode)
+        {
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = faceColor;
+            triangles.Load(ToVector2(points), faceIndices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = lineMode;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), lineIndices);
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(triangles);
+            comp.Add(lines);
+
+            ShapeRenderers.Add(comp);
+        }
+
+        protected void AddShapeFacesAndPoints(string name, Point2d[] points, int[] faceIndices, Color pointColor, Color faceColor)
+        {
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = faceColor;
+            triangles.Load(ToVector2(points), faceIndices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = PointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Name = POINT_OUTLINE_NAME;
+            pointOutline.Enabled = false;
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = pointColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = PointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(triangles);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            ShapeRenderers.Add(comp);
+        }
+
+        protected void AddLines(string name, Point2d[] points, int[] lineIndices, Color lineColor, LINE_MODE lineMode)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = lineMode;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), lineIndices);
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(lines);
+
+            ShapeRenderers.Add(comp);
+        }
+
+        protected void AddLines(string name, Vector2[] points, int[] lineIndices, Color lineColor, LINE_MODE lineMode)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = lineMode;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(points, lineIndices);
+
+            var comp = new CompositeRenderer();
+            comp.Name = name;
+            comp.Add(lines);
 
             ShapeRenderers.Add(comp);
         }
@@ -669,6 +803,21 @@ namespace CGALDotNetUnity
             return array;
         }
 
+        private Vector2[] ToVector2(Segment2d[] segments)
+        {
+            var array = new Vector2[segments.Length * 2];
+
+            for (int i = 0; i < segments.Length; i++)
+            {
+                var a = segments[i].A;
+                var b = segments[i].B;
+                array[i * 2 + 0] = new Vector2((float)a.x, (float)a.y);
+                array[i * 2 + 1] = new Vector2((float)b.x, (float)b.y);
+            }
+
+            return array;
+        }
+
         private Vector2[] ToVector2(Point2d[] points)
         {
             return Array.ConvertAll(points, p => new Vector2((float)p.x, (float)p.y));
@@ -689,18 +838,27 @@ namespace CGALDotNetUnity
             return points.ConvertAll(p => new Vector2((float)p.x, (float)p.y));
         }
 
-        private int[] Triangulate<K>(Polygon2<K> polygon)
+        private List<int> Triangulate<K>(Polygon2<K> polygon)
             where K : CGALKernel, new()
         {
-            var points = new Point2d[polygon.Count];
-            polygon.GetPoints(points);
-
-            var tri = new Triangulation2<K>(points);
-
-            var indices = new int[tri.IndiceCount];
-            tri.GetIndices(indices);
-
+            var tri = new ConstrainedTriangulation2<K>(polygon);
+            var indices = new List<int>();
+            tri.GetPolygonIndices(polygon, indices);
             return indices;
+        }
+
+        private void Triangulate<K>(PolygonWithHoles2<K> polygon, out Point2d[] points, out List<int> indices)
+            where K : CGALKernel, new()
+        {
+            var tri = new ConstrainedTriangulation2<K>(polygon);
+
+            int count = tri.VertexCount;
+            points = new Point2d[count];
+            tri.GetPoints(points);
+
+            indices = new List<int>();
+            tri.GetPolygonIndices(polygon, indices);
+
         }
 
     }

@@ -12,17 +12,30 @@ namespace CGALDotNetUnity.Polygons
     public class Arrangement2Example : InputBehaviour
     {
 
-        private Arrangement2<EEK> arrangement;
+        private Color lineColor = new Color32(20, 20, 20, 255);
 
-        private List<BaseRenderer> Renderers { get; set; }
+        private Color pointColor = new Color32(200, 80, 80, 255);
+
+        private Color circumColor = new Color32(200, 80, 80, 255);
+
+        private Color constraintColor = new Color32(200, 80, 80, 255);
+
+        private Color faceColor = new Color32(120, 120, 120, 128);
+
+        private Arrangement2<EEK> arrangement;
 
         protected override void Start()
         {
             base.Start();
 
-            Point2d p1 = new Point2d(-2, -2);
-            Point2d p2 = new Point2d(-2, 2);
-            Point2d p3 = new Point2d(2, -2);
+            SetInputMode(INPUT_MODE.POINT);
+            SetPointSize(0.5f);
+            SetInputColor(lineColor, pointColor);
+            EnableInputPointOutline(true, lineColor);
+
+            Point2d p1 = new Point2d(-5, -5);
+            Point2d p2 = new Point2d(-5, 5);
+            Point2d p3 = new Point2d(5, -5);
 
             var segments = new Segment2d[]
             {
@@ -33,73 +46,46 @@ namespace CGALDotNetUnity.Polygons
 
             arrangement = new Arrangement2<EEK>(segments);
 
-            Renderers = new List<BaseRenderer>();
+            AddArrangement();
+        }
 
-            segments = new Segment2d[arrangement.EdgeCount];
+        protected override void OnInputComplete(List<Point2d> points)
+        {
+            if (points.Count == 1)
+            {
+                arrangement.InsertPoint(points[0]);
+            }
+            else if (points.Count == 2)
+            {
+                arrangement.InsertSegment(new Segment2d(points[0], points[1]), false);
+            }
+
+            AddArrangement();
+        }
+
+        private void AddArrangement()
+        {
+            ClearShapeRenderers();
+
+            var segments = new Segment2d[arrangement.EdgeCount];
             arrangement.GetSegments(segments);
-            AddSegments(segments, Color.blue);
+            AddSegments("", segments, lineColor);
 
             var points = new Point2d[arrangement.VertexCount];
             arrangement.GetPoints(points);
-            AddPoints(points, Color.yellow);
+            AddPoints("", points, PointSize, pointColor);
+
+            EnableShapePointOutline(true, lineColor);
         }
 
         private void OnRenderObject()
         {
             DrawGrid();
-
-            foreach (var renderer in Renderers)
-                renderer.Draw();
+            DrawShapes();
+            DrawInput();
+            DrawPoint();
         }
 
-        protected void AddSegments(Segment2d[] segments, Color color)
-        {
-            var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
-            lines.Orientation = DRAW_ORIENTATION.XY;
-            lines.DefaultColor = color;
-            lines.Load(ToVector2(segments));
-            Renderers.Add(lines);
-        }
-
-        protected void AddPoints(Point2d[] points, Color color)
-        {
-            var verts = new VertexRenderer(0.02f);
-            verts.Orientation = DRAW_ORIENTATION.XY;
-            verts.DefaultColor = color;
-            verts.Load(ToVector2(points));
-            Renderers.Add(verts);
-        }
-
-        private Vector2[] ToVector2(Segment2d[] segments)
-        {
-            var array = new Vector2[segments.Length * 2];
-
-            for (int i = 0; i < segments.Length; i++)
-            {
-                var a = segments[i].A;
-                var b = segments[i].B;
-
-                array[i * 2 + 0] = new Vector2((float)a.x, (float)a.y);
-                array[i * 2 + 1] = new Vector2((float)b.x, (float)b.y);
-            }
-                
-            return array;
-        }
-
-        private Vector2[] ToVector2(Point2d[] points)
-        {
-            var array = new Vector2[points.Length];
-
-            for (int i = 0; i < points.Length; i++)
-            {
-                var p = points[i];
-                array[i] = new Vector2((float)p.x, (float)p.y);
-            }
-                
-
-            return array;
-        }
 
     }
 
