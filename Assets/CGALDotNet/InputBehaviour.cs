@@ -14,6 +14,7 @@ namespace CGALDotNetUnity
 
     public enum INPUT_MODE
     {
+        NONE,
         POINT,
         POINT_CLICK,
         SEGMENT,
@@ -179,6 +180,9 @@ namespace CGALDotNetUnity
             {
                 switch (Mode)
                 {
+                    case INPUT_MODE.NONE:
+                        break;
+
                     case INPUT_MODE.POINT:
                         PointInputMode(point, leftMouseClicked);
                         break;
@@ -311,6 +315,21 @@ namespace CGALDotNetUnity
             SnapTargets.Clear();
         }
 
+        protected void AddLine(string name, Line2d line, Color lineColor)
+        {
+            var points = new Point2d[] { new Point2d(0,0), new Point2d(10,0) };
+            AddLines(name, points, null, lineColor);
+        }
+
+        protected void AddBox(string name, Box2d box, Color lineColor, Color faceColor)
+        {
+            var points = box.GetCorners();
+            var lines = BaseRenderer.SQUARE_LINE_INDICES;
+            var faces = BaseRenderer.SQUARE_FACE_INDICES;
+
+            AddShapeFacesAndLines(name, points, lines, faces, lineColor, faceColor);
+        }
+
         protected void AddPolygon<K>(string name, PolygonWithHoles2<K> polygon, Color lineColor, Color pointColor, Color faceColor)
             where K : CGALKernel, new()
         {
@@ -326,7 +345,7 @@ namespace CGALDotNetUnity
             {
                 var lineIndices = BaseRenderer.PolygonIndices(poly.Count);
                 points = poly.ToArray();
-                AddLines(name, points, lineIndices, lineColor, LINE_MODE.LINES);
+                AddLines(name, points, lineIndices, lineColor);
             }
                 
         }
@@ -366,7 +385,7 @@ namespace CGALDotNetUnity
             triangulation.GetPoints(points);
             triangulation.GetIndices(indices);
 
-            AddShapeFacesAndLines(name, points, indices, indices, lineColor, faceColor, LINE_MODE.TRIANGLES);
+            AddShapeFacesAndLines(name, points, indices, indices, lineColor, faceColor);
         }
 
         protected void AddTriangulationPoints(string name, BaseTriangulation2 triangulation, Color lineColor, Color pointColor, Color faceColor)
@@ -386,10 +405,10 @@ namespace CGALDotNetUnity
             var points = ToVector2(segments);
             var indices = BaseRenderer.SegmentIndices(segments.Count);
 
-            AddLines(name, points, indices, lineColor, LINE_MODE.LINES);
+            AddLines(name, points, indices, lineColor);
         }
 
-        protected void AddShape(string name, Point2d[] points, int[] faceIndices, int[] lineIndices, Color lineColor, Color pointColor, Color faceColor, LINE_MODE lineMode)
+        protected void AddShape(string name, Point2d[] points, IList<int> faceIndices, IList<int> lineIndices, Color lineColor, Color pointColor, Color faceColor, LINE_MODE lineMode)
         {
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -433,7 +452,7 @@ namespace CGALDotNetUnity
             ShapeRenderers.Add(comp);
         }
 
-        protected void AddShapeFacesAndLines(string name, Point2d[] points, int[] faceIndices, int[] lineIndices, Color lineColor, Color faceColor, LINE_MODE lineMode)
+        protected void AddShapeFacesAndLines(string name, Point2d[] points, IList<int> lineIndices, IList<int> faceIndices, Color lineColor, Color faceColor)
         {
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -444,7 +463,7 @@ namespace CGALDotNetUnity
             triangles.SrcBlend = BlendMode.One;
 
             var lines = new SegmentRenderer();
-            lines.LineMode = lineMode;
+            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
             lines.Load(ToVector2(points), lineIndices);
@@ -457,7 +476,7 @@ namespace CGALDotNetUnity
             ShapeRenderers.Add(comp);
         }
 
-        protected void AddShapeFacesAndPoints(string name, Point2d[] points, int[] faceIndices, Color pointColor, Color faceColor)
+        protected void AddShapeFacesAndPoints(string name, Point2d[] points, IList<int> faceIndices, Color pointColor, Color faceColor)
         {
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -494,10 +513,10 @@ namespace CGALDotNetUnity
             ShapeRenderers.Add(comp);
         }
 
-        protected void AddLines(string name, Point2d[] points, int[] lineIndices, Color lineColor, LINE_MODE lineMode)
+        protected void AddLines(string name, Point2d[] points, IList<int> lineIndices, Color lineColor)
         {
             var lines = new SegmentRenderer();
-            lines.LineMode = lineMode;
+            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
             lines.Load(ToVector2(points), lineIndices);
@@ -509,10 +528,10 @@ namespace CGALDotNetUnity
             ShapeRenderers.Add(comp);
         }
 
-        protected void AddLines(string name, Vector2[] points, int[] lineIndices, Color lineColor, LINE_MODE lineMode)
+        protected void AddLines(string name, Vector2[] points, IList<int> lineIndices, Color lineColor)
         {
             var lines = new SegmentRenderer();
-            lines.LineMode = lineMode;
+            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
             lines.Load(points, lineIndices);

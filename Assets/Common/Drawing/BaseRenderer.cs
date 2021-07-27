@@ -17,9 +17,14 @@ namespace Common.Unity.Drawing
             0, 4, 1, 5, 2, 6, 3, 7
         };
 
-        public static readonly IList<int> SQUARE_INDICES = new int[]
+        public static readonly IList<int> SQUARE_LINE_INDICES = new int[]
         {
             0, 1, 1, 2, 2, 3, 3, 0
+        };
+
+        public static readonly IList<int> SQUARE_FACE_INDICES = new int[]
+        {
+            0, 1, 2, 0, 2, 3
         };
 
         private Material m_material;
