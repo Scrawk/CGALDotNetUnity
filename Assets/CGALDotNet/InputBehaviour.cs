@@ -16,6 +16,7 @@ namespace CGALDotNetUnity
     {
         POINT,
         POINT_CLICK,
+        SEGMENT,
         POLYGON
     }
 
@@ -52,6 +53,8 @@ namespace CGALDotNetUnity
 
         private GridRenderer Grid { get; set; }
 
+        private List<Point2d> SnapTargets { get; set; }
+
         protected virtual void Start()
         {
             SnapPoint = 0;
@@ -60,6 +63,7 @@ namespace CGALDotNetUnity
             PointOutlineEnabled = false;
 
             InputPoints = new List<Point2d>();
+            SnapTargets = new List<Point2d>();
             ShapeRenderers = new List<CompositeRenderer>();
             InputRenderers = new List<CompositeRenderer>();
             PointRenderer = new List<CompositeRenderer>();
@@ -137,7 +141,7 @@ namespace CGALDotNetUnity
 
             Mode = mode;
 
-            if (mode != INPUT_MODE.POLYGON)
+            if (mode < INPUT_MODE.SEGMENT)
                 SetLineEnable(InputRenderers, false);
             else
                 SetLineEnable(InputRenderers, true);
@@ -183,6 +187,10 @@ namespace CGALDotNetUnity
                         PointClickInputMode(point, leftMouseClicked);
                         break;
 
+                    case INPUT_MODE.SEGMENT:
+                        SegmentInputMode(point, leftMouseClicked);
+                        break;
+
                     case INPUT_MODE.POLYGON:
                         PolygonInputMode(point, leftMouseClicked);
                         break;
@@ -193,7 +201,9 @@ namespace CGALDotNetUnity
 
         private void PointInputMode(Point2d point, bool leftMouseClicked)
         {
-            if(leftMouseClicked)
+            point = SnapToTargets(point);
+
+            if (leftMouseClicked)
             {
                 AddPoint(point);
                 OnInputComplete(InputPoints);
@@ -209,9 +219,34 @@ namespace CGALDotNetUnity
             }
         }
 
+        private void SegmentInputMode(Point2d point, bool leftMouseClicked)
+        {
+            point = SnapToTargets(point);
+
+            if (leftMouseClicked)
+            {
+                if (InputPoints.Count == 0)
+                {
+                    AddPoint(point);
+                    AddPoint(point);
+                }
+
+                if (InputPoints.Count == 2 && LastPointDistance() > SnapDist)
+                {
+                    OnInputComplete(InputPoints);
+                    ResetInput();
+                }
+            }
+            else
+            {
+                MoveLastPoint(point);
+            }
+        }
+
         private void PolygonInputMode(Point2d point, bool leftMouseClicked)
         {
             point = SnapToPolygon(point);
+            point = SnapToTargets(point);
 
             if (leftMouseClicked)
             {
@@ -264,6 +299,16 @@ namespace CGALDotNetUnity
         protected void DrawGrid()
         {
             Grid.Draw();
+        }
+
+        protected void AddSnapTargets(IList<Point2d> points)
+        {
+            SnapTargets.AddRange(points);
+        }
+
+        protected void ClearSnapTargets()
+        {
+            SnapTargets.Clear();
         }
 
         protected void AddPolygon<K>(string name, PolygonWithHoles2<K> polygon, Color lineColor, Color pointColor, Color faceColor)
@@ -334,13 +379,14 @@ namespace CGALDotNetUnity
             AddPoints(name, points, PointSize, pointColor);
         }
 
-        protected void AddSegments(string name, Segment2d[] segments, Color lineColor)
+        protected void AddSegments(string name, IList<Segment2d> segments, Color lineColor)
         {
             if (segments == null) return;
 
             var points = ToVector2(segments);
+            var indices = BaseRenderer.SegmentIndices(segments.Count);
 
-            AddLines(name, points, null, lineColor, LINE_MODE.LINES);
+            AddLines(name, points, indices, lineColor, LINE_MODE.LINES);
         }
 
         protected void AddShape(string name, Point2d[] points, int[] faceIndices, int[] lineIndices, Color lineColor, Color pointColor, Color faceColor, LINE_MODE lineMode)
@@ -738,6 +784,16 @@ namespace CGALDotNetUnity
             return new Point2d(p.x, p.y);
         }
 
+        private double LastPointDistance()
+        {
+            if (InputPoints.Count < 2)
+                return 0;
+
+            int i = InputPoints.Count - 2;
+            int j = InputPoints.Count - 1;
+            return Point2d.Distance(InputPoints[i], InputPoints[j]);
+        }
+
         private void AddPoint(Point2d point)
         {
             InputPoints.Add(point);
@@ -756,15 +812,26 @@ namespace CGALDotNetUnity
             int count = InputPoints.Count;
             if (count < 4) return point;
 
-            var x = InputPoints[0].x - point.x;
-            var y = InputPoints[0].y - point.y;
+            var p = InputPoints[0] - point;
 
-            var dist = Math.Sqrt(x * x + y * y);
+            if (p.Magnitude <= SnapDist)
+                point = InputPoints[0];
 
-            if (dist <= SnapDist)
+            return point;
+        }
+
+        private Point2d SnapToTargets(Point2d point)
+        {
+            foreach(var p in SnapTargets)
             {
-                point.x = InputPoints[0].x;
-                point.y = InputPoints[0].y;
+                var q = p - point;
+
+                if (q.Magnitude <= SnapDist)
+                {
+                    point = p;
+                    return point;
+                }
+                    
             }
 
             return point;
@@ -803,11 +870,11 @@ namespace CGALDotNetUnity
             return array;
         }
 
-        private Vector2[] ToVector2(Segment2d[] segments)
+        private Vector2[] ToVector2(IList<Segment2d> segments)
         {
-            var array = new Vector2[segments.Length * 2];
+            var array = new Vector2[segments.Count * 2];
 
-            for (int i = 0; i < segments.Length; i++)
+            for (int i = 0; i < segments.Count; i++)
             {
                 var a = segments[i].A;
                 var b = segments[i].B;

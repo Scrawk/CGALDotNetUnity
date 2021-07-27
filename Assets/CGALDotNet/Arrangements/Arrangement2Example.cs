@@ -6,6 +6,8 @@ using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Arrangements;
+using CGALDotNet.Polygons;
+using CGALDotNet.Hulls;
 
 namespace CGALDotNetUnity.Polygons
 {
@@ -14,7 +16,9 @@ namespace CGALDotNetUnity.Polygons
 
         private Color lineColor = new Color32(20, 20, 20, 255);
 
-        private Color pointColor = new Color32(200, 80, 80, 255);
+        private Color pointColor = new Color32(80, 80, 200, 255);
+
+        private Color inputColor = new Color32(80, 200, 80, 255);
 
         private Color circumColor = new Color32(200, 80, 80, 255);
 
@@ -28,9 +32,9 @@ namespace CGALDotNetUnity.Polygons
         {
             base.Start();
 
-            SetInputMode(INPUT_MODE.POINT);
+            SetInputMode(INPUT_MODE.SEGMENT);
             SetPointSize(0.5f);
-            SetInputColor(lineColor, pointColor);
+            SetInputColor(lineColor, inputColor);
             EnableInputPointOutline(true, lineColor);
 
             Point2d p1 = new Point2d(-5, -5);
@@ -44,7 +48,20 @@ namespace CGALDotNetUnity.Polygons
                 new Segment2d(p3, p1)
             };
 
-            arrangement = new Arrangement2<EEK>(segments);
+            var points = new Point2d[]
+            {
+                new Point2d(-5, -5),
+                new Point2d(-5, 5),
+                new Point2d(5, -5)
+            };
+
+            int count = 100;
+            int seed = 0;
+            var rnd = RandomPoints(count, seed);
+            var hull = ConvexHull2<EEK>.Instance.CreateHull(rnd, 0, count);
+
+            arrangement = new Arrangement2<EEK>();
+            arrangement.InsertPolygon(hull, true);
 
             AddArrangement();
         }
@@ -57,7 +74,19 @@ namespace CGALDotNetUnity.Polygons
             }
             else if (points.Count == 2)
             {
-                arrangement.InsertSegment(new Segment2d(points[0], points[1]), false);
+                var seg = new Segment2d(points[0], points[1]);
+
+                if(arrangement.IntersectsSegment(seg))
+                {
+                    arrangement.InsertSegment(seg, false);
+                    Debug.Log("Is valid = " + arrangement.IsValid());
+                }
+                else
+                {
+                    arrangement.InsertSegment(seg, true);
+                    Debug.Log("Is valid = " + arrangement.IsValid());
+                }
+
             }
 
             AddArrangement();
@@ -65,15 +94,19 @@ namespace CGALDotNetUnity.Polygons
 
         private void AddArrangement()
         {
+            
             ClearShapeRenderers();
 
             var segments = new Segment2d[arrangement.EdgeCount];
             arrangement.GetSegments(segments);
-            AddSegments("", segments, lineColor);
+            AddSegments("", GetSegments(), lineColor);
 
             var points = new Point2d[arrangement.VertexCount];
             arrangement.GetPoints(points);
             AddPoints("", points, PointSize, pointColor);
+
+            ClearSnapTargets();
+            AddSnapTargets(points);
 
             EnableShapePointOutline(true, lineColor);
         }
@@ -84,6 +117,63 @@ namespace CGALDotNetUnity.Polygons
             DrawShapes();
             DrawInput();
             DrawPoint();
+        }
+
+        private List<Segment2d> GetSegments()
+        {
+            var segments = new Segment2d[arrangement.EdgeCount];
+            arrangement.GetSegments(segments);
+
+            var list = new List<Segment2d>();
+
+            foreach(var seg in segments)
+            {
+
+                var n = (Vector2d)(seg.B - seg.A);
+                n = n.Normalized * PointSize;
+
+                var offset = (Point2d)(n * PointSize * 2);
+                var perp = (Point2d)(n.PerpendicularCCW * PointSize * 0.5f);
+
+                var ab = new Segment2d(seg.A + offset, seg.B - offset);
+
+                var ab_plus = ab + perp;
+                var ab_min = ab - perp;
+
+                list.Add(ab_plus);
+                list.Add(ab_min);
+
+                if (seg.Length > PointSize * 2)
+                {
+                    n = (Vector2d)(seg.A - ab_plus.A);
+                    n = n.Normalized * PointSize;
+                    list.Add(new Segment2d(ab_plus.A, ab_plus.A - (Point2d)n));
+
+                    n = (Vector2d)(seg.B - ab_min.B);
+                    n = n.Normalized * PointSize;
+                    list.Add(new Segment2d(ab_min.B, ab_min.B - (Point2d)n));
+                }
+
+            }
+
+            return list;
+        }
+
+        private Point2d[] RandomPoints(int count, int seed)
+        {
+            var points = new Point2d[count];
+
+            var rnd = new System.Random(seed);
+
+            for(int i = 0; i < count; i++)
+            {
+                double x = rnd.NextDouble(-5, 5);
+                double y = rnd.NextDouble(-5, 5);
+
+                points[i] = new Point2d(x, y);
+            }
+
+            return points;
         }
 
 

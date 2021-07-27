@@ -173,6 +173,19 @@ namespace Common.Unity.Drawing
             return indices;
         }
 
+        public static int[] SegmentIndices(int count)
+        {
+            int[] indices = new int[count * 2];
+
+            for (int i = 0; i < count; i++)
+            {
+                indices[i * 2 + 0] = i * 2 + 0;
+                indices[i * 2 + 1] = i * 2 + 1;
+            }
+
+            return indices;
+        }
+
         public abstract void Load(IList<Vector2> points);
 
         public abstract void Load(IList<Vector3> points);
