@@ -56,6 +56,8 @@ namespace CGALDotNetUnity
 
         private List<Point2d> SnapTargets { get; set; }
 
+        private Point2d? PreviousPoint { get; set; }
+
         protected virtual void Start()
         {
             SnapPoint = 0;
@@ -159,14 +161,27 @@ namespace CGALDotNetUnity
 
         }
 
-        protected virtual void OnLeftClick(Point2d point)
+        protected virtual void OnLeftClickDown(Point2d point)
+        {
+
+        }
+
+        protected virtual void OnLeftClickUp(Point2d point)
+        {
+
+        }
+
+        protected virtual void OnLeftDrag(Point2d point, Point2d delta)
         {
 
         }
 
         protected virtual void Update()
         {
-            bool leftMouseClicked = Input.GetMouseButtonDown(0);
+            bool leftMouseDown = Input.GetMouseButtonDown(0);
+            bool leftMouseUp = Input.GetMouseButtonUp(0);
+            bool leftMouseDragged = Input.GetMouseButton(0);
+
             Point2d point = GetMousePosition();
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -178,29 +193,37 @@ namespace CGALDotNetUnity
             }
             else
             {
-                switch (Mode)
+                if (leftMouseUp)
                 {
-                    case INPUT_MODE.NONE:
-                        break;
+                    OnLeftClickUp(point);
+                }
+                else
+                {
+                    switch (Mode)
+                    {
+                        case INPUT_MODE.NONE:
+                            break;
 
-                    case INPUT_MODE.POINT:
-                        PointInputMode(point, leftMouseClicked);
-                        break;
+                        case INPUT_MODE.POINT:
+                            PointInputMode(point, leftMouseDown);
+                            break;
 
-                    case INPUT_MODE.POINT_CLICK:
-                        PointClickInputMode(point, leftMouseClicked);
-                        break;
+                        case INPUT_MODE.POINT_CLICK:
+                            PointClickInputMode(point, leftMouseDown, leftMouseDragged);
+                            break;
 
-                    case INPUT_MODE.SEGMENT:
-                        SegmentInputMode(point, leftMouseClicked);
-                        break;
+                        case INPUT_MODE.SEGMENT:
+                            SegmentInputMode(point, leftMouseDown);
+                            break;
 
-                    case INPUT_MODE.POLYGON:
-                        PolygonInputMode(point, leftMouseClicked);
-                        break;
+                        case INPUT_MODE.POLYGON:
+                            PolygonInputMode(point, leftMouseDown);
+                            break;
+                    }
                 }
             }
 
+            PreviousPoint = point;
         }
 
         private void PointInputMode(Point2d point, bool leftMouseClicked)
@@ -215,11 +238,16 @@ namespace CGALDotNetUnity
             }
         }
 
-        private void PointClickInputMode(Point2d point, bool leftMouseClicked)
+        private void PointClickInputMode(Point2d point, bool leftMouseClicked, bool leftMouseDragged)
         {
             if (leftMouseClicked)
             {
-                OnLeftClick(point);
+                OnLeftClickDown(point);
+            }
+            else if(leftMouseDragged && PreviousPoint != null)
+            {
+                var delta = point - PreviousPoint.Value;
+                OnLeftDrag(point, delta);
             }
         }
 
@@ -315,10 +343,75 @@ namespace CGALDotNetUnity
             SnapTargets.Clear();
         }
 
+        protected void AddGeometry(string name, IGeometry2d geometry, Color col, float size = 0)
+        {
+            if (geometry is Point2d point)
+                AddPoint(name, point, size, col);
+            else if (geometry is Segment2d seg)
+                AddSegment(name, seg, col);
+            else if (geometry is Line2d line)
+                AddLine(name, line, col);
+            else if (geometry is Ray2d ray)
+                AddRay(name, ray, col);
+            else if (geometry is Triangle2d tri)
+                AddTriangle(name, tri, col, col);
+            else if (geometry is Box2d box)
+                AddBox(name, box, col, col);
+        }
+
+        protected void AddPoint(string name, Point2d point, float size, Color color)
+        {
+            var points = new Point2d[] { point };
+            AddPoints(name, points, size, color);
+        }
+
+        protected void AddSegment(string name, Segment2d segment, Color lineColor)
+        {
+            var points = new Point2d[] { segment.A, segment.B };
+            AddLines(name, points, null, lineColor);
+        }
+
+        protected void AddRay(string name, Ray2d ray, Color lineColor)
+        {
+            var points = new Point2d[] { ray.Position, ray.GetPosition(100) };
+            AddLines(name, points, null, lineColor);
+        }
+
         protected void AddLine(string name, Line2d line, Color lineColor)
         {
-            var points = new Point2d[] { new Point2d(0,0), new Point2d(10,0) };
+            if (line == null || line.IsDegenerate)
+                return;
+
+            double x1, y1, x2, y2;
+
+            if (line.IsHorizontal)
+            {
+                x1 = -100;
+                y1 = line.Y(x1);
+
+                x2 = 100;
+                y2 = line.Y(x2);
+            }
+            else
+            {
+                y1 = -100;
+                x1 = line.X(y1);
+
+                y2 = 100;
+                x2 = line.X(y2);
+            }
+
+            var points = new Point2d[] { new Point2d(x1, y1), new Point2d(x2, y2) };
             AddLines(name, points, null, lineColor);
+        }
+
+        protected void AddTriangle(string name, Triangle2d tri, Color lineColor, Color faceColor)
+        {
+            var points = new Point2d[] { tri.A, tri.B, tri.C };
+            var lines = new int[] { 0, 1, 1, 2, 2, 0 };
+            var faces = new int[] { 0, 1, 2 };
+
+            AddShapeFacesAndLines(name, points, lines, faces, lineColor, faceColor);
         }
 
         protected void AddBox(string name, Box2d box, Color lineColor, Color faceColor)
@@ -350,6 +443,18 @@ namespace CGALDotNetUnity
                 
         }
 
+        protected void AddPolygon<K>(string name, Polygon2<K> polygon, Color lineColor, Color faceColor)
+            where K : CGALKernel, new()
+        {
+            if (polygon == null) return;
+
+            var faceIndices = Triangulate(polygon);
+            var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
+            var points = polygon.ToArray();
+
+            AddShapeFacesAndLines(name, points, lineIndices, faceIndices.ToArray(), lineColor, faceColor);
+        }
+
         protected void AddPolygon<K>(string name, Polygon2<K> polygon, Color lineColor, Color pointColor, Color faceColor)
             where K : CGALKernel, new()
         {
@@ -359,7 +464,7 @@ namespace CGALDotNetUnity
             var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
             var points = polygon.ToArray();
 
-            AddShape(name, points, faceIndices.ToArray(), lineIndices, lineColor, pointColor, faceColor, LINE_MODE.LINES);
+            AddShape(name, points, lineIndices, faceIndices.ToArray(), lineColor, pointColor, faceColor, LINE_MODE.LINES);
         }
 
         protected void AddTriangulation(string name, BaseTriangulation2 triangulation, Color lineColor, Color pointColor, Color faceColor)
@@ -408,7 +513,7 @@ namespace CGALDotNetUnity
             AddLines(name, points, indices, lineColor);
         }
 
-        protected void AddShape(string name, Point2d[] points, IList<int> faceIndices, IList<int> lineIndices, Color lineColor, Color pointColor, Color faceColor, LINE_MODE lineMode)
+        protected void AddShape(string name, Point2d[] points, IList<int> lineIndices, IList<int> faceIndices, Color lineColor, Color pointColor, Color faceColor, LINE_MODE lineMode)
         {
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;

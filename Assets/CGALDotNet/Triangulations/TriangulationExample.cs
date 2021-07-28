@@ -101,7 +101,7 @@ namespace CGALDotNetUnity.Triangulations
             triangulation.Clear();
         }
 
-        protected override void OnLeftClick(Point2d point)
+        protected override void OnLeftClickDown(Point2d point)
         {
 
         }

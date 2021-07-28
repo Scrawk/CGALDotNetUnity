@@ -56,7 +56,7 @@ namespace CGALDotNetUnity.Polygons
             SetInputMode(INPUT_MODE.POLYGON);
         }
 
-        protected override void OnLeftClick(Point2d point)
+        protected override void OnLeftClickDown(Point2d point)
         {
             if (isSimple && polygon != null)
             {

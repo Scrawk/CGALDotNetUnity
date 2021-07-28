@@ -64,7 +64,7 @@ namespace CGALDotNetUnity.Polygons
      
         }
 
-        protected override void OnLeftClick(Point2d point)
+        protected override void OnLeftClickDown(Point2d point)
         {
             if (polygon != null)
             {
