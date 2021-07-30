@@ -28,10 +28,10 @@ namespace CGALDotNetUnity.Triangulations
         {
             base.Start();
 
-            SetInputMode(INPUT_MODE.POINT);
-            SetPointSize(0.5f);
-            SetInputColor(lineColor, pointColor);
-            EnableInputPointOutline(true, lineColor);
+            //SetInputMode(INPUT_MODE.POINT);
+            //SetPointSize(0.5f);
+            //SetInputColor(lineColor, pointColor);
+            //EnableInputPointOutline(true, lineColor);
 
             triangulation = new ConstrainedTriangulation2<EEK>();
 
@@ -61,11 +61,11 @@ namespace CGALDotNetUnity.Triangulations
 
         private void AddTraingulation()
         {
-            ClearShapeRenderers();
-            AddTriangulationFaces("", triangulation, lineColor, pointColor, faceColor);
+            //ClearShapeRenderers();
+            //AddTriangulationFaces("", triangulation, lineColor, pointColor, faceColor);
             AddConstraints();
-            AddTriangulationPoints("", triangulation, lineColor, pointColor, faceColor);
-            EnableShapePointOutline(true, lineColor);
+            //AddTriangulationPoints("", triangulation, lineColor, pointColor, faceColor);
+            //EnableShapePointOutline(true, lineColor);
         }
 
         private void AddCircumcircles()
@@ -80,8 +80,8 @@ namespace CGALDotNetUnity.Triangulations
                 for (int i = 0; i < count; i++)
                     circumcenters[i] = triangles[i].CircumCircle();
 
-                AddPoints("", circumcenters, PointSize, circumColor);
-                AddCircles("", circumcenters, circumColor, 64);
+                //AddPoints("", circumcenters, PointSize, circumColor);
+                //AddCircles("", circumcenters, circumColor, 64);
             }
         }
 
@@ -92,7 +92,7 @@ namespace CGALDotNetUnity.Triangulations
             {
                 var segments = new Segment2d[count];
                 triangulation.GetConstraints(segments);
-                AddSegments("", segments, constraintColor);
+                //AddSegments("", segments, constraintColor);
             }
         }
 
@@ -109,9 +109,9 @@ namespace CGALDotNetUnity.Triangulations
         private void OnPostRender()
         {
             DrawGrid();
-            DrawShapes();
-            DrawInput();
-            DrawPoint();
+            //DrawShapes();
+            //DrawInput();
+            //DrawPoint();
         }
 
         protected void OnGUI()

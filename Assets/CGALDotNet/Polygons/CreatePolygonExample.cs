@@ -11,12 +11,9 @@ namespace CGALDotNetUnity.Polygons
 
     public class CreatePolygonExample : InputBehaviour
     {
+        private Color pointColor = new Color32(80, 80, 200, 128);
 
-        private Color lineColor  = new Color32(20, 20, 20, 255);
-
-        private Color pointColor = new Color32(20, 20, 20, 255);
-
-        private Color faceColor = new Color32(120, 120, 120, 128);
+        private Color lineColor = new Color32(20, 20, 255, 128);
 
         private Polygon2<EEK> polygon;
 
@@ -31,7 +28,7 @@ namespace CGALDotNetUnity.Polygons
         protected override void Start()
         {
             base.Start();
-
+            DrawGridAxis(true);
             SetInputMode(INPUT_MODE.POLYGON);
         }
 
@@ -39,13 +36,7 @@ namespace CGALDotNetUnity.Polygons
         {
             polygon = new Polygon2<EEK>(points.ToArray());
             isSimple = polygon.IsSimple;
-
-            var lineCol = isSimple ? lineColor : Color.red;
-            var pointCol = isSimple ? pointColor : Color.red;
-
-            AddPolygon<EEK>("", polygon, lineCol, pointCol, faceColor);
-
-            SetInputMode(INPUT_MODE.POINT_CLICK);
+            InputPoints.Clear();
         }
 
         protected override void OnCleared()
@@ -54,6 +45,7 @@ namespace CGALDotNetUnity.Polygons
             point = null;
             isSimple = false;
             SetInputMode(INPUT_MODE.POLYGON);
+            InputPoints.Clear();
         }
 
         protected override void OnLeftClickDown(Point2d point)
@@ -63,16 +55,17 @@ namespace CGALDotNetUnity.Polygons
                 this.point = point;
                 orientedSide = polygon.OrientedSide(point);
                 containsPoint = polygon.ContainsPoint(point);
-                SetPoint(this.point.Value);
             }
         }
 
         private void OnPostRender()
         {
             DrawGrid();
-            DrawShapes();
-            DrawInput();
-            DrawPoint();
+
+            CreatePoints(InputPoints.ToArray(), null, pointColor, lineColor, 0.2f).Draw();
+
+            if(point != null)
+                CreatePoints(new Point2d[] { point.Value }, pointColor, lineColor, 0.2f).Draw();
         }
 
         protected void OnGUI()

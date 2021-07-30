@@ -32,10 +32,10 @@ namespace CGALDotNetUnity.Polygons
         {
             base.Start();
 
-            SetInputMode(INPUT_MODE.SEGMENT);
-            SetPointSize(0.5f);
-            SetInputColor(lineColor, inputColor);
-            EnableInputPointOutline(true, lineColor);
+            //SetInputMode(INPUT_MODE.SEGMENT);
+            //SetPointSize(0.5f);
+            //SetInputColor(lineColor, inputColor);
+            //EnableInputPointOutline(true, lineColor);
 
             Point2d p1 = new Point2d(-5, -5);
             Point2d p2 = new Point2d(-5, 5);
@@ -95,28 +95,28 @@ namespace CGALDotNetUnity.Polygons
         private void AddArrangement()
         {
             
-            ClearShapeRenderers();
+            //ClearShapeRenderers();
 
             var segments = new Segment2d[arrangement.EdgeCount];
             arrangement.GetSegments(segments);
-            AddSegments("", GetSegments(), lineColor);
+            //AddSegments("", GetSegments(), lineColor);
 
             var points = new Point2d[arrangement.VertexCount];
             arrangement.GetPoints(points);
-            AddPoints("", points, PointSize, pointColor);
+            //AddPoints("", points, PointSize, pointColor);
 
             ClearSnapTargets();
             AddSnapTargets(points);
 
-            EnableShapePointOutline(true, lineColor);
+            //EnableShapePointOutline(true, lineColor);
         }
 
         private void OnRenderObject()
         {
             DrawGrid();
-            DrawShapes();
-            DrawInput();
-            DrawPoint();
+            //DrawShapes();
+            //DrawInput();
+            //DrawPoint();
         }
 
         private List<Segment2d> GetSegments()

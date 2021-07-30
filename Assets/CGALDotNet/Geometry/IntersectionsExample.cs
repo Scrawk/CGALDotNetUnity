@@ -24,7 +24,7 @@ namespace CGALDotNetUnity.Geometry
         {
             base.Start();
 
-            SetInputMode(INPUT_MODE.POINT_CLICK);
+            //SetInputMode(INPUT_MODE.POINT_CLICK);
 
             var box = new Box2d(-7, -5, -2, 5);
 
@@ -43,8 +43,6 @@ namespace CGALDotNetUnity.Geometry
             Geometry.Add(segment);
             Geometry.Add(ray);
 
-            AddGeometry();
-            AddIntersections();
         }
 
         protected override void OnLeftClickUp(Point2d point)
@@ -54,7 +52,7 @@ namespace CGALDotNetUnity.Geometry
 
         protected override void OnLeftDrag(Point2d point, Point2d delta)
         {
-            ClearShapeRenderers();
+            //ClearShapeRenderers();
 
             ClickedOn = FindClikedOn(point);
             if(ClickedOn != null)
@@ -63,17 +61,14 @@ namespace CGALDotNetUnity.Geometry
                 var translate = Matrix3x3d.Translate(t);
                 ClickedOn.Transform(translate);
             }
-
-            AddGeometry();
-            AddIntersections();
         }
 
         private void OnRenderObject()
         {
             DrawGrid();
-            DrawShapes();
-            DrawInput();
-            DrawPoint();
+            //DrawShapes();
+            //DrawInput();
+            //DrawPoint();
         }
 
         private IGeometry2d FindClikedOn(Point2d point)
@@ -90,69 +85,6 @@ namespace CGALDotNetUnity.Geometry
             return null;
         }
 
-        private void AddGeometry()
-        {
-            foreach (var geometry in Geometry)
-                AddGeometry("", geometry, shapeColor, 0.1f);
-        }
-
-        private void AddIntersections()
-        {
-            int count = Geometry.Count;
-
-            var check = new bool[count, count];
-
-            for (int i = 0; i < count; i++)
-            {
-                for (int j = 0; j < count; j++)
-                {
-                    if (check[i, j]) continue;
-                    check[i, j] = true;
-                    check[j, i] = true;
-
-                    if (Geometry[i] == Geometry[j]) continue;
-
-                    var result = CGALIntersections.Intersection(Geometry[i], Geometry[j]);
-
-                    AddIntersection(result);
-                }
-            }
-        }
-
-        private void AddIntersection(IntersectionResult2d result)
-        {
-            switch (result.type)
-            {
-                case INTERSECTION_RESULT_2D.POINT2:
-                    AddPoint("", result.Point, 0.1f, intersectionColor);
-                    break;
-
-                case INTERSECTION_RESULT_2D.LINE2:
-                    AddLine("", result.Line, intersectionColor);
-                    break;
-
-                case INTERSECTION_RESULT_2D.RAY2:
-                    AddRay("", result.Ray, intersectionColor);
-                    break;
-
-                case INTERSECTION_RESULT_2D.SEGMENT2:
-                    AddSegment("", result.Segment, intersectionColor);
-                    break;
-
-                case INTERSECTION_RESULT_2D.TRIANGLE2:
-                    AddTriangle("", result.Triangle, intersectionColor, intersectionColor);
-                    break;
-
-                case INTERSECTION_RESULT_2D.BOX2:
-                    AddBox("", result.Box, intersectionColor, intersectionColor);
-                    break;
-
-                case INTERSECTION_RESULT_2D.POLYGON2:
-                    var polygon = new Polygon2<EEK>(result.Polygon);
-                    AddPolygon("", polygon, intersectionColor, intersectionColor);
-                    break;
-            }
-        }
 
     }
 

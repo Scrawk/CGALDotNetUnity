@@ -27,7 +27,7 @@ namespace CGALDotNetUnity.Polygons
         protected override void Start()
         {
             base.Start();
-            SetInputMode(INPUT_MODE.POLYGON);
+            //SetInputMode(INPUT_MODE.POLYGON);
             ConsoleRedirect.Redirect();
             result = new List<PolygonWithHoles2<EEK>>();
         }
@@ -38,21 +38,21 @@ namespace CGALDotNetUnity.Polygons
             {
                 var input = CreateInputPolygon(points);
 
-                ResetInput();
-                ClearShapeRenderers();
+                //ResetInput();
+                //ClearShapeRenderers();
 
                 if (input != null)
                 {
                     polygon1 = input;
-                    AddPolygon("", polygon1, lineColor, pointColor, faceColor);
+                    //AddPolygon("", polygon1, lineColor, pointColor, faceColor);
                 }
             }
             else if (polygon2 == null)
             {
                 var input = CreateInputPolygon(points);
 
-                ResetInput();
-                ClearShapeRenderers();
+                //ResetInput();
+                //ClearShapeRenderers();
 
                 if (input != null)
                 {
@@ -68,7 +68,7 @@ namespace CGALDotNetUnity.Polygons
                         foreach (var poly in polygons)
                         {
                             poly.Print();
-                            AddPolygon("", poly, lineColor, pointColor, faceColor);
+                            //AddPolygon("", poly, lineColor, pointColor, faceColor);
                         }
                     }
                 }
@@ -76,7 +76,7 @@ namespace CGALDotNetUnity.Polygons
             }
             else
             {
-                ResetInput();
+               // ResetInput();
             }
         }
 
@@ -109,8 +109,8 @@ namespace CGALDotNetUnity.Polygons
         private void OnPostRender()
         {
             DrawGrid();
-            DrawShapes();
-            DrawInput();
+            //DrawShapes();
+            //DrawInput();
         }
 
         protected void OnGUI()

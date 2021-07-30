@@ -24,8 +24,13 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void Start()
         {
-            base.Start();
+            EnablePointOutline = true;
+            PointSize = 0.5f;
             SetInputMode(INPUT_MODE.POLYGON);
+
+            base.Start();
+
+            DrawGridAxis(true);
         }
 
         protected override void OnInputComplete(List<Point2d> points)
@@ -34,32 +39,23 @@ namespace CGALDotNetUnity.Polygons
             {
                 var input = CreateInputPolygon(points);
 
-                ResetInput();
-                ClearShapeRenderers();
-
                 if (input != null)
                 {
                     polygon = input;
                 }
 
-                AddPolygon("", polygon, lineColor, pointColor, faceColor);
             }
             else if(polygon.HoleCount < 2)
             {
                 var input = CreateInputHole(points);
 
-                ResetInput();
-                ClearShapeRenderers();
-
                 if (input != null)
                 {
                     polygon.AddHole(input);
-
-                    if (polygon.HoleCount == 2)
-                        SetInputMode(INPUT_MODE.POINT_CLICK);
+    
                 }
 
-                AddPolygon("", polygon, lineColor, pointColor, faceColor);
+                //AddFaces(polygon, faceColor);
             }
      
         }
@@ -70,7 +66,7 @@ namespace CGALDotNetUnity.Polygons
             {
                 this.point = point;
                 containsPoint = polygon.ContainsPoint(point);
-                SetPoint(this.point.Value);
+                //SetPoint(this.point.Value);
             }
         }
 
@@ -117,9 +113,6 @@ namespace CGALDotNetUnity.Polygons
         private void OnPostRender()
         {
             DrawGrid();
-            DrawShapes();
-            DrawInput();
-            DrawPoint();
         }
 
         protected void OnGUI()
