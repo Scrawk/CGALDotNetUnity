@@ -10,11 +10,11 @@ namespace CGALDotNetUnity.Polygons
     public class CreatePolygonWithHolesExample : InputBehaviour
     {
 
-        private Color lineColor = new Color32(20, 20, 20, 255);
+        private Color lineColor = new Color32(80, 80, 200, 128);
 
-        private Color pointColor = new Color32(20, 20, 20, 255);
+        private Color pointColor = new Color32(80, 80, 200, 128);
 
-        private Color faceColor = new Color32(120, 120, 120, 128);
+        private Color faceColor = new Color32(80, 80, 200, 128);
 
         private PolygonWithHoles2<EEK> polygon;
 
@@ -24,13 +24,11 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void Start()
         {
-            EnablePointOutline = true;
             PointSize = 0.5f;
-            SetInputMode(INPUT_MODE.POLYGON);
 
             base.Start();
-
             DrawGridAxis(true);
+            SetInputMode(INPUT_MODE.POLYGON);
         }
 
         protected override void OnInputComplete(List<Point2d> points)
@@ -42,6 +40,7 @@ namespace CGALDotNetUnity.Polygons
                 if (input != null)
                 {
                     polygon = input;
+                    InputPoints.Clear();
                 }
 
             }
@@ -52,10 +51,8 @@ namespace CGALDotNetUnity.Polygons
                 if (input != null)
                 {
                     polygon.AddHole(input);
-    
+                    InputPoints.Clear();
                 }
-
-                //AddFaces(polygon, faceColor);
             }
      
         }
@@ -113,6 +110,16 @@ namespace CGALDotNetUnity.Polygons
         private void OnPostRender()
         {
             DrawGrid();
+
+            CreatePoints(InputPoints.ToArray(), null, pointColor, lineColor, PointSize).Draw();
+
+            if (polygon != null)
+            {
+                var list = polygon.ToList();
+
+                foreach(var poly in list)
+                    CreatePolygon(poly, faceColor).Draw();
+            }
         }
 
         protected void OnGUI()

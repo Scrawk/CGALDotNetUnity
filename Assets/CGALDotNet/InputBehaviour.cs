@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System.Linq;
 
 using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
 using CGALDotNet.Triangulations;
+
+using POINT = CGeom2D.Points.Point2d;
+using LINE = CGeom2D.Geometry.Line2d;
+using SEGMENT = CGeom2D.Geometry.Segment2d;
 
 namespace CGALDotNetUnity
 {
@@ -78,27 +83,27 @@ namespace CGALDotNetUnity
 
         protected virtual void OnInputComplete(List<Point2d> points)
         {
-
+            
         }
 
         protected virtual void OnCleared()
         {
-
+           
         }
 
         protected virtual void OnLeftClickDown(Point2d point)
         {
-
+            
         }
 
         protected virtual void OnLeftClickUp(Point2d point)
         {
-
+           
         }
 
         protected virtual void OnLeftDrag(Point2d point, Point2d delta)
         {
-
+           
         }
 
         protected virtual void Update()
@@ -249,6 +254,25 @@ namespace CGALDotNetUnity
             Grid.Create();
         }
 
+        protected static CompositeRenderer CreatePolygon(Polygon2<EEK> polygon, Color faceColor)
+        {
+            var faceIndices = Triangulate(polygon);
+            var points = polygon.ToArray();
+
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = faceColor;
+            triangles.Load(ToVector2(points), faceIndices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            var comp = new CompositeRenderer();
+            comp.Add(triangles);
+
+            return comp;
+        }
+
         protected static CompositeRenderer CreatePolygon(Polygon2<EEK> polygon, Color pointColor, Color faceColor, Color lineColor, float pointSize)
         {
             var faceIndices = Triangulate(polygon);
@@ -291,6 +315,57 @@ namespace CGALDotNetUnity
             comp.Add(lines);
             comp.Add(pointBody);
             comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer CreateLine(LINE line, Color lineColor)
+        {
+            double x1, y1, x2, y2;
+            double len = -100;
+
+            if (line.IsHorizontal)
+            {
+                x1 = -len;
+                y1 = line.Y(x1);
+
+                x2 = len;
+                y2 = line.Y(x2);
+            }
+            else
+            {
+                y1 = -len;
+                x1 = line.X(y1);
+
+                y2 = len;
+                x2 = line.X(y2);
+            }
+
+            var p1 = new POINT(x1, y1);
+            var p2 = new POINT(x2, y2);
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(new POINT[] { p1, p2 }));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer CreateSegments(List<SEGMENT> segments, Color lineColor)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(segments));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
 
             return comp;
         }
@@ -346,6 +421,32 @@ namespace CGALDotNetUnity
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
             pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer CreatePoints(IList<POINT> points, Color pointColor, Color outlineColor, float size)
+        {
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = size * 0.5f;
+            pointBody.Load(ToVector2(points.ToArray()));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Enabled = true;
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = outlineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = size * 0.5f;
+            pointOutline.Load(ToVector2(points.ToArray()));
 
             var comp = new CompositeRenderer();
             comp.Add(pointBody);
@@ -504,6 +605,11 @@ namespace CGALDotNetUnity
             return Array.ConvertAll(points, p => new Vector2((float)p.x, (float)p.y));
         }
 
+        private static Vector2[] ToVector2(POINT[] points)
+        {
+            return Array.ConvertAll(points, p => new Vector2((float)p.x, (float)p.y));
+        }
+
         private static Vector2[] ToVector2(Circle2d[] circles)
         {
             return Array.ConvertAll(circles, c => new Vector2((float)c.Center.x, (float)c.Center.y));
@@ -517,6 +623,19 @@ namespace CGALDotNetUnity
         private static List<Vector2> ToVector2(List<Point2d> points)
         {
             return points.ConvertAll(p => new Vector2((float)p.x, (float)p.y));
+        }
+
+        private static List<Vector2> ToVector2(List<SEGMENT> segments)
+        {
+            var list = new List<Vector2>();
+            foreach(var seg in segments)
+            {
+                var a = new Vector2((float)seg.A.x, (float)seg.A.y);
+                var b = new Vector2((float)seg.B.x, (float)seg.B.y);
+                list.Add(a, b);
+            }
+
+            return list;
         }
 
         private static List<int> Triangulate<K>(Polygon2<K> polygon)

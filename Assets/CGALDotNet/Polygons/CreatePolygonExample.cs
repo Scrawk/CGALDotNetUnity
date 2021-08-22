@@ -1,61 +1,102 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
-using CGALDotNet.Polygons;
+using Common.Core.Colors;
+
+using CGeom2D.Geometry;
+using CGeom2D.Numerics;
+using CGeom2D.Points;
+
+using POINT = CGALDotNet.Geometry.Point2d;
+using POINT2 = CGeom2D.Points.Point2d;
+using SEGMENT = CGeom2D.Geometry.Segment2d;
 
 namespace CGALDotNetUnity.Polygons
 {
 
     public class CreatePolygonExample : InputBehaviour
     {
-        private Color pointColor = new Color32(80, 80, 200, 128);
+        private Color pointColor = new Color32(200, 80, 80, 255);
 
-        private Color lineColor = new Color32(20, 20, 255, 128);
+        private Color faceColor = new Color32(80, 80, 200, 128);
 
-        private Polygon2<EEK> polygon;
+        private Color lineColor = new Color32(0, 0, 0, 255);
 
-        private CGAL_ORIENTED_SIDE orientedSide;
+        private POINT? Point;
 
-        private bool containsPoint;
+        PointCollection collection;
 
-        private bool isSimple;
+        SweepLine line;
 
-        private Point2d? point;
+        SweepEvent currentEvent;
+
+        ColorRGB[] palette;
 
         protected override void Start()
         {
+            PointSize = 0.2f;
+
             base.Start();
-            DrawGridAxis(true);
-            SetInputMode(INPUT_MODE.POLYGON);
+            //DrawGridAxis(true);
+            SetInputMode(INPUT_MODE.POINT_CLICK);
+
+            collection = new PointCollection(1000000);
+
+            collection.AddPoint(0, 0);
+            collection.AddPoint(4, 0);
+            collection.AddPoint(2, 2);
+            collection.AddPoint(4, -4);
+            collection.AddPoint(6, -6);
+            collection.AddPoint(8, -4);
+
+            collection.AddSegment(0, 1);
+            collection.AddSegment(0, 2);
+            collection.AddSegment(0, 3);
+            collection.AddSegment(3, 4);
+            collection.AddSegment(3, 5);
+
+            line = collection.CreateSweepLine();
+            currentEvent = line.PopEvent();
+
+            palette = ColorRGB.Palatte();
+            palette.Shuffle(0);
+
         }
 
-        protected override void OnInputComplete(List<Point2d> points)
+        protected override void Update()
         {
-            polygon = new Polygon2<EEK>(points.ToArray());
-            isSimple = polygon.IsSimple;
+            base.Update();
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                currentEvent = line.PopEvent();
+            }
+        }
+
+        protected override void OnInputComplete(List<POINT> points)
+        {
             InputPoints.Clear();
+            SetInputMode(INPUT_MODE.POINT_CLICK);
         }
 
         protected override void OnCleared()
         {
-            polygon = null;
-            point = null;
-            isSimple = false;
-            SetInputMode(INPUT_MODE.POLYGON);
+            collection.Clear();
+            Point = null;
+            SetInputMode(INPUT_MODE.POINT_CLICK);
             InputPoints.Clear();
         }
 
-        protected override void OnLeftClickDown(Point2d point)
+        protected override void OnLeftClickDown(POINT point)
         {
-            if (isSimple && polygon != null)
-            {
-                this.point = point;
-                orientedSide = polygon.OrientedSide(point);
-                containsPoint = polygon.ContainsPoint(point);
-            }
+            Point = point;
+        }
+
+        private void OnDestroy()
+        {
+ 
         }
 
         private void OnPostRender()
@@ -64,48 +105,39 @@ namespace CGALDotNetUnity.Polygons
 
             CreatePoints(InputPoints.ToArray(), null, pointColor, lineColor, 0.2f).Draw();
 
-            if(point != null)
-                CreatePoints(new Point2d[] { point.Value }, pointColor, lineColor, 0.2f).Draw();
+            if (currentEvent != null)
+            {
+                var line = currentEvent.Line(100);
+                CreateLine(line, lineColor).Draw();
+            }
+
+            var segments = new Dictionary<int, List<SEGMENT>>();
+            collection.GetSegments(segments);
+
+            foreach (var kvp in segments)
+            {
+                var color = RandomColor(kvp.Key);
+                CreateSegments(kvp.Value, color).Draw();
+            }
+
+            var points = new List<POINT2>();
+            collection.GetPoints(points);
+            CreatePoints(points, pointColor, lineColor, 0.2f).Draw();
+
+            if (Point != null)
+                CreatePoints(new POINT[] { Point.Value }, Color.red, lineColor, 0.25f).Draw();
         }
 
         protected void OnGUI()
         {
-            int textLen = 400;
-            int textHeight = 25;
 
-            GUI.color = Color.black;
-
-            if (polygon == null)
-            {
-                GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
-                GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
-                GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
-            }
-            else
-            {
-                GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
-                GUI.Label(new Rect(10, 30, textLen, textHeight), "Count = " + polygon.Count);
-
-                GUI.Label(new Rect(10, 50, textLen, textHeight), "Is Simple = " + isSimple);
-
-                if (isSimple)
-                {
-                    GUI.Label(new Rect(10, 70, textLen, textHeight), "Is Convex = " + polygon.FindIfConvex());
-                    GUI.Label(new Rect(10, 90, textLen, textHeight), "Area = " + polygon.FindArea());
-                    GUI.Label(new Rect(10, 110, textLen, textHeight), "Orientation = " + polygon.FindOrientation());
-
-                    if (point != null)
-                    {
-                        GUI.Label(new Rect(10, 130, textLen, textHeight), "Point oriented side = " + orientedSide);
-                        GUI.Label(new Rect(10, 150, textLen, textHeight), "Contains point = " + containsPoint);
-                    }
-                    else
-                        GUI.Label(new Rect(10, 130, textLen, textHeight), "Click to test point oriented side.");
-                }
-            }
 
         }
 
-
+        private Color RandomColor(int i)
+        {
+            int len = palette.Length;
+            return palette[i % len].ToColor();
+        }
     }
 }

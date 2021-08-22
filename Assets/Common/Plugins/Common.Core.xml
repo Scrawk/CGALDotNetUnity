@@ -266,6 +266,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Common.Core.Colors.ColorRGB.Palatte">
+            <summary>
+            Create a palette of colors..
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Common.Core.Colors.ColorRGB.CustomPalatte(System.Int32,System.Single,System.Single)">
             <summary>
             Create a custom palette of hues with the same saturation and value.

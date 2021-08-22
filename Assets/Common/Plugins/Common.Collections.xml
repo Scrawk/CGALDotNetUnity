@@ -681,11 +681,6 @@
             Gets or sets the capacity of the heap.
             </summary>
         </member>
-        <member name="P:Common.Collections.Queues.BinaryHeap`1.Comparer">
-            <summary>
-            Optional comparer to use.
-            </summary>
-        </member>
         <member name="M:Common.Collections.Queues.BinaryHeap`1.#ctor">
             <summary>
             Creates a new binary heap.
@@ -770,9 +765,6 @@
         <member name="M:Common.Collections.Queues.BinaryHeap`1.IndexOfValue(`0)">
             <summary>
             Find the index of the item in the list.
-            This utilizes the type T's Comparer 
-            and will consider items 
-            the same order the same object.
             </summary>
             <param name="value"></param>
             <returns></returns>
@@ -823,11 +815,6 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="P:Common.Collections.Queues.IPriorityQueue`1.Comparer">
-            <summary>
-            Optional comparer to use.
-            </summary>
-        </member>
         <member name="P:Common.Collections.Queues.IPriorityQueue`1.Count">
             <summary>
             The number of items in queue.
@@ -872,9 +859,7 @@
         <member name="T:Common.Collections.Queues.PriorityList`1">
             <summary>
             A naive implementation of a priority queue
-            using a list. Stores the items in reverse
-            so removing first item is really removing from 
-            end which is faster.
+            using a list.
             </summary>
             <typeparam name="T"></typeparam>
         </member>
@@ -907,11 +892,6 @@
         <member name="P:Common.Collections.Queues.PriorityList`1.Capacity">
             <summary>
             The capacity of the list.
-            </summary>
-        </member>
-        <member name="P:Common.Collections.Queues.PriorityList`1.Comparer">
-            <summary>
-            Optional comparer to use.
             </summary>
         </member>
         <member name="P:Common.Collections.Queues.PriorityList`1.Item(System.Int32)">
@@ -984,16 +964,6 @@
             <summary>
             Sort the list.
             </summary>
-        </member>
-        <member name="M:Common.Collections.Queues.PriorityList`1.ReverseCompare(`0,`0)">
-            <summary>
-            The function used to compare the items.
-            Will reverse the order so end of list
-            contains the lowest values.
-            </summary>
-            <param name="x"></param>
-            <param name="y"></param>
-            <returns></returns>
         </member>
         <member name="T:Common.Collections.Sets.DisjointGridSet2">
             <summary>
