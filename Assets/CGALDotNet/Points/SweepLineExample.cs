@@ -2,21 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using CGALDotNet;
 using Common.Core.Colors;
-
-using CGeom2D.Geometry;
-using CGeom2D.Numerics;
 using CGeom2D.Points;
+using CGeom2D.Geometry;
 
-using POINT = CGALDotNet.Geometry.Point2d;
-using POINT2 = CGeom2D.Points.Point2d;
-using SEGMENT = CGeom2D.Geometry.Segment2d;
-
-namespace CGALDotNetUnity.Polygons
+namespace CGALDotNetUnity.Points
 {
 
-    public class CreatePolygonExample : InputBehaviour
+    public class SweepLineExample : InputBehaviour
     {
         private Color pointColor = new Color32(200, 80, 80, 255);
 
@@ -24,7 +17,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Color lineColor = new Color32(0, 0, 0, 255);
 
-        private POINT? Point;
+        private Point2d? Point;
 
         PointCollection collection;
 
@@ -42,7 +35,8 @@ namespace CGALDotNetUnity.Polygons
             //DrawGridAxis(true);
             SetInputMode(INPUT_MODE.POINT_CLICK);
 
-            collection = new PointCollection(1000000);
+            var comparer = new SweepComparer(SWEEP.Y);
+            collection = new PointCollection(comparer, 1000000);
 
             collection.AddPoint(0, 0);
             collection.AddPoint(4, 0);
@@ -62,7 +56,6 @@ namespace CGALDotNetUnity.Polygons
 
             palette = ColorRGB.Palatte();
             palette.Shuffle(0);
-
         }
 
         protected override void Update()
@@ -75,7 +68,7 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
-        protected override void OnInputComplete(List<POINT> points)
+        protected override void OnInputComplete(List<Point2d> points)
         {
             InputPoints.Clear();
             SetInputMode(INPUT_MODE.POINT_CLICK);
@@ -89,49 +82,41 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
-        protected override void OnLeftClickDown(POINT point)
+        protected override void OnLeftClickDown(Point2d point)
         {
             Point = point;
-        }
-
-        private void OnDestroy()
-        {
- 
         }
 
         private void OnPostRender()
         {
             DrawGrid();
 
-            CreatePoints(InputPoints.ToArray(), null, pointColor, lineColor, 0.2f).Draw();
+            FromPoints(InputPoints.ToArray(), null, pointColor, lineColor, 0.2f).Draw();
 
             if (currentEvent != null)
             {
-                var line = currentEvent.Line(100);
-                CreateLine(line, lineColor).Draw();
+                var line = currentEvent.CreateLine();
+                FromLine(line, lineColor).Draw();
+
+                var box = (Box2d)currentEvent.Bounds * collection.InvScale;
+                FromBox(box, lineColor).Draw();
             }
 
-            var segments = new Dictionary<int, List<SEGMENT>>();
+            var segments = new Dictionary<int, List<Segment2d>>();
             collection.GetSegments(segments);
 
             foreach (var kvp in segments)
             {
                 var color = RandomColor(kvp.Key);
-                CreateSegments(kvp.Value, color).Draw();
+                FromSegments(kvp.Value, color).Draw();
             }
 
-            var points = new List<POINT2>();
+            var points = new List<Point2d>();
             collection.GetPoints(points);
-            CreatePoints(points, pointColor, lineColor, 0.2f).Draw();
+            FromPoints(points, pointColor, lineColor, 0.2f).Draw();
 
             if (Point != null)
-                CreatePoints(new POINT[] { Point.Value }, Color.red, lineColor, 0.25f).Draw();
-        }
-
-        protected void OnGUI()
-        {
-
-
+                FromPoints(new Point2d[] { Point.Value }, Color.red, lineColor, 0.25f).Draw();
         }
 
         private Color RandomColor(int i)

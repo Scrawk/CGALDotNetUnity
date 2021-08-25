@@ -5,14 +5,9 @@ using UnityEngine.Rendering;
 using System.Linq;
 
 using Common.Unity.Drawing;
-using CGALDotNet;
-using CGALDotNet.Geometry;
-using CGALDotNet.Polygons;
-using CGALDotNet.Triangulations;
-
-using POINT = CGeom2D.Points.Point2d;
-using LINE = CGeom2D.Geometry.Line2d;
-using SEGMENT = CGeom2D.Geometry.Segment2d;
+using CGeom2D;
+using CGeom2D.Points;
+using CGeom2D.Geometry;
 
 namespace CGALDotNetUnity
 {
@@ -254,6 +249,7 @@ namespace CGALDotNetUnity
             Grid.Create();
         }
 
+        /*
         protected static CompositeRenderer CreatePolygon(Polygon2<EEK> polygon, Color faceColor)
         {
             var faceIndices = Triangulate(polygon);
@@ -318,8 +314,9 @@ namespace CGALDotNetUnity
 
             return comp;
         }
+        */
 
-        protected static CompositeRenderer CreateLine(LINE line, Color lineColor)
+        protected static CompositeRenderer FromLine(Line2d line, Color lineColor)
         {
             double x1, y1, x2, y2;
             double len = -100;
@@ -341,14 +338,14 @@ namespace CGALDotNetUnity
                 x2 = line.X(y2);
             }
 
-            var p1 = new POINT(x1, y1);
-            var p2 = new POINT(x2, y2);
+            var p1 = new Point2d(x1, y1);
+            var p2 = new Point2d(x2, y2);
 
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
-            lines.Load(ToVector2(new POINT[] { p1, p2 }));
+            lines.Load(ToVector2(new Point2d[] { p1, p2 }));
 
             var comp = new CompositeRenderer();
             comp.Add(lines);
@@ -356,7 +353,7 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer CreateSegments(List<SEGMENT> segments, Color lineColor)
+        protected static CompositeRenderer FromSegments(List<Segment2d> segments, Color lineColor)
         {
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
@@ -370,7 +367,23 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer CreatePoints(Point2d[] points, int[] lineIndices, Color lineColor, Color pointColor, float size)
+        protected static CompositeRenderer FromBox(Box2d box, Color lineColor)
+        {
+            var corners = box.GetCorners();
+            
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(corners), BaseRenderer.SQUARE_LINE_INDICES);
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromPoints(Point2d[] points, int[] lineIndices, Color lineColor, Color pointColor, float size)
         {
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
@@ -403,6 +416,7 @@ namespace CGALDotNetUnity
             return comp;
         }
 
+        /*
         protected static CompositeRenderer CreatePoints(Circle2d[] points, Color pointColor, float size)
         {
             var pointBody = new CircleRenderer();
@@ -428,8 +442,9 @@ namespace CGALDotNetUnity
 
             return comp;
         }
+        */
 
-        protected static CompositeRenderer CreatePoints(IList<POINT> points, Color pointColor, Color outlineColor, float size)
+        protected static CompositeRenderer FromPoints(IList<Point2d> points, Color pointColor, Color outlineColor, float size)
         {
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;
@@ -455,7 +470,7 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer CreatePoints(Point2d[] points, Color pointColor, Color outlineColor, float size)
+        protected static CompositeRenderer FromPoints(Point2d[] points, Color pointColor, Color outlineColor, float size)
         {
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;
@@ -571,20 +586,6 @@ namespace CGALDotNetUnity
             InputPoints.RemoveAt(count - 1);
         }
 
-        private static Vector2[] ToVector2<K>(Polygon2<K> poylgon, int count)
-            where K : CGALKernel, new()
-        {
-            var array = new Vector2[count];
-
-            for(int i = 0; i < count; i++)
-            {
-                var p = poylgon[i];
-                array[i] = new Vector2((float)p.x, (float)p.y);
-            }
-
-            return array;
-        }
-
         private static Vector2[] ToVector2(IList<Segment2d> segments)
         {
             var array = new Vector2[segments.Count * 2];
@@ -605,27 +606,7 @@ namespace CGALDotNetUnity
             return Array.ConvertAll(points, p => new Vector2((float)p.x, (float)p.y));
         }
 
-        private static Vector2[] ToVector2(POINT[] points)
-        {
-            return Array.ConvertAll(points, p => new Vector2((float)p.x, (float)p.y));
-        }
-
-        private static Vector2[] ToVector2(Circle2d[] circles)
-        {
-            return Array.ConvertAll(circles, c => new Vector2((float)c.Center.x, (float)c.Center.y));
-        }
-
-        private static float[] ToFloat(Circle2d[] circles)
-        {
-            return Array.ConvertAll(circles, c => (float)c.Radius);
-        }
-
-        private static List<Vector2> ToVector2(List<Point2d> points)
-        {
-            return points.ConvertAll(p => new Vector2((float)p.x, (float)p.y));
-        }
-
-        private static List<Vector2> ToVector2(List<SEGMENT> segments)
+        private static List<Vector2> ToVector2(List<Segment2d> segments)
         {
             var list = new List<Vector2>();
             foreach(var seg in segments)
@@ -636,29 +617,6 @@ namespace CGALDotNetUnity
             }
 
             return list;
-        }
-
-        private static List<int> Triangulate<K>(Polygon2<K> polygon)
-            where K : CGALKernel, new()
-        {
-            var tri = new ConstrainedTriangulation2<K>(polygon);
-            var indices = new List<int>();
-            tri.GetPolygonIndices(polygon, indices);
-            return indices;
-        }
-
-        private static void Triangulate<K>(PolygonWithHoles2<K> polygon, out Point2d[] points, out List<int> indices)
-            where K : CGALKernel, new()
-        {
-            var tri = new ConstrainedTriangulation2<K>(polygon);
-
-            int count = tri.VertexCount;
-            points = new Point2d[count];
-            tri.GetPoints(points);
-
-            indices = new List<int>();
-            tri.GetPolygonIndices(polygon, indices);
-
         }
 
     }
