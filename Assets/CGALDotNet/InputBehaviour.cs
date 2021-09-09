@@ -5,9 +5,10 @@ using UnityEngine.Rendering;
 using System.Linq;
 
 using Common.Unity.Drawing;
-using CGeom2D;
-using CGeom2D.Points;
-using CGeom2D.Geometry;
+using Common.Core.Colors;
+using CGALDotNet;
+using CGALDotNet.Polygons;
+using CGALDotNet.Geometry;
 
 namespace CGALDotNetUnity
 {
@@ -43,6 +44,8 @@ namespace CGALDotNetUnity
         private List<Point2d> SnapTargets { get; set; }
 
         private Point2d? PreviousPoint { get; set; }
+
+        private Color[] Palette { get; set; }
 
 
         protected virtual void Start()
@@ -148,6 +151,26 @@ namespace CGALDotNetUnity
             PreviousPoint = point;
         }
 
+        public Color SampleColor(int i)
+        {
+            int len = Palette.Length;
+            return Palette[i % len];
+        }
+
+        public void CreatePalette(int seed)
+        {
+            var palette = ColorRGB.Palatte();
+            palette.Shuffle(seed);
+            Palette = Array.ConvertAll(palette, c => c.ToColor());
+        }
+
+        public void CreatePalette(int seed, int hues, float saturation, float value)
+        {
+            var palette = ColorRGB.CustomPalatte(hues, saturation, value);
+            palette.Shuffle(seed);
+            Palette = Array.ConvertAll(palette, c => c.ToColor());
+        }
+
         private void PointInputMode(Point2d point, bool leftMouseClicked)
         {
             point = SnapToTargets(point);
@@ -230,6 +253,14 @@ namespace CGALDotNetUnity
             Grid.Draw();
         }
 
+        protected void DrawInput(Color lineColor, Color pointColor, float pointSize)
+        {
+            if (InputPoints == null || InputPoints.Count == 0)
+                return;
+
+            FromPoints(InputPoints, null, lineColor, pointColor, pointSize).Draw();
+        }
+
         protected void AddSnapTargets(IList<Point2d> points)
         {
             SnapTargets.AddRange(points);
@@ -268,13 +299,15 @@ namespace CGALDotNetUnity
 
             return comp;
         }
+        */
 
-        protected static CompositeRenderer CreatePolygon(Polygon2<EEK> polygon, Color pointColor, Color faceColor, Color lineColor, float pointSize)
+        protected static CompositeRenderer FromPolygon(Polygon2<EEK> polygon, Color faceColor, Color lineColor, Color pointColor, float pointSize)
         {
-            var faceIndices = Triangulate(polygon);
+            //var faceIndices = Triangulate(polygon);
             var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
             var points = polygon.ToArray();
 
+            /*
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
@@ -282,6 +315,7 @@ namespace CGALDotNetUnity
             triangles.Load(ToVector2(points), faceIndices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
+            */
 
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
@@ -298,23 +332,21 @@ namespace CGALDotNetUnity
             pointBody.Load(ToVector2(points));
 
             var pointOutline = new CircleRenderer();
-            pointOutline.Enabled = false;
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
             pointOutline.Segments = POINT_SEGMENTS;
-            pointOutline.DefaultColor = pointColor;
+            pointOutline.DefaultColor = lineColor;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = pointSize * 0.5f;
             pointOutline.Load(ToVector2(points));
 
             var comp = new CompositeRenderer();
-            comp.Add(triangles);
+            //comp.Add(triangles);
             comp.Add(lines);
             comp.Add(pointBody);
             comp.Add(pointOutline);
 
             return comp;
         }
-        */
 
         protected static CompositeRenderer FromLine(Line2d line, Color lineColor)
         {
@@ -359,7 +391,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
-            lines.Load(ToVector2(segments));
+            lines.Load(ToVector2(segments), BaseRenderer.SegmentIndices(segments.Count));
 
             var comp = new CompositeRenderer();
             comp.Add(lines);
@@ -383,7 +415,7 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer FromPoints(Point2d[] points, int[] lineIndices, Color lineColor, Color pointColor, float size)
+        protected static CompositeRenderer FromPoints(IList<Point2d> points, int[] lineIndices, Color lineColor, Color pointColor, float size)
         {
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
@@ -403,7 +435,7 @@ namespace CGALDotNetUnity
             pointOutline.Enabled = true;
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
             pointOutline.Segments = POINT_SEGMENTS;
-            pointOutline.DefaultColor = pointColor;
+            pointOutline.DefaultColor = lineColor;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
             pointOutline.Load(ToVector2(points));
@@ -444,7 +476,7 @@ namespace CGALDotNetUnity
         }
         */
 
-        protected static CompositeRenderer FromPoints(IList<Point2d> points, Color pointColor, Color outlineColor, float size)
+        protected static CompositeRenderer FromPoints(IList<Point2d> points, Color lineColor, Color pointColor, float size)
         {
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;
@@ -458,36 +490,10 @@ namespace CGALDotNetUnity
             pointOutline.Enabled = true;
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
             pointOutline.Segments = POINT_SEGMENTS;
-            pointOutline.DefaultColor = outlineColor;
+            pointOutline.DefaultColor = lineColor;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
             pointOutline.Load(ToVector2(points.ToArray()));
-
-            var comp = new CompositeRenderer();
-            comp.Add(pointBody);
-            comp.Add(pointOutline);
-
-            return comp;
-        }
-
-        protected static CompositeRenderer FromPoints(Point2d[] points, Color pointColor, Color outlineColor, float size)
-        {
-            var pointBody = new CircleRenderer();
-            pointBody.Orientation = DRAW_ORIENTATION.XY;
-            pointBody.Segments = POINT_SEGMENTS;
-            pointBody.DefaultColor = pointColor;
-            pointBody.Fill = true;
-            pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
-
-            var pointOutline = new CircleRenderer();
-            pointOutline.Enabled = true;
-            pointOutline.Orientation = DRAW_ORIENTATION.XY;
-            pointOutline.Segments = POINT_SEGMENTS;
-            pointOutline.DefaultColor = outlineColor;
-            pointOutline.Fill = false;
-            pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
 
             var comp = new CompositeRenderer();
             comp.Add(pointBody);
@@ -601,9 +607,16 @@ namespace CGALDotNetUnity
             return array;
         }
 
-        private static Vector2[] ToVector2(Point2d[] points)
+        private static Vector2[] ToVector2(IList<Point2d> points)
         {
-            return Array.ConvertAll(points, p => new Vector2((float)p.x, (float)p.y));
+            var array = new Vector2[points.Count];
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                array[i] = new Vector2((float)points[i].x, (float)points[i].y);
+            }
+
+            return array;
         }
 
         private static List<Vector2> ToVector2(List<Segment2d> segments)

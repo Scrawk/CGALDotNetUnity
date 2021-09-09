@@ -4,6 +4,25 @@
         <name>CGeom2D</name>
     </assembly>
     <members>
+        <member name="M:CGeom2D.Arrangements.SegmentArrangement.Intersects(CGeom2D.Geometry.Segment2d,CGeom2D.Geometry.Segment2d,System.Double@)">
+            <summary>
+            Do the two segments intersect.
+            </summary>
+            <param name="ab">a segment</param>
+            <param name="cd">other segment</param>
+            <param name="t">Intersection point = ab.A + t * (ab.B - ab.A)</param>
+            <returns>If they intersect</returns>
+        </member>
+        <member name="M:CGeom2D.Arrangements.SegmentArrangement.Intersects(CGeom2D.Geometry.Segment2d,CGeom2D.Geometry.Segment2d,System.Double@,System.Double@)">
+            <summary>
+            Do the two segments intersect.
+            </summary>
+            <param name="ab">a segment</param>
+            <param name="cd">other segment</param>
+            <param name="s">Intersection point = ab.A + s * (ab.B - ab.A)</param>
+            <param name="t">Intersection point = cd.A + t * (cd.B - cd.A)</param>
+            <returns>If they intersect</returns>
+        </member>
         <member name="M:CGeom2D.Geometry.Box2d.Transform(CGeom2D.Numerics.Matrix2x2d)">
             <summary>
             Transform the box by the matrix.
@@ -267,6 +286,11 @@
             </summary>
             <param name="radian">The input in radians.</param>
             <returns>The output in radians.</returns>
+        </member>
+        <member name="M:CGeom2D.MathUtil.Swap``1(``0@,``0@)">
+            <summary>
+            Swap the value of a and b.
+            </summary>
         </member>
         <member name="T:CGeom2D.Numerics.Degree">
             <summary>
@@ -2217,11 +2241,6 @@
             A point from the x,y varibles.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point2d.#ctor(CGeom2D.Numerics.Int128,CGeom2D.Numerics.Int128)">
-            <summary>
-            A point from the x,y varibles.
-            </summary>
-        </member>
         <member name="P:CGeom2D.Points.Point2d.Item(System.Int32)">
             <summary>
             Array accessor for variables. 
@@ -2299,9 +2318,9 @@
             Divide a point and a scalar.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point2d.op_Explicit(CGeom2D.Points.Point2i)~CGeom2D.Points.Point2d">
+        <member name="M:CGeom2D.Points.Point2d.op_Implicit(CGeom2D.Points.Point2i)~CGeom2D.Points.Point2d">
             <summary>
-            Explict cast from Int128 point.
+            Implicit cast from Int128 point.
             </summary>
         </member>
         <member name="M:CGeom2D.Points.Point2d.op_Equality(CGeom2D.Points.Point2d,CGeom2D.Points.Point2d)">
@@ -2455,11 +2474,6 @@
             A point from the x,y varibles.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point2i.#ctor(System.Double,System.Double)">
-            <summary>
-            A point from the x,y varibles.
-            </summary>
-        </member>
         <member name="P:CGeom2D.Points.Point2i.Item(System.Int32)">
             <summary>
             Array accessor for variables. 
@@ -2532,9 +2546,9 @@
             Divide a point and a scalar.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point2i.op_Implicit(CGeom2D.Points.Point2d)~CGeom2D.Points.Point2i">
+        <member name="M:CGeom2D.Points.Point2i.op_Explicit(CGeom2D.Points.Point2d)~CGeom2D.Points.Point2i">
             <summary>
-            Implicit cast from double point.
+            Explicit cast from double point.
             </summary>
         </member>
         <member name="M:CGeom2D.Points.Point2i.op_Equality(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
@@ -2647,11 +2661,6 @@
             A point from the varibles.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point3d.#ctor(CGeom2D.Numerics.Int128,CGeom2D.Numerics.Int128,CGeom2D.Numerics.Int128)">
-            <summary>
-            A point from the varibles.
-            </summary>
-        </member>
         <member name="P:CGeom2D.Points.Point3d.Item(System.Int32)">
             <summary>
             Array accessor for variables. 
@@ -2729,9 +2738,9 @@
             Divide a point and a scalar.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point3d.op_Explicit(CGeom2D.Points.Point3i)~CGeom2D.Points.Point3d">
+        <member name="M:CGeom2D.Points.Point3d.op_Implicit(CGeom2D.Points.Point3i)~CGeom2D.Points.Point3d">
             <summary>
-            Explicit cast from Int128 point.
+            implicit cast from Int128 point.
             </summary>
         </member>
         <member name="M:CGeom2D.Points.Point3d.op_Equality(CGeom2D.Points.Point3d,CGeom2D.Points.Point3d)">
@@ -2884,11 +2893,6 @@
             A point from the varibles.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point3i.#ctor(System.Double,System.Double,System.Double)">
-            <summary>
-            A point from the varibles.
-            </summary>
-        </member>
         <member name="P:CGeom2D.Points.Point3i.Item(System.Int32)">
             <summary>
             Array accessor for variables. 
@@ -2961,9 +2965,9 @@
             Divide a point and a scalar.
             </summary>
         </member>
-        <member name="M:CGeom2D.Points.Point3i.op_Implicit(CGeom2D.Points.Point3d)~CGeom2D.Points.Point3i">
+        <member name="M:CGeom2D.Points.Point3i.op_Explicit(CGeom2D.Points.Point3d)~CGeom2D.Points.Point3i">
             <summary>
-            Implicit cast from  double point.
+            Explicit cast from  double point.
             </summary>
         </member>
         <member name="M:CGeom2D.Points.Point3i.op_Equality(CGeom2D.Points.Point3i,CGeom2D.Points.Point3i)">
@@ -3246,55 +3250,31 @@
             <summary>
             Cross product area of a quadrilateral.
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <param name="c"></param>
-            <returns></returns>
         </member>
         <member name="M:CGeom2D.Predicates.Left(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
             <summary>
-            Is c left of the line ab.
+            Is b left of the line ac.
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <param name="c"></param>
-            <returns></returns>
         </member>
         <member name="M:CGeom2D.Predicates.Right(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
             <summary>
-            Is c right of the line ab.
+            Is b right of the line ac.
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <param name="c"></param>
-            <returns></returns>
         </member>
         <member name="M:CGeom2D.Predicates.LeftOn(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
             <summary>
-            Is c left of or on the line ab.
+            Is b left of or on the line ac.
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <param name="c"></param>
-            <returns></returns>
         </member>
         <member name="M:CGeom2D.Predicates.RightOn(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
             <summary>
-            Is c right of or on the line ab.
+            Is b right of or on the line ac.
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <param name="c"></param>
-            <returns></returns>
         </member>
         <member name="M:CGeom2D.Predicates.Collinear(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
             <summary>
             Do the 3 points form a striaght line.
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <param name="c"></param>
-            <returns></returns>
         </member>
         <member name="M:CGeom2D.Predicates.InCone(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
             <summary>
@@ -3325,8 +3305,8 @@
         </member>
         <member name="M:CGeom2D.Predicates.Between(CGeom2D.Points.Point2i,CGeom2D.Points.Point2i,CGeom2D.Points.Point2i)">
             <summary>
-            True if c lies in between the segment ab.
-            c on a or b is considered between.
+            True if b lies in between the segment ac.
+            b on a or c is considered between.
             </summary>
         </member>
         <member name="M:CGeom2D.Predicates.Xor(System.Boolean,System.Boolean)">

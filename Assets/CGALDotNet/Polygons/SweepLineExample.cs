@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Core.Colors;
+using Common.Unity.Utility;
 using CGeom2D.Points;
 using CGeom2D.Geometry;
 
@@ -11,32 +12,34 @@ namespace CGALDotNetUnity.Points
 
     public class SweepLineExample : InputBehaviour
     {
-        private Color pointColor = new Color32(200, 80, 80, 255);
+        /*
+        private Color redColor = new Color32(200, 80, 80, 255);
 
-        private Color faceColor = new Color32(80, 80, 200, 128);
+        private Color blueColor = new Color32(80, 80, 200, 255);
 
         private Color lineColor = new Color32(0, 0, 0, 255);
 
         private Point2d? Point;
 
-        PointCollection collection;
+        private PointCollection collection;
 
-        SweepLine line;
+        private SweepLine line;
 
-        SweepEvent currentEvent;
-
-        ColorRGB[] palette;
+        private SweepEvent currentEvent;
 
         protected override void Start()
         {
+            //ConsoleRedirect.Redirect();
+
             PointSize = 0.2f;
 
             base.Start();
             //DrawGridAxis(true);
             SetInputMode(INPUT_MODE.POINT_CLICK);
+            CreatePalette(0);
 
-            var comparer = new SweepComparer(SWEEP.Y);
-            collection = new PointCollection(comparer, 1000000);
+            var comparer = new SweepComparer(SWEEP.X);
+            collection = new PointCollection(comparer, 1000);
 
             collection.AddPoint(0, 0);
             collection.AddPoint(4, 0);
@@ -45,17 +48,23 @@ namespace CGALDotNetUnity.Points
             collection.AddPoint(6, -6);
             collection.AddPoint(8, -4);
 
+            collection.AddPoint(2, 0);
+            collection.AddPoint(6, 0);
+
+            //collection.AddPoint(-2, 0);
+
             collection.AddSegment(0, 1);
             collection.AddSegment(0, 2);
             collection.AddSegment(0, 3);
             collection.AddSegment(3, 4);
             collection.AddSegment(3, 5);
 
+            collection.AddSegment(0, 6);
+            collection.AddSegment(0, 7);
+
             line = collection.CreateSweepLine();
             currentEvent = line.PopEvent();
-
-            palette = ColorRGB.Palatte();
-            palette.Shuffle(0);
+            
         }
 
         protected override void Update()
@@ -68,18 +77,11 @@ namespace CGALDotNetUnity.Points
             }
         }
 
-        protected override void OnInputComplete(List<Point2d> points)
-        {
-            InputPoints.Clear();
-            SetInputMode(INPUT_MODE.POINT_CLICK);
-        }
-
         protected override void OnCleared()
         {
             collection.Clear();
             Point = null;
             SetInputMode(INPUT_MODE.POINT_CLICK);
-            InputPoints.Clear();
         }
 
         protected override void OnLeftClickDown(Point2d point)
@@ -90,39 +92,64 @@ namespace CGALDotNetUnity.Points
         private void OnPostRender()
         {
             DrawGrid();
+            DrawLine();
+            DrawSegments();
+            DrawPoints();
+            DrawStartPoints();
+            DrawClickPoint();
+        }
 
-            FromPoints(InputPoints.ToArray(), null, pointColor, lineColor, 0.2f).Draw();
-
+        private void DrawLine()
+        {
             if (currentEvent != null)
             {
                 var line = currentEvent.CreateLine();
                 FromLine(line, lineColor).Draw();
 
-                var box = (Box2d)currentEvent.Bounds * collection.InvScale;
-                FromBox(box, lineColor).Draw();
+                //var box = (Box2d)currentEvent.Bounds * collection.InvScale;
+                //FromBox(box, lineColor).Draw();
             }
+        }
 
+        private void DrawSegments()
+        {
             var segments = new Dictionary<int, List<Segment2d>>();
             collection.GetSegments(segments);
 
             foreach (var kvp in segments)
             {
-                var color = RandomColor(kvp.Key);
+                var color = SampleColor(kvp.Key);
                 FromSegments(kvp.Value, color).Draw();
             }
+        }
 
+        private void DrawPoints()
+        {
             var points = new List<Point2d>();
             collection.GetPoints(points);
-            FromPoints(points, pointColor, lineColor, 0.2f).Draw();
-
-            if (Point != null)
-                FromPoints(new Point2d[] { Point.Value }, Color.red, lineColor, 0.25f).Draw();
+            FromPoints(points, redColor, lineColor, 0.2f).Draw();
         }
 
-        private Color RandomColor(int i)
+        private void DrawStartPoints()
         {
-            int len = palette.Length;
-            return palette[i % len].ToColor();
+            var segments = new Dictionary<int, List<Segment2d>>();
+            collection.GetSegments(segments);
+
+            var points = new List<Point2d>();
+            foreach (var kvp in segments)
+            {
+                var p = collection.GetPoint2d(kvp.Key);
+                points.Add(p);
+            }
+
+            FromPoints(points, blueColor, lineColor, 0.2f).Draw();
         }
+
+        private void DrawClickPoint()
+        {
+            if (Point != null)
+                FromPoints(new Point2d[] { Point.Value }, redColor, lineColor, 0.2f).Draw();
+        }
+        */
     }
 }
