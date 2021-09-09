@@ -280,10 +280,11 @@ namespace CGALDotNetUnity
             Grid.Create();
         }
 
-        /*
         protected static CompositeRenderer CreatePolygon(Polygon2<EEK> polygon, Color faceColor)
         {
-            var faceIndices = Triangulate(polygon);
+            var faceIndices = new List<int>();
+            polygon.Triangulate(faceIndices);
+
             var points = polygon.ToArray();
 
             var triangles = new FaceRenderer();
@@ -299,15 +300,15 @@ namespace CGALDotNetUnity
 
             return comp;
         }
-        */
-
+        
         protected static CompositeRenderer FromPolygon(Polygon2<EEK> polygon, Color faceColor, Color lineColor, Color pointColor, float pointSize)
         {
-            //var faceIndices = Triangulate(polygon);
+            var faceIndices = new List<int>();
+            polygon.Triangulate(faceIndices);
+
             var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
             var points = polygon.ToArray();
 
-            /*
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
@@ -315,7 +316,6 @@ namespace CGALDotNetUnity
             triangles.Load(ToVector2(points), faceIndices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
-            */
 
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
@@ -340,7 +340,7 @@ namespace CGALDotNetUnity
             pointOutline.Load(ToVector2(points));
 
             var comp = new CompositeRenderer();
-            //comp.Add(triangles);
+            comp.Add(triangles);
             comp.Add(lines);
             comp.Add(pointBody);
             comp.Add(pointOutline);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ using CGALDotNet.Geometry;
 namespace CGALDotNetUnity.Polygons
 {
 
-    public class CreatePolygonExample : InputBehaviour
+    public class CreatePolygonWithHolesExample : InputBehaviour
     {
         private Color redColor = new Color32(200, 80, 80, 255);
 
@@ -22,7 +22,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Point2d? Point;
 
-        private Polygon2<EEK> Polygon;
+        private PolygonWithHoles2<EEK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
@@ -38,16 +38,20 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void OnInputComplete(List<Point2d> points)
         {
-            Polygon = new Polygon2<EEK>(points.ToArray());
-
-            if (!Polygon.IsCounterClockWise)
-                Polygon.Reverse();
+            Polygon = new PolygonWithHoles2<EEK>(points.ToArray());
 
             SetInputMode(INPUT_MODE.POINT_CLICK);
 
             InputPoints.Clear();
 
-            Renderers["Polygon"] = FromPolygon(Polygon, faceColor, lineColor, pointColor, PointSize);
+            var polygons = Polygon.ToList();
+            int index = 0;
+
+            foreach(var polygon in polygons)
+            {
+                Renderers["Polygon " + index++] = FromPolygon(polygon, faceColor, lineColor, pointColor, PointSize);
+            }
+            
         }
 
         protected override void OnCleared()
@@ -73,7 +77,7 @@ namespace CGALDotNetUnity.Polygons
 
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
-            
+
         }
 
         protected void OnGUI()
@@ -90,6 +94,7 @@ namespace CGALDotNetUnity.Polygons
             }
             else
             {
+                /*
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), "Count = " + Polygon.Count);
 
@@ -111,6 +116,7 @@ namespace CGALDotNetUnity.Polygons
                     else
                         GUI.Label(new Rect(10, 130, textLen, textHeight), "Click to test point oriented side.");
                 }
+                */
             }
 
         }
