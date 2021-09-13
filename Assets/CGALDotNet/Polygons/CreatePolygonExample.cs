@@ -29,10 +29,7 @@ namespace CGALDotNetUnity.Polygons
         protected override void Start()
         {
             base.Start();
-
-            //DrawGridAxis(true);
             SetInputMode(INPUT_MODE.POLYGON);
-
             Renderers = new Dictionary<string, CompositeRenderer>();
         }
 
@@ -106,7 +103,8 @@ namespace CGALDotNetUnity.Polygons
                     if (Point != null)
                     {
                         GUI.Label(new Rect(10, 130, textLen, textHeight), "Point oriented side = " + Polygon.OrientedSide(Point.Value));
-                        GUI.Label(new Rect(10, 150, textLen, textHeight), "Contains point = " + Polygon.ContainsPoint(Point.Value));
+                        //GUI.Label(new Rect(10, 150, textLen, textHeight), "Point bounded side = " + Polygon.BoundedSide(Point.Value));
+                        GUI.Label(new Rect(10, 170, textLen, textHeight), "Contains point = " + Polygon.ContainsPoint(Point.Value));
                     }
                     else
                         GUI.Label(new Rect(10, 130, textLen, textHeight), "Click to test point oriented side.");

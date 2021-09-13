@@ -68,11 +68,6 @@ namespace CGALDotNetUnity
             Mode = mode;
         }
 
-        protected void DrawGridAxis(bool draw)
-        {
-            Grid.DrawAxis = draw;
-        }
-
         protected void SetGridColor(Color lineColor, Color axisColor)
         {
             Grid.LineColor = lineColor;
@@ -248,8 +243,9 @@ namespace CGALDotNetUnity
             }
         }
 
-        protected void DrawGrid()
+        protected void DrawGrid(bool drawAxis = false)
         {
+            Grid.DrawAxis = drawAxis;
             Grid.Draw();
         }
 
@@ -280,12 +276,13 @@ namespace CGALDotNetUnity
             Grid.Create();
         }
 
-        protected static CompositeRenderer CreatePolygon(Polygon2<EEK> polygon, Color faceColor)
+        protected static CompositeRenderer FromPolygon(PolygonWithHoles2<EEK> polygon, Color faceColor)
         {
             var faceIndices = new List<int>();
             polygon.Triangulate(faceIndices);
 
-            var points = polygon.ToArray();
+            var points = new List<Point2d>();
+            polygon.GetAllPoints(points);
 
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -300,7 +297,71 @@ namespace CGALDotNetUnity
 
             return comp;
         }
-        
+
+        protected static CompositeRenderer FromPolygon(PolygonWithHoles2<EEK> polygon, Color faceColor, Color lineColor)
+        {
+            var faceIndices = new List<int>();
+            polygon.Triangulate(faceIndices);
+
+            var points = new List<Point2d>();
+            polygon.GetAllPoints(points);
+
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = faceColor;
+            triangles.Load(ToVector2(points), faceIndices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.TRIANGLES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), faceIndices);
+
+            var comp = new CompositeRenderer();
+            comp.Add(triangles);
+            comp.Add(lines);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromPolygon(Polygon2<EEK> polygon, Color lineColor, Color pointColor, float pointSize)
+        {
+            var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
+            var points = polygon.ToArray();
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), lineIndices);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
         protected static CompositeRenderer FromPolygon(Polygon2<EEK> polygon, Color faceColor, Color lineColor, Color pointColor, float pointSize)
         {
             var faceIndices = new List<int>();
@@ -341,6 +402,94 @@ namespace CGALDotNetUnity
 
             var comp = new CompositeRenderer();
             comp.Add(triangles);
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromPolygon(PolygonWithHoles2<EEK> polygon, Color faceColor, Color lineColor, Color pointColor, float pointSize)
+        {
+            var faceIndices = new List<int>();
+            polygon.Triangulate(faceIndices);
+
+            var count = polygon.PointCount(POLYGON_ELEMENT.BOUNDARY);
+            var points = new Point2d[count];
+            polygon.GetPoints(POLYGON_ELEMENT.BOUNDARY, points);
+
+            var lineIndices = BaseRenderer.PolygonIndices(count);
+            
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = faceColor;
+            triangles.Load(ToVector2(points), faceIndices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), lineIndices);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Add(triangles);
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromPolygon(PolygonWithHoles2<EEK> polygon, Color lineColor, Color pointColor, float pointSize)
+        {
+            var count = polygon.PointCount(POLYGON_ELEMENT.BOUNDARY);
+            var points = new Point2d[count];
+            polygon.GetPoints(POLYGON_ELEMENT.BOUNDARY, points);
+
+            var lineIndices = BaseRenderer.PolygonIndices(count);
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), lineIndices);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
             comp.Add(lines);
             comp.Add(pointBody);
             comp.Add(pointOutline);
