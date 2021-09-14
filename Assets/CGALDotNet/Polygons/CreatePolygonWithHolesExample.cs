@@ -100,13 +100,13 @@ namespace CGALDotNetUnity.Polygons
 
             if (Input.GetKeyDown(KeyCode.F1))
             {
-                AddHoles = true;
-                SetInputMode(INPUT_MODE.POLYGON);
+                AddHoles = false;
+                SetInputMode(INPUT_MODE.POINT_CLICK);
             }
             else if (Input.GetKeyDown(KeyCode.F2))
             {
-                AddHoles = false;
-                SetInputMode(INPUT_MODE.POINT_CLICK);
+                AddHoles = true;
+                SetInputMode(INPUT_MODE.POLYGON);
             }
         }
 
@@ -137,7 +137,7 @@ namespace CGALDotNetUnity.Polygons
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Add holes to polygon.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
                 GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
-                GUI.Label(new Rect(10, 70, textLen, textHeight), "F2 to stop adding holes and F1 to start adding holes again.");
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "F1 to stop adding holes and F2 to start adding holes again.");
                 GUI.Label(new Rect(10, 90, textLen, textHeight), "Holes must be simple and not intersect the polygon boundary or other holes.");
             }
             else

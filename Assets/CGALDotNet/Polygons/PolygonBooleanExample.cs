@@ -92,7 +92,7 @@ namespace CGALDotNetUnity.Polygons
             //Renderers["PolygonBody"+id] = FromPolygon(polygon, faceColor);
             //Renderers["PolygonOutline" + id] = FromPolygon(polygon, lineColor, pointColor, PointSize);
 
-            Renderers["PolygonBody" + id] = FromPolygon(polygon, faceColor, lineColor);
+            Renderers["PolygonBody" + id] = FromPolygonTriangulation(polygon, faceColor, lineColor);
 
             int holes = polygon.HoleCount;
             for(int i = 0; i < holes; i++)
@@ -117,29 +117,9 @@ namespace CGALDotNetUnity.Polygons
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                Op = NextOp(Op);
+                Op = CGALEnum.Next(Op);
             }
 
-        }
-
-        private POLYGON_BOOLEAN NextOp(POLYGON_BOOLEAN op)
-        {
-            switch (op)
-            {
-                case POLYGON_BOOLEAN.JOIN:
-                    return POLYGON_BOOLEAN.INTERSECT;
-
-                case POLYGON_BOOLEAN.INTERSECT:
-                    return POLYGON_BOOLEAN.DIFFERENCE;
-
-                case POLYGON_BOOLEAN.DIFFERENCE:
-                    return POLYGON_BOOLEAN.SYMMETRIC_DIFFERENCE;
-
-                case POLYGON_BOOLEAN.SYMMETRIC_DIFFERENCE:
-                    return POLYGON_BOOLEAN.JOIN;
-            }
-
-            return op;
         }
 
         private void OnPostRender()

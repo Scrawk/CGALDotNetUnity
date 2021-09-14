@@ -298,7 +298,7 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer FromPolygon(PolygonWithHoles2<EEK> polygon, Color faceColor, Color lineColor)
+        protected static CompositeRenderer FromPolygonTriangulation(PolygonWithHoles2<EEK> polygon, Color faceColor, Color lineColor)
         {
             var faceIndices = new List<int>();
             polygon.Triangulate(faceIndices);
@@ -319,6 +319,37 @@ namespace CGALDotNetUnity
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
             lines.Load(ToVector2(points), faceIndices);
+
+            var comp = new CompositeRenderer();
+            comp.Add(triangles);
+            comp.Add(lines);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromPolygon(Polygon2<EEK> polygon, Color faceColor, Color lineColor)
+        {
+            var faceIndices = new List<int>();
+            polygon.Triangulate(faceIndices);
+
+            var points = new List<Point2d>();
+            polygon.GetPoints(points);
+
+            var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
+
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = faceColor;
+            triangles.Load(ToVector2(points), faceIndices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), lineIndices);
 
             var comp = new CompositeRenderer();
             comp.Add(triangles);
@@ -497,6 +528,34 @@ namespace CGALDotNetUnity
             return comp;
         }
 
+        protected static CompositeRenderer FromGeometry(IGeometry2d geometry, Color bodyColor, Color lineColor, float pointSize = 0)
+        {
+
+            switch(geometry)
+            {
+                case Point2d point:
+                    return FromPoints(new Point2d[] { point }, lineColor, bodyColor, pointSize);
+
+                case Line2d line:
+                    return FromLine(line, lineColor);
+
+                case Ray2d ray:
+                    return FromRay(ray, lineColor);
+
+                case Segment2d seg:
+                    return FromSegment(seg, lineColor);
+
+                case Box2d box:
+                    return FromPolygon(PolygonFactory<EEK>.FromBox(box), bodyColor, lineColor);
+
+                case Triangle2d tri:
+                    return FromPolygon(PolygonFactory<EEK>.FromTriangle(tri), bodyColor, lineColor);
+
+            }
+
+            return new CompositeRenderer();
+        }
+
         protected static CompositeRenderer FromLine(Line2d line, Color lineColor)
         {
             double x1, y1, x2, y2;
@@ -534,13 +593,17 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer FromSegments(List<Segment2d> segments, Color lineColor)
+        protected static CompositeRenderer FromRay(Ray2d ray, Color lineColor)
         {
+
+            var p1 = ray.Position;
+            var p2 = ray.GetPosition(100);
+
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
-            lines.Load(ToVector2(segments), BaseRenderer.SegmentIndices(segments.Count));
+            lines.Load(ToVector2(new Point2d[] { p1, p2 }));
 
             var comp = new CompositeRenderer();
             comp.Add(lines);
@@ -548,15 +611,33 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer FromBox(Box2d box, Color lineColor)
+        protected static CompositeRenderer FromSegment(Segment2d segment, Color lineColor)
         {
-            var corners = box.GetCorners();
-            
+            var points = new Point2d[]
+            {
+                segment.A,
+                segment.B
+            };
+
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
-            lines.Load(ToVector2(corners), BaseRenderer.SQUARE_LINE_INDICES);
+            lines.Load(ToVector2(points), BaseRenderer.SegmentIndices(points.Length));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromSegments(List<Segment2d> segments, Color lineColor)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(segments), BaseRenderer.SegmentIndices(segments.Count));
 
             var comp = new CompositeRenderer();
             comp.Add(lines);

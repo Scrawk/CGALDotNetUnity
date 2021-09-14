@@ -37,14 +37,20 @@ namespace CGALDotNetUnity.Polygons
         {
             Polygon = new Polygon2<EEK>(points.ToArray());
 
-            if (!Polygon.IsCounterClockWise)
-                Polygon.Reverse();
+            if (Polygon.IsSimple)
+            {
+                if (!Polygon.IsCounterClockWise)
+                    Polygon.Reverse();
 
-            SetInputMode(INPUT_MODE.POINT_CLICK);
+                SetInputMode(INPUT_MODE.POINT_CLICK);
+                Renderers["Polygon"] = FromPolygon(Polygon, faceColor, lineColor, pointColor, PointSize);
+            }
+            else
+            {
+                Renderers["Polygon"] = FromPolygon(Polygon, faceColor, redColor, redColor, PointSize);
+            }
 
             InputPoints.Clear();
-
-            Renderers["Polygon"] = FromPolygon(Polygon, faceColor, lineColor, pointColor, PointSize);
         }
 
         protected override void OnCleared()
@@ -59,7 +65,6 @@ namespace CGALDotNetUnity.Polygons
         protected override void OnLeftClickDown(Point2d point)
         {
             Point = point;
-
             Renderers["Point"] = FromPoints(new Point2d[] { Point.Value }, lineColor, redColor, PointSize);
         }
 
@@ -79,7 +84,7 @@ namespace CGALDotNetUnity.Polygons
             int textHeight = 25;
             GUI.color = Color.black;
 
-            if (Polygon == null)
+            if (Polygon == null || !Polygon.IsSimple)
             {
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
