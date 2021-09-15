@@ -22,6 +22,8 @@ namespace CGALDotNetUnity.Polygons
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
+        private PolygonSimplificationParams Param;
+
         protected override void Start()
         {
             base.Start();
@@ -33,19 +35,22 @@ namespace CGALDotNetUnity.Polygons
 
             Polygon = new PolygonWithHoles2<EEK>(star);
             Polygon.AddHole(circle);
-
-            var param = PolygonSimplificationParams.Default;
-            param.threshold = 50;
-            param.stop = POLYGON_SIMP_STOP_FUNC.BELOW_THRESHOLD;
-            param.cost = POLYGON_SIMP_COST_FUNC.SQUARE_DIST;
-            param.elements = POLYGON_ELEMENT.ALL;
-
-            SimplifiedPolygon = PolygonSimplification2<EEK>.Instance.Simplify(Polygon, param);
-
             Polygon.Translate(new Point2d(-15, 0));
-            SimplifiedPolygon.Translate(new Point2d(15, 0));
-
             AddPolygon("Polygon", Polygon);
+
+            Param = PolygonSimplificationParams.Default;
+            Param.threshold = 100;
+            Param.stop = POLYGON_SIMP_STOP_FUNC.BELOW_THRESHOLD;
+            Param.cost = POLYGON_SIMP_COST_FUNC.SQUARE_DIST;
+
+            Simplify();
+        }
+
+        private void Simplify()
+        {
+            SimplifiedPolygon = PolygonSimplification2<EEK>.Instance.Simplify(Polygon, Param);
+            SimplifiedPolygon.Translate(new Point2d(30, 0));
+
             AddPolygon("SimplifiedPolygon", SimplifiedPolygon);
         }
 
@@ -70,6 +75,27 @@ namespace CGALDotNetUnity.Polygons
 
         }
 
+        protected override void Update()
+        {
+            base.Update();
+
+            if(Input.GetKeyDown(KeyCode.KeypadMinus) || Input.GetKeyDown(KeyCode.Minus))
+            {
+                Param.threshold -= 1;
+
+                if (Param.threshold < 1)
+                    Param.threshold = 1;
+
+                Simplify();
+            }
+            else if (Input.GetKeyDown(KeyCode.KeypadPlus) || Input.GetKeyDown(KeyCode.Plus))
+            {
+                Param.threshold += 1;
+
+                Simplify();
+            }
+        }
+
         private void OnPostRender()
         {
             DrawGrid();
@@ -84,6 +110,12 @@ namespace CGALDotNetUnity.Polygons
             int textLen = 400;
             int textHeight = 25;
             GUI.color = Color.black;
+
+            GUI.Label(new Rect(10, 10, textLen, textHeight), "+/- to adjust simplification threshold.");
+            GUI.Label(new Rect(10, 30, textLen, textHeight), "Cost Function = " + Param.cost);
+            GUI.Label(new Rect(10, 50, textLen, textHeight), "Stop Function = " + Param.stop);
+            GUI.Label(new Rect(10, 70, textLen, textHeight), "Threshold = " + Param.threshold);
+
         }
 
 
