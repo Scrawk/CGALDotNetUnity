@@ -8,7 +8,7 @@ using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
 using CGALDotNet.Hulls;
 
-namespace CGALDotNetUnity.Polygons
+namespace CGALDotNetUnity.Hulls
 {
 
     public class ConvexHull2Example : InputBehaviour

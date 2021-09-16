@@ -9,6 +9,8 @@ using Common.Core.Colors;
 using CGALDotNet;
 using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
+using CGALDotNet.Circular;
+using CGALDotNet.Triangulations;
 
 namespace CGALDotNetUnity
 {
@@ -255,6 +257,11 @@ namespace CGALDotNetUnity
                 return;
 
             FromPoints(InputPoints, null, lineColor, pointColor, pointSize).Draw();
+        }
+
+        protected void AddSnapTarget(Point2d point)
+        {
+            SnapTargets.Add(point);
         }
 
         protected void AddSnapTargets(IList<Point2d> points)
@@ -678,7 +685,6 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        /*
         protected static CompositeRenderer CreatePoints(Circle2d[] points, Color pointColor, float size)
         {
             var pointBody = new CircleRenderer();
@@ -704,7 +710,6 @@ namespace CGALDotNetUnity
 
             return comp;
         }
-        */
 
         protected static CompositeRenderer FromPoints(IList<Point2d> points, Color lineColor, Color pointColor, float size)
         {
@@ -726,6 +731,53 @@ namespace CGALDotNetUnity
             pointOutline.Load(ToVector2(points.ToArray()));
 
             var comp = new CompositeRenderer();
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromTriangulation(BaseTriangulation2 triangulation, Color faceColor, Color lineColor, Color pointColor, float pointSize)
+        {
+            var indices = new int[triangulation.IndiceCount];
+            triangulation.GetIndices(indices);
+
+            var points = new Point2d[triangulation.VertexCount];
+            triangulation.GetPoints(points);
+
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = faceColor;
+            triangles.Load(ToVector2(points), indices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.TRIANGLES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), indices);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Add(triangles);
+            comp.Add(lines);
             comp.Add(pointBody);
             comp.Add(pointOutline);
 
@@ -842,9 +894,17 @@ namespace CGALDotNetUnity
             var array = new Vector2[points.Count];
 
             for (int i = 0; i < points.Count; i++)
-            {
                 array[i] = new Vector2((float)points[i].x, (float)points[i].y);
-            }
+
+            return array;
+        }
+
+        private static Vector2[] ToVector2(IList<Circle2d> points)
+        {
+            var array = new Vector2[points.Count];
+
+            for (int i = 0; i < points.Count; i++)
+                array[i] = new Vector2((float)points[i].Center.x, (float)points[i].Center.y);
 
             return array;
         }
