@@ -122,7 +122,7 @@ namespace CGALDotNetUnity.Polygons
 
         protected void OnGUI()
         {
-            int textLen = 400;
+            int textLen = 1000;
             int textHeight = 25;
             GUI.color = Color.black;
 

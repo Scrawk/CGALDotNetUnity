@@ -89,16 +89,16 @@ namespace CGALDotNetUnity.Polygons
 
         private void AddPolygon(int id, PolygonWithHoles2<EEK> polygon)
         {
-            //Renderers["PolygonBody"+id] = FromPolygon(polygon, faceColor);
-            //Renderers["PolygonOutline" + id] = FromPolygon(polygon, lineColor, pointColor, PointSize);
+            //Renderers["PolygonBody" + id] = FromPolygonTriangulation(polygon, faceColor, lineColor);
 
-            Renderers["PolygonBody" + id] = FromPolygonTriangulation(polygon, faceColor, lineColor);
+            Renderers["PolygonBody"+id] = FromPolygon(polygon, faceColor);
+            Renderers["PolygonOutline" + id] = FromPolygon(polygon, lineColor, pointColor, PointSize);
 
             int holes = polygon.HoleCount;
             for(int i = 0; i < holes; i++)
             {
-                //var hole = polygon.Copy(POLYGON_ELEMENT.HOLE, i);
-                //Renderers["Hole " + i + " " + id] = FromPolygon(hole, lineColor, pointColor, PointSize);
+                var hole = polygon.Copy(POLYGON_ELEMENT.HOLE, i);
+                Renderers["Hole " + i + " " + id] = FromPolygon(hole, lineColor, pointColor, PointSize);
             }
                 
         }
@@ -118,6 +118,11 @@ namespace CGALDotNetUnity.Polygons
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 Op = CGALEnum.Next(Op);
+
+                //Triangulation polygons for symetric difference
+                //not allows working at the moment.
+                if (Op == POLYGON_BOOLEAN.SYMMETRIC_DIFFERENCE)
+                    Op = POLYGON_BOOLEAN.JOIN;
             }
 
         }
