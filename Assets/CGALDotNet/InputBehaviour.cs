@@ -638,7 +638,98 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer FromSegments(List<Segment2d> segments, Color lineColor)
+        protected static CompositeRenderer FromSegment(Segment2d segment, Color lineColor, Color outlineColor, Color pointColor, float pointSize)
+        {
+            var points = new Point2d[]
+            {
+                segment.A,
+                segment.B
+            };
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), BaseRenderer.SegmentIndices(points.Length));
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = outlineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromTriangle(Triangle2d tri, Color lineColor, Color outlineColor, Color pointColor, float pointSize)
+        {
+            var points = new Point2d[]
+            {
+                tri.A,
+                tri.B,
+                tri.C
+            };
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.TRIANGLES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), new int[] { 0, 1, 2 });
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = outlineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromRays(IList<Ray2d> rays, Color lineColor)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(rays), BaseRenderer.SegmentIndices(rays.Count));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromSegments(IList<Segment2d> segments, Color lineColor)
         {
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
@@ -784,6 +875,44 @@ namespace CGALDotNetUnity
             return comp;
         }
 
+        protected static CompositeRenderer FromTriangulation(BaseTriangulation2 triangulation, Color lineColor, Color pointColor, float pointSize)
+        {
+            var indices = new int[triangulation.IndiceCount];
+            triangulation.GetIndices(indices);
+
+            var points = new Point2d[triangulation.VertexCount];
+            triangulation.GetPoints(points);
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.TRIANGLES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(points), indices);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            var comp = new CompositeRenderer();
+            comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
         private Point2d GetMousePosition()
         {
             Vector3 p = Input.mousePosition;
@@ -882,6 +1011,21 @@ namespace CGALDotNetUnity
             {
                 var a = segments[i].A;
                 var b = segments[i].B;
+                array[i * 2 + 0] = new Vector2((float)a.x, (float)a.y);
+                array[i * 2 + 1] = new Vector2((float)b.x, (float)b.y);
+            }
+
+            return array;
+        }
+
+        private static Vector2[] ToVector2(IList<Ray2d> rays)
+        {
+            var array = new Vector2[rays.Count * 2];
+
+            for (int i = 0; i < rays.Count; i++)
+            {
+                var a = rays[i].Position;
+                var b = a + (Point2d)rays[i].Direction;
                 array[i * 2 + 0] = new Vector2((float)a.x, (float)a.y);
                 array[i * 2 + 1] = new Vector2((float)b.x, (float)b.y);
             }

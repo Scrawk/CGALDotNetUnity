@@ -35,7 +35,7 @@ namespace CGALDotNetUnity.Geometry
             var segment = new Segment2d(new Point2d(-10, 0), new Point2d(10, 0));
             var box = new Box2d(-5, 5);
             var triangle = new Triangle2d(new Point2d(1, 1), new Point2d(9, 1), new Point2d(1, 9));
-            var ray = new Ray2d(new Point2d(0,0), new Vector2d(0, 1));
+            //var ray = new Ray2d(new Point2d(0,0), new Vector2d(0, 1));
 
             //Geometry.Add(point);
             Geometry.Add(box);
