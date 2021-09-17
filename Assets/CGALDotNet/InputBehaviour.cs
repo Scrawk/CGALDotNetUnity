@@ -776,32 +776,6 @@ namespace CGALDotNetUnity
             return comp;
         }
 
-        protected static CompositeRenderer CreatePoints(Circle2d[] points, Color pointColor, float size)
-        {
-            var pointBody = new CircleRenderer();
-            pointBody.Orientation = DRAW_ORIENTATION.XY;
-            pointBody.Segments = POINT_SEGMENTS;
-            pointBody.DefaultColor = pointColor;
-            pointBody.Fill = true;
-            pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
-
-            var pointOutline = new CircleRenderer();
-            pointOutline.Enabled = true;
-            pointOutline.Orientation = DRAW_ORIENTATION.XY;
-            pointOutline.Segments = POINT_SEGMENTS;
-            pointOutline.DefaultColor = pointColor;
-            pointOutline.Fill = false;
-            pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
-
-            var comp = new CompositeRenderer();
-            comp.Add(pointBody);
-            comp.Add(pointOutline);
-
-            return comp;
-        }
-
         protected static CompositeRenderer FromPoints(IList<Point2d> points, Color lineColor, Color pointColor, float size)
         {
             var pointBody = new CircleRenderer();
@@ -907,6 +881,42 @@ namespace CGALDotNetUnity
 
             var comp = new CompositeRenderer();
             comp.Add(lines);
+            comp.Add(pointBody);
+            comp.Add(pointOutline);
+
+            return comp;
+        }
+
+        protected static CompositeRenderer FromCircles(Circle2d[] circles, Color circleColor, Color outlineColor, Color pointColor, float pointSize, int segments = 16)
+        {
+            var points = ToVector2(circles);
+            var radius = ToRadius(circles);
+
+            var renderer = new CircleRenderer();
+            renderer.Orientation = DRAW_ORIENTATION.XY;
+            renderer.Segments = segments;
+            renderer.DefaultColor = circleColor;
+            renderer.Fill = false;
+            renderer.Load(points, radius);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointColor;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = pointSize * 0.5f;
+            pointBody.Load(points);
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = outlineColor;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = pointSize * 0.5f;
+            pointOutline.Load(points);
+
+            var comp = new CompositeRenderer();
+            comp.Add(renderer);
             comp.Add(pointBody);
             comp.Add(pointOutline);
 
@@ -1049,6 +1059,16 @@ namespace CGALDotNetUnity
 
             for (int i = 0; i < points.Count; i++)
                 array[i] = new Vector2((float)points[i].Center.x, (float)points[i].Center.y);
+
+            return array;
+        }
+
+        private static float[] ToRadius(IList<Circle2d> circles)
+        {
+            var array = new float[circles.Count];
+
+            for (int i = 0; i < circles.Count; i++)
+                array[i] = (float)circles[i].Radius;
 
             return array;
         }

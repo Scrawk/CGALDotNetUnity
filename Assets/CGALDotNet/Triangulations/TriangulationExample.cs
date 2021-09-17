@@ -6,6 +6,7 @@ using Common.Unity.Drawing;
 using Common.Unity.Utility;
 using CGALDotNet;
 using CGALDotNet.Geometry;
+using CGALDotNet.Circular;
 using CGALDotNet.Triangulations;
 
 namespace CGALDotNetUnity.Triangulations
@@ -22,13 +23,6 @@ namespace CGALDotNetUnity.Triangulations
             CLICK_TO_SELECT_FACE
         }
 
-        enum TRI_TYPE
-        {
-            REGULAR,
-            DELAUNAY,
-            CONSTRAINED
-        }
-
         private Color pointColor = new Color32(80, 80, 200, 255);
 
         private Color redColor = new Color32(200, 80, 80, 255);
@@ -43,14 +37,13 @@ namespace CGALDotNetUnity.Triangulations
 
         private new MODE Mode = MODE.CLICK_TO_ADD_POINT;
 
-        private TRI_TYPE Type = TRI_TYPE.REGULAR;
+        private TRIANGULATION_TYPE Type = TRIANGULATION_TYPE.DELAUNAY;
 
         private TriVertex2? SelectedVertex;
 
         private TriFace2? SelectedFace;
 
         private TriEdge2? SelectedEdge;
-
 
         protected override void Start()
         {
@@ -61,17 +54,17 @@ namespace CGALDotNetUnity.Triangulations
             CreateTriangulation(Type);
         }
 
-        private void CreateTriangulation(TRI_TYPE type)
+        private void CreateTriangulation(TRIANGULATION_TYPE type)
         {
             switch (type)
             {
-                case TRI_TYPE.REGULAR:
+                case TRIANGULATION_TYPE.REGULAR:
                     triangulation = new Triangulation2<EEK>();
                     break;
-                case TRI_TYPE.DELAUNAY:
+                case TRIANGULATION_TYPE.DELAUNAY:
                     triangulation = new DelaunayTriangulation2<EEK>();
                     break;
-                case TRI_TYPE.CONSTRAINED:
+                case TRIANGULATION_TYPE.CONSTRAINED:
                     triangulation = new ConstrainedTriangulation2<EEK>();
                     break;
             }
@@ -175,6 +168,19 @@ namespace CGALDotNetUnity.Triangulations
             Renderers["Triangulation"] = FromTriangulation(triangulation, faceColor, lineColor, pointColor, PointSize);
         }
 
+        private void BuildCircumcircirles()
+        {
+            int count = triangulation.TriangleCount;
+            var triangles = new Triangle2d[count];
+            triangulation.GetTriangles(triangles);
+
+            var circles = new Circle2d[count];
+            for (int i = 0; i < count; i++)
+                circles[i] = triangles[i].CircumCircle();
+
+            Renderers["Circles"] = FromCircles(circles, redColor, lineColor, redColor, PointSize, 32);
+        }
+
         protected override void OnCleared()
         {
             UnselectAll();
@@ -189,6 +195,19 @@ namespace CGALDotNetUnity.Triangulations
             {
                 Mode = CGALEnum.Next(Mode);
             }
+            else if (Input.GetKeyDown(KeyCode.F1))
+            {
+                Type = CGALEnum.Next(Type);
+                OnCleared();
+            }
+            else if (Input.GetKeyDown(KeyCode.F2))
+            {
+                if (Renderers.ContainsKey("Circles"))
+                    Renderers.Remove("Circles");
+                else
+                    BuildCircumcircirles();
+            
+            }
             else if(Input.GetKeyDown(KeyCode.Delete))
             {
                 if (SelectedVertex != null)
@@ -200,7 +219,7 @@ namespace CGALDotNetUnity.Triangulations
                     BuildTriangulationRenderer();
                 }  
             }
-            else if (Input.GetKeyDown(KeyCode.F))
+            else if (Input.GetKeyDown(KeyCode.F3))
             {
                 if(SelectedEdge != null)
                 {
@@ -231,23 +250,26 @@ namespace CGALDotNetUnity.Triangulations
             GUI.color = Color.black;
 
             GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear.");
-            GUI.Label(new Rect(10, 30, textLen, textHeight), "Tab to change mode.");
-            GUI.Label(new Rect(10, 50, textLen, textHeight), "Current mode = " + Mode);
+            GUI.Label(new Rect(10, 30, textLen, textHeight), "F1 to change triangulation type.");
+            GUI.Label(new Rect(10, 50, textLen, textHeight), "Current triangulation type = " + Type);
+            GUI.Label(new Rect(10, 70, textLen, textHeight), "F2 to toggle circumcircles.");
+            GUI.Label(new Rect(10, 90, textLen, textHeight), "Tab to change mode.");
+            GUI.Label(new Rect(10, 110, textLen, textHeight), "Current mode = " + Mode);
 
             if(SelectedVertex != null)
             {
-                GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Vertex = " + SelectedVertex.Value);
-                GUI.Label(new Rect(10, 90, textLen, textHeight), "Press delete to remove selected vertex.");
+                GUI.Label(new Rect(10, 130, textLen, textHeight), "Selected Vertex = " + SelectedVertex.Value);
+                GUI.Label(new Rect(10, 150, textLen, textHeight), "Press delete to remove selected vertex.");
             }
             else if (SelectedEdge != null)
             {
-                GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Edge = " + SelectedEdge.Value);
-                GUI.Label(new Rect(10, 90, textLen, textHeight), "Press F to flip selected edge.");
-                GUI.Label(new Rect(10, 110, textLen, textHeight), "Warning - May result in invalid triangulation.");
+                GUI.Label(new Rect(10, 130, textLen, textHeight), "Selected Edge = " + SelectedEdge.Value);
+                GUI.Label(new Rect(10, 150, textLen, textHeight), "Press F3 to flip selected edge.");
+                GUI.Label(new Rect(10, 170, textLen, textHeight), "Warning - May result in invalid triangulation.");
             }
             else if (SelectedFace != null)
             {
-                GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Face = " + SelectedFace.Value);
+                GUI.Label(new Rect(10, 190, textLen, textHeight), "Selected Face = " + SelectedFace.Value);
             }
 
         }
