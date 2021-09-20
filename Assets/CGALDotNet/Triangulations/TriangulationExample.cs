@@ -15,7 +15,7 @@ namespace CGALDotNetUnity.Triangulations
     public class TriangulationExample : InputBehaviour
     {
 
-        public enum MODE
+        public enum CLICK_MODE
         {
             CLICK_TO_ADD_POINT,
             CLICK_TO_SELECT_POINT,
@@ -35,7 +35,7 @@ namespace CGALDotNetUnity.Triangulations
 
         private BaseTriangulation2 triangulation;
 
-        private new MODE Mode = MODE.CLICK_TO_ADD_POINT;
+        private CLICK_MODE ClickMode = CLICK_MODE.CLICK_TO_ADD_POINT;
 
         private TRIANGULATION_TYPE Type = TRIANGULATION_TYPE.DELAUNAY;
 
@@ -80,21 +80,21 @@ namespace CGALDotNetUnity.Triangulations
         protected override void OnLeftClickDown(Point2d point)
         {
 
-            switch (Mode)
+            switch (ClickMode)
             {
-                case MODE.CLICK_TO_ADD_POINT:
+                case CLICK_MODE.CLICK_TO_ADD_POINT:
                     AddPoint(point);
                     break;
 
-                case MODE.CLICK_TO_SELECT_POINT:
+                case CLICK_MODE.CLICK_TO_SELECT_POINT:
                     SelectPoint(point);
                     break;
 
-                case MODE.CLICK_TO_SELECT_EDGE:
+                case CLICK_MODE.CLICK_TO_SELECT_EDGE:
                     SelectEdge(point);
                     break;
 
-                case MODE.CLICK_TO_SELECT_FACE:
+                case CLICK_MODE.CLICK_TO_SELECT_FACE:
                     SelectFace(point);
                     break;
             }
@@ -193,7 +193,7 @@ namespace CGALDotNetUnity.Triangulations
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                Mode = CGALEnum.Next(Mode);
+                ClickMode = CGALEnum.Next(ClickMode);
             }
             else if (Input.GetKeyDown(KeyCode.F1))
             {
@@ -254,7 +254,7 @@ namespace CGALDotNetUnity.Triangulations
             GUI.Label(new Rect(10, 50, textLen, textHeight), "Current triangulation type = " + Type);
             GUI.Label(new Rect(10, 70, textLen, textHeight), "F2 to toggle circumcircles.");
             GUI.Label(new Rect(10, 90, textLen, textHeight), "Tab to change mode.");
-            GUI.Label(new Rect(10, 110, textLen, textHeight), "Current mode = " + Mode);
+            GUI.Label(new Rect(10, 110, textLen, textHeight), "Current mode = " + ClickMode);
 
             if(SelectedVertex != null)
             {

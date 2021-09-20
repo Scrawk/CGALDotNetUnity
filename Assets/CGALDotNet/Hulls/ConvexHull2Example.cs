@@ -53,16 +53,16 @@ namespace CGALDotNetUnity.Hulls
             Renderers["Points"] = FromPoints(points, lineColor, pointColor, PointSize);
         }
 
-        private Point2d[] CreatePoints(int count, double xrange, double yrange)
+        private Point2d[] CreatePoints(int count, float xrange, float yrange)
         {
-            var rnd = new System.Random(Seed);
+            UnityEngine.Random.InitState(Seed);
 
             var points = new Point2d[count];
 
             for(int i = 0; i < count; i++)
             {
-                double x = rnd.NextDouble(-xrange, xrange);
-                double y = rnd.NextDouble(-yrange, yrange);
+                double x = UnityEngine.Random.Range(-xrange, xrange);
+                double y = UnityEngine.Random.Range(-yrange, yrange);
                 points[i] = new Point2d(x, y);
             }
 

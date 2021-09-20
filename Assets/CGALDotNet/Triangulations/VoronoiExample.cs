@@ -42,8 +42,6 @@ namespace CGALDotNetUnity.Triangulations
             ExpandPoints(points, width, height, radius);
             TranslatePoints(points, width, height);
 
-            points.Shuffle();
-
             triangulation = new DelaunayTriangulation2<EEK>();
             triangulation.InsertPoints(points.ToArray());
 
@@ -83,13 +81,12 @@ namespace CGALDotNetUnity.Triangulations
 
         private void FillPoints(List<Point2d> points, int width, int height, double radius, int samples)
         {
-            var rnd = new System.Random(0);
 
             for (int i = 0; i < samples; i++)
             {
                 var point = new Point2d();
-                point.x = rnd.NextDouble(0, width);
-                point.y = rnd.NextDouble(0, height);
+                point.x = UnityEngine.Random.Range(0, width);
+                point.y = UnityEngine.Random.Range(0, height);
 
                 if (!WithInRadius(point, points, radius))
                 {

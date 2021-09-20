@@ -30,15 +30,15 @@ namespace Common.Unity.Drawing
 
             if (Orientation == DRAW_ORIENTATION.XY)
             {
-                Vertices.Add(a.xy01());
-                Vertices.Add(b.xy01());
-                Vertices.Add(c.xy01());
+                Vertices.Add(new Vector4(a.x, a.y, 0, 1));
+                Vertices.Add(new Vector4(b.x, b.y, 0, 1));
+                Vertices.Add(new Vector4(c.x, c.y, 0, 1));
             }
             else if (Orientation == DRAW_ORIENTATION.XZ)
             {
-                Vertices.Add(a.x0y1());
-                Vertices.Add(b.x0y1());
-                Vertices.Add(c.x0y1());
+                Vertices.Add(new Vector4(a.x, 0, a.y, 1));
+                Vertices.Add(new Vector4(b.x, 0, b.y, 1));
+                Vertices.Add(new Vector4(c.x, 0, c.y, 1));
             }
 
             Colors.Add(DefaultColor);
@@ -58,9 +58,9 @@ namespace Common.Unity.Drawing
             foreach (var v in vertices)
             {
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    Vertices.Add(v.xy01());
+                    Vertices.Add(new Vector4(v.x, v.y, 0, 1));
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    Vertices.Add(v.x0y1());
+                    Vertices.Add(new Vector4(v.x, 0, v.y, 1));
    
                 Colors.Add(DefaultColor);
             }

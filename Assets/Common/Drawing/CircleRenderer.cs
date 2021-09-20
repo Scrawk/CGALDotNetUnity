@@ -52,10 +52,13 @@ namespace Common.Unity.Drawing
         {
             m_radii.Add(radius);
 
+            float x = position.x;
+            float y = position.y;
+
             if (Orientation == DRAW_ORIENTATION.XY)
-                Vertices.Add(position.xy01());
+                Vertices.Add(new Vector4(x, y, 0, 1));
             else if (Orientation == DRAW_ORIENTATION.XZ)
-                Vertices.Add(position.x0y1());
+                Vertices.Add(new Vector4(x, 0, y, 1));
 
             Colors.Add(DefaultColor);
         }
@@ -72,10 +75,13 @@ namespace Common.Unity.Drawing
             {
                 m_radii.Add(radius);
 
+                float x = positions[i].x;
+                float y = positions[i].y;
+
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    Vertices.Add(positions[i].xy01());
+                    Vertices.Add(new Vector4(x, y, 0, 1));
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    Vertices.Add(positions[i].x0y1());
+                    Vertices.Add(new Vector4(x, y, 0, 1));
 
                 Colors.Add(DefaultColor);
             }
@@ -88,10 +94,13 @@ namespace Common.Unity.Drawing
             {
                 m_radii.Add(radius[i]);
 
+                float x = positions[i].x;
+                float y = positions[i].y;
+
                 if (Orientation == DRAW_ORIENTATION.XY)
-                    Vertices.Add(positions[i].xy01());
+                    Vertices.Add(new Vector4(x, y, 0, 1));
                 else if (Orientation == DRAW_ORIENTATION.XZ)
-                    Vertices.Add(positions[i].x0y1());
+                    Vertices.Add(new Vector4(x, 0, y, 1));
 
                 Colors.Add(DefaultColor);
             }

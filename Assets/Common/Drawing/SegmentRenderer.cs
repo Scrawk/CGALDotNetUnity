@@ -2,8 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-using Common.Core.Numerics;
-
 namespace Common.Unity.Drawing
 {
 
