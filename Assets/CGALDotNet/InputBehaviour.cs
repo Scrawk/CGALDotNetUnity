@@ -47,8 +47,6 @@ namespace CGALDotNetUnity
 
         private Point2d? PreviousPoint { get; set; }
 
-        private Color[] Palette { get; set; }
-
         private CompositeRenderer InputRenderer;
 
         protected virtual void Start()
@@ -151,22 +149,6 @@ namespace CGALDotNetUnity
             }
 
             PreviousPoint = point;
-        }
-
-        public Color SampleColor(int i)
-        {
-            int len = Palette.Length;
-            return Palette[i % len];
-        }
-
-        public void CreatePalette(int seed)
-        {
-            var palette = new Color[]
-            {
-                Color.red,
-                Color.green,
-                Color.blue
-            };
         }
 
         private void PointInputMode(Point2d point, bool leftMouseClicked)
