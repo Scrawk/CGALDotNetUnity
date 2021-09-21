@@ -27,6 +27,12 @@ namespace CGALDotNetUnity.Triangulations
 
         private DelaunayTriangulation2<EEK> triangulation;
 
+        private bool DrawTriangulation = true;
+
+        private bool DrawVoronoiSegments = true;
+
+        private bool DrawVoronoiRays = false;
+
         protected override void Start()
         {
             base.Start();
@@ -45,17 +51,29 @@ namespace CGALDotNetUnity.Triangulations
             triangulation = new DelaunayTriangulation2<EEK>();
             triangulation.InsertPoints(points.ToArray());
 
-            Renderers["Triangulation"] = FromTriangulation(triangulation, blueColor, blueColor, PointSize);
+            CreateRenderers();
+        }
 
-            //var rays = triangulation.GetVoronoiRays();
-            var segments = triangulation.GetVoronoiSegments();
+        private void CreateRenderers()
+        {
+            Renderers.Clear();
 
-            //Debug.Log("Rays " + rays.Length);
-            //Debug.Log("Segments " + segments.Length);
+            if(DrawTriangulation)
+            {
+                Renderers["Triangulation"] = Draw().Outline(triangulation, blueColor).PopRenderer();
+            }
+            
+            if(DrawVoronoiSegments)
+            {
+                var segments = triangulation.GetVoronoiSegments();
+                Renderers["Segments"] = Draw().Outline(segments, redColor).PopRenderer();
+            }
 
-            //Renderers["Rays"] = FromRays(rays, redColor);
-            Renderers["Segments"] = FromSegments(segments, greenColor);
-
+            if(DrawVoronoiRays)
+            {
+                var rays = triangulation.GetVoronoiRays();
+                Renderers["Rays"] = Draw().Outline(rays, redColor).PopRenderer();
+            }
         }
 
         private List<Point2d> CreateBoundaryPoints(int width, int height, int radius)
@@ -133,12 +151,46 @@ namespace CGALDotNetUnity.Triangulations
                 points[i] = points[i] - translate;
         }
 
+        protected override void Update()
+        {
+            base.Update();
+
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                DrawTriangulation = !DrawTriangulation;
+                CreateRenderers();
+            }
+            else if (Input.GetKeyDown(KeyCode.F2))
+            {
+                DrawVoronoiSegments = !DrawVoronoiSegments;
+                CreateRenderers();
+            }
+            else if (Input.GetKeyDown(KeyCode.F3))
+            {
+                DrawVoronoiRays = !DrawVoronoiRays;
+                CreateRenderers();
+            }
+
+        }
+
         private void OnPostRender()
         {
             DrawGrid();
 
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
+
+        }
+
+        protected void OnGUI()
+        {
+            int textLen = 1000;
+            int textHeight = 25;
+            GUI.color = Color.black;
+
+            GUI.Label(new Rect(10, 10, textLen, textHeight), "F1 to draw triangulation.");
+            GUI.Label(new Rect(10, 30, textLen, textHeight), "F2 to draw voronoi segment.");
+            GUI.Label(new Rect(10, 50, textLen, textHeight), "F3 to draw voronoi rays");
 
         }
 

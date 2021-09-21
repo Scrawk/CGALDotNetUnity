@@ -46,8 +46,7 @@ namespace CGALDotNetUnity.Geometry
 
             foreach(var geometry in Geometry)
             {
-                int count = Renderers.Count;
-                Renderers["Geometry" + count] = FromGeometry(geometry, faceColor, lineColor, PointSize);
+                CreateRenderer(geometry);
             }
 
             var set = new HashSet<ValueTuple<IGeometry2d, IGeometry2d>>();
@@ -69,22 +68,76 @@ namespace CGALDotNetUnity.Geometry
                     var result = CGALIntersections.Intersection(geo1, geo2);
                    if(result.Hit)
                     {
-                        var col = intersectionColor;
-                        int count = Renderers.Count;
-
-                        if (result.IsPolygon)
-                        {
-                            var polygon = result.Polygon<EEK>();
-                            Renderers["Geometry" + count] = FromPolygon(polygon, col, col);
-                        }
-                        else
-                        {
-                            var geo = result.Geometry;
-                            Renderers["Geometry" + count] = FromGeometry(geo, col, col, PointSize);
-                        }
+                        CreateRenderer(result, intersectionColor);
                     }
         
                 }
+            }
+        }
+
+        private void CreateRenderer( IntersectionResult2d result, Color col)
+        {
+            int count = Renderers.Count;
+
+            if (result.Type == INTERSECTION_RESULT_2D.POLYGON2)
+            {
+                var polygon = result.Polygon<EEK>();
+
+                Renderers["Geometry" + count] = Draw().
+                Faces(polygon, col).
+                Outline(polygon, col).
+                PopRenderer();
+            }
+            else if(result.Type == INTERSECTION_RESULT_2D.POINT2)
+            {
+                var point = result.Point;
+
+                Renderers["Geometry" + count] = Draw().
+                    Points(point, col, col).
+                    PopRenderer();
+            }
+            else 
+            {
+                var geo = result.Geometry;
+                Renderers["Geometry" + count] = Draw().
+                    Outline(geo, col).
+                    PopRenderer();
+            }
+        }
+
+        private void CreateRenderer(IGeometry2d geometry)
+        {
+            int count = Renderers.Count;
+
+            if (geometry is Box2d box)
+            {
+                var polygon = PolygonFactory<EEK>.FromBox(box);
+
+                Renderers["Geometry" + count] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                PopRenderer();
+            }
+            else if (geometry is Triangle2d tri)
+            {
+                var polygon = PolygonFactory<EEK>.FromTriangle(tri);
+
+                Renderers["Geometry" + count] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                PopRenderer();
+            }
+            else if (geometry is Point2d point)
+            {
+                Renderers["Geometry" + count] = Draw().
+                    Points(point, lineColor, pointColor).
+                    PopRenderer();
+            }
+            else
+            {
+                Renderers["Geometry" + count] = Draw().
+                    Outline(geometry, lineColor).
+                    PopRenderer();
             }
         }
 

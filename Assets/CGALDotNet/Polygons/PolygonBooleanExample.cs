@@ -54,7 +54,7 @@ namespace CGALDotNetUnity.Polygons
                     Polygons.Add(polygon);
 
                     for(int i = 0; i < Polygons.Count; i++)
-                        AddPolygon(i, Polygons[i]);
+                        CreateRenderer(i, Polygons[i]);
 
                 }
             }
@@ -75,7 +75,7 @@ namespace CGALDotNetUnity.Polygons
                         if(PolygonBoolean2<EEK>.Instance.Op(Op, polygon, poly, Polygons))
                         {
                             for (int i = 0; i < Polygons.Count; i++)
-                                AddPolygon(i, Polygons[i]);
+                                CreateRenderer(i, Polygons[i]);
 
                             break;
                         }
@@ -87,20 +87,24 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
-        private void AddPolygon(int id, PolygonWithHoles2<EEK> polygon)
+        private void CreateRenderer(int id, PolygonWithHoles2<EEK> polygon)
         {
-            //Renderers["PolygonBody" + id] = FromPolygonTriangulation(polygon, faceColor, lineColor);
-
-            Renderers["PolygonBody"+id] = FromPolygon(polygon, faceColor);
-            Renderers["PolygonOutline" + id] = FromPolygon(polygon, lineColor, pointColor, PointSize);
+            Renderers["Polygon " + id] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor, PointSize).
+                PopRenderer();
 
             int holes = polygon.HoleCount;
-            for(int i = 0; i < holes; i++)
+            for (int i = 0; i < holes; i++)
             {
                 var hole = polygon.Copy(POLYGON_ELEMENT.HOLE, i);
-                Renderers["Hole " + i + " " + id] = FromPolygon(hole, lineColor, pointColor, PointSize);
+
+                Renderers["Hole " + i + " " + id] = Draw().
+                Outline(hole, lineColor).
+                Points(hole, lineColor, pointColor, PointSize).
+                PopRenderer();
             }
-                
         }
 
         protected override void OnCleared()

@@ -45,6 +45,10 @@ namespace CGALDotNetUnity.Triangulations
 
         private TriEdge2? SelectedEdge;
 
+        private Segment2d SelectedSegment;
+
+        private Triangle2d SelectedTriangle;
+
         protected override void Start()
         {
             base.Start();
@@ -118,7 +122,7 @@ namespace CGALDotNetUnity.Triangulations
                 if (Point2d.Distance(vert.Point, point) < 0.2)
                 {
                     SelectedVertex = vert;
-                    Renderers["Point"] = FromPoints(new Point2d[] { vert.Point }, lineColor, redColor, PointSize);
+                    BuildSelectionRenderer();
                 }
             }
         }
@@ -132,7 +136,8 @@ namespace CGALDotNetUnity.Triangulations
                 if (seg.Distance(point) < 0.2)
                 {
                     SelectedEdge = edge;
-                    Renderers["Segment"] = FromSegment(seg, redColor,  lineColor, redColor, PointSize);
+                    SelectedSegment = seg;
+                    BuildSelectionRenderer();
                 }
             }
         }
@@ -146,7 +151,8 @@ namespace CGALDotNetUnity.Triangulations
                 if(triangulation.GetTriangle(face.Index, out Triangle2d tri))
                 {
                     SelectedFace = face;
-                    Renderers["Face"] = FromTriangle(tri, redColor, lineColor, redColor, PointSize);
+                    SelectedTriangle = tri;
+                    BuildSelectionRenderer();
                 }
                 
             }
@@ -165,7 +171,32 @@ namespace CGALDotNetUnity.Triangulations
 
         private void BuildTriangulationRenderer()
         {
-            Renderers["Triangulation"] = FromTriangulation(triangulation, faceColor, lineColor, pointColor, PointSize);
+            Renderers["Triangulation"] = Draw().
+                Faces(triangulation, faceColor).
+                Outline(triangulation, lineColor).
+                Points(triangulation, lineColor, pointColor).
+                PopRenderer();
+        }
+
+        private void BuildSelectionRenderer()
+        {
+            if(SelectedVertex != null)
+            {
+                var point = SelectedVertex.Value.Point;
+                Renderers["Point"] = Draw().Points(point, lineColor, redColor).PopRenderer();
+            }
+
+            if (SelectedEdge != null)
+            {
+                var seg = SelectedSegment;
+                Renderers["Edge"] = Draw().Outline(seg, redColor).PopRenderer();
+            }
+
+            if (SelectedFace != null)
+            {
+                var tri = SelectedTriangle;
+                Renderers["Face"] = Draw().Faces(tri, redColor).PopRenderer();
+            }
         }
 
         private void BuildCircumcircirles()
@@ -178,7 +209,9 @@ namespace CGALDotNetUnity.Triangulations
             for (int i = 0; i < count; i++)
                 circles[i] = triangles[i].CircumCircle();
 
-            Renderers["Circles"] = FromCircles(circles, redColor, lineColor, redColor, PointSize, 32);
+            Renderers["Circles"] = Draw().
+                Circles(circles, redColor, redColor, false, 64).
+                PopRenderer();
         }
 
         protected override void OnCleared()
@@ -227,7 +260,7 @@ namespace CGALDotNetUnity.Triangulations
                     triangulation.FlipEdge(e.FaceIndex, e.NeighbourIndex);
 
                     SelectedEdge = null;
-                    Renderers.Remove("Segment");
+                    Renderers.Remove("Edge");
                     BuildTriangulationRenderer();
 
                 }

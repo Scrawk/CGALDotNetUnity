@@ -36,7 +36,7 @@ namespace CGALDotNetUnity.Polygons
             Polygon = new PolygonWithHoles2<EEK>(star);
             Polygon.AddHole(circle);
             Polygon.Translate(new Point2d(-15, 0));
-            AddPolygon("Polygon", Polygon);
+            CreateRenderer("Polygon", Polygon);
 
             Param = PolygonSimplificationParams.Default;
             Param.threshold = 100;
@@ -51,28 +51,27 @@ namespace CGALDotNetUnity.Polygons
             SimplifiedPolygon = PolygonSimplification2<EEK>.Instance.Simplify(Polygon, Param);
             SimplifiedPolygon.Translate(new Point2d(30, 0));
 
-            AddPolygon("SimplifiedPolygon", SimplifiedPolygon);
+            CreateRenderer("Simplified", SimplifiedPolygon);
         }
 
-        private void AddPolygon(string name, PolygonWithHoles2<EEK> polygon, bool showTriangulation = false)
+        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon)
         {
-            if (showTriangulation)
-            {
-                Renderers["Polygon " + name] = FromPolygonTriangulation(polygon, faceColor, lineColor);
-            }
-            else
-            {
-                Renderers["PolygonBody " + name] = FromPolygon(polygon, faceColor);
-                Renderers["PolygonOutline " + name] = FromPolygon(polygon, lineColor, pointColor, PointSize);
+            Renderers[name] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor, PointSize).
+                PopRenderer();
 
-                int holes = polygon.HoleCount;
-                for (int i = 0; i < holes; i++)
-                {
-                    var hole = polygon.Copy(POLYGON_ELEMENT.HOLE, i);
-                    Renderers["Hole " + i + " " + name] = FromPolygon(hole, lineColor, pointColor, PointSize);
-                }
-            }
+            int holes = polygon.HoleCount;
+            for (int i = 0; i < holes; i++)
+            {
+                var hole = polygon.Copy(POLYGON_ELEMENT.HOLE, i);
 
+                Renderers[name + " Hole " + i] = Draw().
+                Outline(hole, lineColor).
+                Points(hole, lineColor, pointColor, PointSize).
+                PopRenderer();
+            }
         }
 
         protected override void Update()

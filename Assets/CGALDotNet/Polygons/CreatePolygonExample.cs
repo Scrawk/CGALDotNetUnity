@@ -43,14 +43,35 @@ namespace CGALDotNetUnity.Polygons
                     Polygon.Reverse();
 
                 SetInputMode(INPUT_MODE.POINT_CLICK);
-                Renderers["Polygon"] = FromPolygon(Polygon, faceColor, lineColor, pointColor, PointSize);
+                CreateRenderer(true);
             }
             else
             {
-                Renderers["Polygon"] = FromPolygon(Polygon, faceColor, redColor, redColor, PointSize);
+                CreateRenderer(false);
             }
 
             InputPoints.Clear();
+        }
+
+        private void CreateRenderer(bool isSimple)
+        {
+            if(isSimple)
+            {
+                Renderers["Polygon"] = Draw().
+                Faces(Polygon, faceColor).
+                Outline(Polygon, lineColor).
+                Points(Polygon, lineColor, pointColor).
+                PopRenderer();
+            }
+            else
+            {
+                Renderers["Polygon"] = Draw().
+                Faces(Polygon, redColor).
+                Outline(Polygon, redColor).
+                Points(Polygon, lineColor, pointColor).
+                PopRenderer();
+            }
+
         }
 
         protected override void OnCleared()
@@ -65,7 +86,12 @@ namespace CGALDotNetUnity.Polygons
         protected override void OnLeftClickDown(Point2d point)
         {
             Point = point;
-            Renderers["Point"] = FromPoints(new Point2d[] { Point.Value }, lineColor, redColor, PointSize);
+
+            var array = new Point2d[] { Point.Value };
+
+            Renderers["Point"] = Draw().
+                Points(array, lineColor, redColor, PointSize).
+                PopRenderer();
         }
 
         private void OnPostRender()
@@ -108,7 +134,7 @@ namespace CGALDotNetUnity.Polygons
                     if (Point != null)
                     {
                         GUI.Label(new Rect(10, 130, textLen, textHeight), "Point oriented side = " + Polygon.OrientedSide(Point.Value));
-                        //GUI.Label(new Rect(10, 150, textLen, textHeight), "Point bounded side = " + Polygon.BoundedSide(Point.Value));
+                        GUI.Label(new Rect(10, 150, textLen, textHeight), "Point bounded side = " + Polygon.BoundedSide(Point.Value));
                         GUI.Label(new Rect(10, 170, textLen, textHeight), "Contains point = " + Polygon.ContainsPoint(Point.Value));
                     }
                     else

@@ -49,7 +49,11 @@ namespace CGALDotNetUnity.Polygons
 
                     Polygon = new PolygonWithHoles2<EEK>(boundary);
 
-                    Renderers["PolygonOutline"] = FromPolygon(Polygon, faceColor, lineColor, pointColor, PointSize);
+                    CreateRenderer(null);
+                }
+                else
+                {
+                    Debug.Log("Polygon was not simple.");
                 }
             }
             else if(AddHoles)
@@ -62,12 +66,7 @@ namespace CGALDotNetUnity.Polygons
                 if (PolygonWithHoles2.IsValidHole(Polygon, hole))
                 {
                     Polygon.AddHole(hole);
-
-                    Renderers["PolygonBody"] = FromPolygon(Polygon, faceColor);
-                    Renderers["PolygonOutline"] = FromPolygon(Polygon, lineColor, pointColor, PointSize);
-
-                    int holes = Polygon.HoleCount;
-                    Renderers["Hole " + holes] = FromPolygon(hole, lineColor, pointColor, PointSize);
+                    CreateRenderer(hole);
                 }
                 else
                 {
@@ -76,6 +75,24 @@ namespace CGALDotNetUnity.Polygons
             }
 
             InputPoints.Clear();
+        }
+
+        private void CreateRenderer(Polygon2<EEK> hole)
+        {
+            Renderers["Polygon"] = Draw().
+            Faces(Polygon, faceColor).
+            Outline(Polygon, lineColor).
+            Points(Polygon, lineColor, pointColor, PointSize).
+            PopRenderer();
+
+            if (hole != null)
+            {
+                var holes = Polygon.HoleCount;
+                Renderers["Hole " + holes] = Draw().
+                Outline(hole, lineColor).
+                Points(hole, lineColor, pointColor, PointSize).
+                PopRenderer();
+            }
         }
 
         protected override void OnCleared()
@@ -91,7 +108,9 @@ namespace CGALDotNetUnity.Polygons
         protected override void OnLeftClickDown(Point2d point)
         {
             Point = point;
-            Renderers["Point"] = FromPoints(new Point2d[] { Point.Value }, lineColor, redColor, PointSize);
+            Renderers["Point"] = Draw().
+                Points(point, lineColor, redColor).
+                PopRenderer();
         }
 
         protected override void Update()
@@ -157,7 +176,7 @@ namespace CGALDotNetUnity.Polygons
 
                     if (Point != null)
                     {
-                        GUI.Label(new Rect(10, 150, textLen, textHeight), "Contains point = " + Polygon.ContainsPoint(Point.Value));
+                        GUI.Label(new Rect(10, 130, textLen, textHeight), "Contains point = " + Polygon.ContainsPoint(Point.Value));
                     }
                     else
                         GUI.Label(new Rect(10, 130, textLen, textHeight), "Click to test contains point.");

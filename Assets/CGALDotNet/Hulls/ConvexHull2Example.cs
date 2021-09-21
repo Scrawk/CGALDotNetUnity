@@ -49,8 +49,7 @@ namespace CGALDotNetUnity.Hulls
 
             Debug.Log("Created hull in " + ms + "ms");
 
-            Renderers["Hull"] = FromPolygon(Hull, faceColor, lineColor);
-            Renderers["Points"] = FromPoints(points, lineColor, pointColor, PointSize);
+            CreateRenderer(Hull, points);
         }
 
         private Point2d[] CreatePoints(int count, float xrange, float yrange)
@@ -67,6 +66,19 @@ namespace CGALDotNetUnity.Hulls
             }
 
             return points;
+        }
+
+        private void CreateRenderer(Polygon2<EEK> polygon, IList<Point2d> points)
+        {
+            Renderers["Polygon"] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor).
+                PopRenderer();
+
+            Renderers["Points"] = Draw().
+                Points(points, lineColor, pointColor).
+                PopRenderer();
         }
 
         protected override void Update()

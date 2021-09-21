@@ -82,9 +82,22 @@ namespace CGALDotNetUnity.Polygons
             var results = new List<Polygon2<EEK>>();
             PolygonPartition2<EEK>.Instance.Partition(Op, Polygon, results);
 
+            CreateRenderer(results);
+        }
+
+        private void CreateRenderer(List<Polygon2<EEK>> list)
+        {
             Renderers.Clear();
-            for (int i = 0; i < results.Count; i++)
-                Renderers["Polygon" + i] = FromPolygon(results[i], faceColor, lineColor, pointColor, PointSize);
+            for (int i = 0; i < list.Count; i++)
+            {
+                var polygon = list[i];
+                Renderers["Polygon " + i] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor).
+                PopRenderer();
+            }
+               
         }
 
         protected void OnGUI()

@@ -22,8 +22,6 @@ namespace CGALDotNetUnity.Arrangements
             CLICK_TO_ADD_POINT,
             CLICK_TO_ADD_EDGE,
             CLICK_TO_ADD_POLYGON,
-            CLICK_TO_SELECT_POINT,
-            CLICK_TO_SELECT_EDGE,
             CLICK_TO_SELECT_FACE
         }
 
@@ -41,11 +39,7 @@ namespace CGALDotNetUnity.Arrangements
 
         private CLICK_MODE ClickMode = CLICK_MODE.CLICK_TO_ADD_POINT;
 
-        private ArrVertex2? SelectedVertex;
-
         private ArrFace2? SelectedFace;
-
-        private ArrHalfEdge2? SelectedEdge;
 
         protected override void Start()
         {
@@ -58,16 +52,10 @@ namespace CGALDotNetUnity.Arrangements
 
         private void CreateArrangement()
         {
-            //ConsoleRedirect.Redirect();
-
             arrangement = new Arrangement2<EEK>();
             var box = PolygonFactory<EEK>.FromBox(-5, 5);
 
             arrangement.InsertPolygon(box, true);
-
-            //var builder = new StringBuilder();
-            //arrangement.Print(builder, true);
-            //Debug.Log(builder);
 
             Renderers.Clear();
             BuildArrangementRenderer();
@@ -96,14 +84,6 @@ namespace CGALDotNetUnity.Arrangements
             {
                 case CLICK_MODE.CLICK_TO_ADD_POINT:
                     AddPoint(point);
-                    break;
-
-                case CLICK_MODE.CLICK_TO_SELECT_POINT:
-                    SelectPoint(point);
-                    break;
-
-                case CLICK_MODE.CLICK_TO_SELECT_EDGE:
-                    SelectEdge(point);
                     break;
 
                 case CLICK_MODE.CLICK_TO_SELECT_FACE:
@@ -137,18 +117,6 @@ namespace CGALDotNetUnity.Arrangements
             BuildArrangementRenderer();
         }
 
-        private void SelectPoint(Point2d point)
-        {
-            UnselectAll();
-
-        }
-
-        private void SelectEdge(Point2d point)
-        {
-            UnselectAll();
-
-        }
-
         private void SelectFace(Point2d point)
         {
             UnselectAll();
@@ -163,17 +131,13 @@ namespace CGALDotNetUnity.Arrangements
 
         private void UnselectAll()
         {
-            SelectedEdge = null;
-            SelectedVertex = null;
             SelectedFace = null;
-
-            Renderers.Remove("Point");
-            Renderers.Remove("Edge");
             Renderers.Remove("Face");
         }
 
         private void BuildArrangementRenderer()
         {
+            /*
             var mesh = new DCELMesh();
             mesh.FromArrangement(arrangement);
 
@@ -187,13 +151,20 @@ namespace CGALDotNetUnity.Arrangements
                 if (polygon.IsCounterClockWise)
                     polygon.Reverse();
 
-                Renderers["Face"+index] = FromPolygonTriangulation(polygon, faceColor, lineColor);
+                //Renderers["Face"+index] = FromPolygonTriangulation(polygon, faceColor, lineColor);
 
                 index++;
             }
+            */
 
-            Renderers["Arrangement"] = FromArrangement(arrangement, lineColor, pointColor, PointSize);
+            Renderers["Arrangement"] = Draw().
+                Faces(arrangement, faceColor).
+                Outline(arrangement, lineColor).
+                Points(arrangement, lineColor, pointColor).
+                PopRenderer();
         }
+
+
 
         protected override void OnCleared()
         {
@@ -240,29 +211,15 @@ namespace CGALDotNetUnity.Arrangements
             int textHeight = 25;
             GUI.color = Color.black;
 
-            
             GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear.");
             GUI.Label(new Rect(10, 30, textLen, textHeight), "Tab to change mode.");
             GUI.Label(new Rect(10, 50, textLen, textHeight), "Current mode = " + ClickMode);
 
-            
-            if (SelectedVertex != null)
-            {
-                GUI.Label(new Rect(10, 130, textLen, textHeight), "Selected Vertex = " + SelectedVertex.Value);
-                GUI.Label(new Rect(10, 150, textLen, textHeight), "Press delete to remove selected vertex.");
-            }
-            else if (SelectedEdge != null)
-            {
-                GUI.Label(new Rect(10, 130, textLen, textHeight), "Selected Edge = " + SelectedEdge.Value);
-            }
-            else if (SelectedFace != null)
+            if (SelectedFace != null)
             {
                 GUI.Label(new Rect(10, 190, textLen, textHeight), "Selected Face = " + SelectedFace.Value);
             }
-            
         }
-
-
 
     }
 }
