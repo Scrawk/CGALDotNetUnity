@@ -377,6 +377,32 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
+        public RendererBuilder Points(IList<Segment2d> segments, Color lineCol, Color pointCol, float size = POINT_SIZE)
+        {
+            var points = ToVector2(segments);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointCol;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = size * 0.5f;
+            pointBody.Load(points);
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineCol;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = size * 0.5f;
+            pointOutline.Load(points);
+
+            Renderer.Add(pointBody);
+            Renderer.Add(pointOutline);
+
+            return Instance;
+        }
+
         public RendererBuilder Circles(IList<Circle2d> circles, Color lineCol, Color fillColor, bool filled = false, float size = POINT_SIZE)
         {
 
