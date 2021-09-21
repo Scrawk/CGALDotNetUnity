@@ -103,29 +103,6 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Faces(Arrangement2 arr, Color color)
-        {
-            var vertCount = arr.VertexCount;
-            var edgeCount = arr.EdgeCount;
-
-            var points = new Point2d[vertCount];
-            arr.GetPoints(points);
-
-            var indices = BaseRenderer.SegmentIndices(edgeCount);
-
-            var triangles = new FaceRenderer();
-            triangles.FaceMode = FACE_MODE.TRIANGLES;
-            triangles.Orientation = DRAW_ORIENTATION.XY;
-            triangles.DefaultColor = color;
-            triangles.Load(ToVector2(points), indices);
-            triangles.ZWrite = false;
-            triangles.SrcBlend = BlendMode.One;
-
-            Renderer.Add(triangles);
-
-            return Instance;
-        }
-
         public RendererBuilder Faces(Triangle2d tri, Color color)
         {
             var points = new Point2d[]
@@ -164,11 +141,10 @@ namespace CGALDotNetUnity
 
         public RendererBuilder Outline(Arrangement2 arr, Color color)
         {
-            var vertCount = arr.VertexCount;
             var edgeCount = arr.EdgeCount;
 
-            var points = new Point2d[vertCount];
-            arr.GetPoints(points);
+            var segments = new Segment2d[edgeCount];
+            arr.GetSegments(segments);
 
             var indices = BaseRenderer.SegmentIndices(edgeCount);
 
@@ -176,7 +152,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), indices);
+            lines.Load(ToVector2(segments), indices);
 
             Renderer.Add(lines);
 

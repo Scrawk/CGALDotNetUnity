@@ -137,34 +137,11 @@ namespace CGALDotNetUnity.Arrangements
 
         private void BuildArrangementRenderer()
         {
-            /*
-            var mesh = new DCELMesh();
-            mesh.FromArrangement(arrangement);
-
-            int index = 0;
-            foreach(var face in mesh.EnumerateFaces())
-            {
-                var points = new List<Point2d>();
-                face.GetPoints(points);
-
-                var polygon = new Polygon2<EEK>(points.ToArray());
-                if (polygon.IsCounterClockWise)
-                    polygon.Reverse();
-
-                //Renderers["Face"+index] = FromPolygonTriangulation(polygon, faceColor, lineColor);
-
-                index++;
-            }
-            */
-
             Renderers["Arrangement"] = Draw().
-                Faces(arrangement, faceColor).
                 Outline(arrangement, lineColor).
                 Points(arrangement, lineColor, pointColor).
                 PopRenderer();
         }
-
-
 
         protected override void OnCleared()
         {
@@ -187,10 +164,6 @@ namespace CGALDotNetUnity.Arrangements
                 else
                     SetInputMode(INPUT_MODE.POINT_CLICK);
 
-            }
-            else if (Input.GetKeyDown(KeyCode.F1))
-            {
-          
             }
 
         }
@@ -217,7 +190,7 @@ namespace CGALDotNetUnity.Arrangements
 
             if (SelectedFace != null)
             {
-                GUI.Label(new Rect(10, 190, textLen, textHeight), "Selected Face = " + SelectedFace.Value);
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Face = " + SelectedFace.Value);
             }
         }
 
