@@ -8,4 +8,4 @@ Examples of CGALDotNet running in Unity.
 
 The CGALDotNet repository can be found [here](https://github.com/Scrawk/CGALDotNet)
 
-![KockStar](./Assests/Media/KockStar.jpg)
+![KockStar](./Assets/Media/KockStar.jpg)
