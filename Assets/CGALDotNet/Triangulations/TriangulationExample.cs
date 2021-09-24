@@ -37,7 +37,7 @@ namespace CGALDotNetUnity.Triangulations
 
         private CLICK_MODE ClickMode = CLICK_MODE.CLICK_TO_ADD_POINT;
 
-        private TRIANGULATION_TYPE Type = TRIANGULATION_TYPE.DELAUNAY;
+        private TRIANGULATION_TYPE Type = TRIANGULATION_TYPE.CONSTRAINED;
 
         private TriVertex2? SelectedVertex;
 
@@ -70,12 +70,45 @@ namespace CGALDotNetUnity.Triangulations
                     break;
                 case TRIANGULATION_TYPE.CONSTRAINED:
                     triangulation = new ConstrainedTriangulation2<EEK>();
-                    break;
+                    break;;
             }
 
-            triangulation.InsertPoint(new Point2d(-5, -5));
-            triangulation.InsertPoint(new Point2d(5, -5));
-            triangulation.InsertPoint(new Point2d(0, 5));
+            if (triangulation is ConstrainedTriangulation2<EEK> tri)
+            {
+
+                var va = new Point2d(5.0, 5.0);
+                var vb = new Point2d(-5.0, 5.0);
+                var vc = new Point2d(4.0, 3.0);
+                var vd = new Point2d(5.0, -5.0);
+                var ve = new Point2d(6.0, 6.0);
+                var vf = new Point2d(-6.0, 6.0);
+                var vg = new Point2d(-6.0, -6.0);
+                var vh = new Point2d(6.0, -6.0);
+
+                tri.InsertPoint(va);
+                tri.InsertPoint(vb);
+                tri.InsertPoint(vc);
+                tri.InsertPoint(vd);
+                tri.InsertPoint(ve);
+                tri.InsertPoint(vf);
+                tri.InsertPoint(vg);
+                tri.InsertPoint(vh);
+
+                tri.InsertConstraint(va, vb);
+                tri.InsertConstraint(vb, vc);
+                tri.InsertConstraint(vc, vd);
+                tri.InsertConstraint(vd, va);
+                tri.InsertConstraint(ve, vf);
+                tri.InsertConstraint(vf, vg);
+                tri.InsertConstraint(vg, vh);
+                tri.InsertConstraint(vh, ve);
+            }
+            else
+            {
+                triangulation.InsertPoint(new Point2d(-5, -5));
+                triangulation.InsertPoint(new Point2d(5, -5));
+                triangulation.InsertPoint(new Point2d(0, 5));
+            }
 
             Renderers.Clear();
             BuildTriangulationRenderer();
@@ -176,6 +209,19 @@ namespace CGALDotNetUnity.Triangulations
                 Outline(triangulation, lineColor).
                 Points(triangulation, lineColor, pointColor).
                 PopRenderer();
+
+            if(triangulation is ConstrainedTriangulation2<EEK> tri)
+            {
+                int count = tri.ConstrainedEdgeCount;
+                if (count == 0) return;
+
+                var segments = new Segment2d[count];
+                tri.GetConstraints(segments);
+
+                Renderers["Segment"] = Draw().
+                    Outline(segments, redColor).
+                    PopRenderer();
+            }
         }
 
         private void BuildSelectionRenderer()
@@ -265,6 +311,23 @@ namespace CGALDotNetUnity.Triangulations
 
                 }
             }
+            else if(Input.GetKeyDown(KeyCode.F4))
+            {
+                if (triangulation is ConstrainedTriangulation2<EEK> tri)
+                {
+                    tri.MakeDelaunay();
+                    BuildTriangulationRenderer();
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.F5))
+            {
+                if (triangulation is ConstrainedTriangulation2<EEK> tri)
+                {
+                    tri.MakeGabriel();
+                    BuildTriangulationRenderer();
+                }
+            }
+
         }
 
         private void OnPostRender()
