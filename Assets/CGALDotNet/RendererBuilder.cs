@@ -267,10 +267,9 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        /*
-        public RendererBuilder Outline(NurbsCurve2d curve, Color color, int samples)
+        public RendererBuilder Outline(BaseNurbsCurve2d curve, Color color, int samples)
         {
-            var points = new List<Vector2d>();
+            var points = new List<Point2d>();
             curve.GetCartesianPoints(points, samples);
 
             var lines = new SegmentRenderer();
@@ -283,7 +282,7 @@ namespace CGALDotNetUnity
 
             return Instance;
         }
-        */
+        
         public RendererBuilder Points(Polygon2<EEK> polygon, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
             var points = polygon.ToArray();
@@ -568,6 +567,42 @@ namespace CGALDotNetUnity
             lines.Load(ToVector2(segments), BaseRenderer.SegmentIndices(segments.Count));
 
             Renderer.Add(lines);
+
+            return Instance;
+        }
+
+        public RendererBuilder Tangents(BaseNurbsCurve2d curve, Color color, int samples)
+        {
+            var points = new List<Point2d>();
+            curve.GetCartesianPoints(points, samples);
+
+            var tangents = new List<Vector2d>();
+            curve.GetTangents(tangents, samples);
+
+            var renderer = new NormalRenderer();
+            renderer.Orientation = DRAW_ORIENTATION.XY;
+            renderer.DefaultColor = color;
+            renderer.Load(ToVector2(points), ToVector2(tangents));
+
+            Renderer.Add(renderer);
+
+            return Instance;
+        }
+
+        public RendererBuilder Normals(BaseNurbsCurve2d curve, Color color, int samples)
+        {
+            var points = new List<Point2d>();
+            curve.GetCartesianPoints(points, samples);
+
+            var normals = new List<Vector2d>();
+            curve.GetNormals(normals, samples);
+
+            var normal = new NormalRenderer();
+            normal.Orientation = DRAW_ORIENTATION.XY;
+            normal.DefaultColor = color;
+            normal.Load(ToVector2(points), ToVector2(normals));
+
+            Renderer.Add(normal);
 
             return Instance;
         }
