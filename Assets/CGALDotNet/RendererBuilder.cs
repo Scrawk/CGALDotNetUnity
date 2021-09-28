@@ -11,6 +11,7 @@ using CGALDotNet.Geometry;
 using CGALDotNet.Circular;
 using CGALDotNet.Triangulations;
 using CGALDotNet.Arrangements;
+using CGALDotNet.Nurbs;
 
 namespace CGALDotNetUnity
 {
@@ -266,6 +267,23 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
+        /*
+        public RendererBuilder Outline(NurbsCurve2d curve, Color color, int samples)
+        {
+            var points = new List<Vector2d>();
+            curve.GetCartesianPoints(points, samples);
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = color;
+            lines.Load(ToVector2(points));
+
+            Renderer.Add(lines);
+
+            return Instance;
+        }
+        */
         public RendererBuilder Points(Polygon2<EEK> polygon, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
             var points = polygon.ToArray();
@@ -592,6 +610,16 @@ namespace CGALDotNetUnity
         }
 
         private static Vector2[] ToVector2(IList<Point2d> points)
+        {
+            var array = new Vector2[points.Count];
+
+            for (int i = 0; i < points.Count; i++)
+                array[i] = new Vector2((float)points[i].x, (float)points[i].y);
+
+            return array;
+        }
+
+        private static Vector2[] ToVector2(IList<Vector2d> points)
         {
             var array = new Vector2[points.Count];
 

@@ -73,6 +73,7 @@ namespace CGALDotNetUnity.Triangulations
                     break;;
             }
 
+            /*
             if (triangulation is ConstrainedTriangulation2<EEK> tri)
             {
 
@@ -85,14 +86,14 @@ namespace CGALDotNetUnity.Triangulations
                 var vg = new Point2d(-6.0, -6.0);
                 var vh = new Point2d(6.0, -6.0);
 
-                tri.InsertPoint(va);
-                tri.InsertPoint(vb);
-                tri.InsertPoint(vc);
-                tri.InsertPoint(vd);
-                tri.InsertPoint(ve);
-                tri.InsertPoint(vf);
-                tri.InsertPoint(vg);
-                tri.InsertPoint(vh);
+                tri.Insert(va);
+                tri.Insert(vb);
+                tri.Insert(vc);
+                tri.Insert(vd);
+                tri.Insert(ve);
+                tri.Insert(vf);
+                tri.Insert(vg);
+                tri.Insert(vh);
 
                 tri.InsertConstraint(va, vb);
                 tri.InsertConstraint(vb, vc);
@@ -105,10 +106,11 @@ namespace CGALDotNetUnity.Triangulations
             }
             else
             {
-                triangulation.InsertPoint(new Point2d(-5, -5));
-                triangulation.InsertPoint(new Point2d(5, -5));
-                triangulation.InsertPoint(new Point2d(0, 5));
-            }
+            */
+                triangulation.Insert(new Point2d(-5, -5));
+                triangulation.Insert(new Point2d(5, -5));
+                triangulation.Insert(new Point2d(0, 5));
+            //}
 
             Renderers.Clear();
             BuildTriangulationRenderer();
@@ -142,7 +144,7 @@ namespace CGALDotNetUnity.Triangulations
         {
             UnselectAll();
 
-            triangulation.InsertPoint(point);
+            triangulation.Insert(point);
             BuildTriangulationRenderer();
         }
 
