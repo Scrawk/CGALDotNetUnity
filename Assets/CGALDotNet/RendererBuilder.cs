@@ -104,6 +104,27 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
+        public RendererBuilder Faces(ConformingTriangulation2 tri, Color color)
+        {
+            var indices = new int[tri.IndiceCount];
+            tri.GetIndices(indices);
+
+            var points = new Point2d[tri.VertexCount];
+            tri.GetPoints(points);
+
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = color;
+            triangles.Load(ToVector2(points), indices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            Renderer.Add(triangles);
+
+            return Instance;
+        }
+
         public RendererBuilder Faces(Triangle2d tri, Color color)
         {
             var points = new Point2d[]
@@ -236,6 +257,25 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
+        public RendererBuilder Outline(ConformingTriangulation2 tri, Color color)
+        {
+            var indices = new int[tri.IndiceCount];
+            tri.GetIndices(indices);
+
+            var points = new Point2d[tri.VertexCount];
+            tri.GetPoints(points);
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.TRIANGLES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = color;
+            lines.Load(ToVector2(points), indices);
+
+            Renderer.Add(lines);
+
+            return Instance;
+        }
+
         public RendererBuilder Outline(Triangle2d tri, Color color)
         {
             var points = new Point2d[]
@@ -282,7 +322,184 @@ namespace CGALDotNetUnity
 
             return Instance;
         }
-        
+
+        public RendererBuilder Outline(IGeometry2d geometry, Color color)
+        {
+
+            switch (geometry)
+            {
+                case Line2d line:
+                    return Outline(line, color);
+
+                case Ray2d ray:
+                    return Outline(ray, color);
+
+                case Segment2d seg:
+                    return Outline(seg ,color);
+
+            }
+
+            return Instance;
+        }
+
+        public RendererBuilder Outline(Line2d line, Color lineColor)
+        {
+            double x1, y1, x2, y2;
+            double len = -100;
+
+            if (line.IsHorizontal)
+            {
+                x1 = -len;
+                y1 = line.Y(x1);
+
+                x2 = len;
+                y2 = line.Y(x2);
+            }
+            else
+            {
+                y1 = -len;
+                x1 = line.X(y1);
+
+                y2 = len;
+                x2 = line.X(y2);
+            }
+
+            var p1 = new Point2d(x1, y1);
+            var p2 = new Point2d(x2, y2);
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = lineColor;
+            lines.Load(ToVector2(new Point2d[] { p1, p2 }));
+
+            Renderer.Add(lines);
+
+            return Instance;
+        }
+
+        public RendererBuilder Outline(Ray2d ray, Color color)
+        {
+            return Outline(new Ray2d[] { ray }, color);
+        }
+
+        public RendererBuilder Outline(IList<Ray2d> rays, Color color)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = color;
+            lines.Load(ToVector2(rays), BaseRenderer.SegmentIndices(rays.Count));
+
+            Renderer.Add(lines);
+
+            return Instance;
+        }
+
+        public RendererBuilder Outline(Segment2d segment, Color color)
+        {
+            return Outline(new Segment2d[] { segment }, color);
+        }
+
+        public RendererBuilder Outline(IList<Segment2d> segments, Color color)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = color;
+            lines.Load(ToVector2(segments), BaseRenderer.SegmentIndices(segments.Count));
+
+            Renderer.Add(lines);
+
+            return Instance;
+        }
+
+        public RendererBuilder Circles(IList<Circle2d> circles, Color lineCol, Color fillColor, bool filled = false, float size = POINT_SIZE)
+        {
+
+            var points = ToVector2(circles);
+            var radius = ToRadius(circles);
+
+            if (filled)
+            {
+                var pointBody = new CircleRenderer();
+                pointBody.Orientation = DRAW_ORIENTATION.XY;
+                pointBody.Segments = POINT_SEGMENTS;
+                pointBody.DefaultColor = fillColor;
+                pointBody.Fill = true;
+                pointBody.DefaultRadius = size * 0.5f;
+                pointBody.Load(points, radius);
+
+                Renderer.Add(pointBody);
+            }
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineCol;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = size * 0.5f;
+            pointOutline.Load(points, radius);
+
+            Renderer.Add(pointOutline);
+
+            return Instance;
+        }
+
+        public RendererBuilder Points(BaseTriangulation2 tri, Color lineCol, Color pointCol, float size = POINT_SIZE)
+        {
+            var points = new Point2d[tri.VertexCount];
+            tri.GetPoints(points);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointCol;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = size * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineCol;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = size * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            Renderer.Add(pointBody);
+            Renderer.Add(pointOutline);
+
+            return Instance;
+        }
+
+        public RendererBuilder Points(ConformingTriangulation2 tri, Color lineCol, Color pointCol, float size = POINT_SIZE)
+        {
+            var points = new Point2d[tri.VertexCount];
+            tri.GetPoints(points);
+
+            var pointBody = new CircleRenderer();
+            pointBody.Orientation = DRAW_ORIENTATION.XY;
+            pointBody.Segments = POINT_SEGMENTS;
+            pointBody.DefaultColor = pointCol;
+            pointBody.Fill = true;
+            pointBody.DefaultRadius = size * 0.5f;
+            pointBody.Load(ToVector2(points));
+
+            var pointOutline = new CircleRenderer();
+            pointOutline.Orientation = DRAW_ORIENTATION.XY;
+            pointOutline.Segments = POINT_SEGMENTS;
+            pointOutline.DefaultColor = lineCol;
+            pointOutline.Fill = false;
+            pointOutline.DefaultRadius = size * 0.5f;
+            pointOutline.Load(ToVector2(points));
+
+            Renderer.Add(pointBody);
+            Renderer.Add(pointOutline);
+
+            return Instance;
+        }
+
         public RendererBuilder Points(Polygon2<EEK> polygon, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
             var points = polygon.ToArray();
@@ -416,157 +633,6 @@ namespace CGALDotNetUnity
 
             Renderer.Add(pointBody);
             Renderer.Add(pointOutline);
-
-            return Instance;
-        }
-
-        public RendererBuilder Circles(IList<Circle2d> circles, Color lineCol, Color fillColor, bool filled = false, float size = POINT_SIZE)
-        {
-
-            var points = ToVector2(circles);
-            var radius = ToRadius(circles);
-
-            if (filled)
-            {
-                var pointBody = new CircleRenderer();
-                pointBody.Orientation = DRAW_ORIENTATION.XY;
-                pointBody.Segments = POINT_SEGMENTS;
-                pointBody.DefaultColor = fillColor;
-                pointBody.Fill = true;
-                pointBody.DefaultRadius = size * 0.5f;
-                pointBody.Load(points, radius);
-
-                Renderer.Add(pointBody);
-            }
-
-            var pointOutline = new CircleRenderer();
-            pointOutline.Orientation = DRAW_ORIENTATION.XY;
-            pointOutline.Segments = POINT_SEGMENTS;
-            pointOutline.DefaultColor = lineCol;
-            pointOutline.Fill = false;
-            pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(points, radius);
-
-            
-            Renderer.Add(pointOutline);
-
-            return Instance;
-        }
-
-        public RendererBuilder Points(BaseTriangulation2 tri, Color lineCol, Color pointCol, float size = POINT_SIZE)
-        {
-            var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
-
-            var pointBody = new CircleRenderer();
-            pointBody.Orientation = DRAW_ORIENTATION.XY;
-            pointBody.Segments = POINT_SEGMENTS;
-            pointBody.DefaultColor = pointCol;
-            pointBody.Fill = true;
-            pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
-
-            var pointOutline = new CircleRenderer();
-            pointOutline.Orientation = DRAW_ORIENTATION.XY;
-            pointOutline.Segments = POINT_SEGMENTS;
-            pointOutline.DefaultColor = lineCol;
-            pointOutline.Fill = false;
-            pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
-
-            Renderer.Add(pointBody);
-            Renderer.Add(pointOutline);
-
-            return Instance;
-        }
-
-        public RendererBuilder Outline(IGeometry2d geometry, Color color)
-        {
-
-            switch (geometry)
-            {
-                case Line2d line:
-                    return Outline(line, color);
-
-                case Ray2d ray:
-                    return Outline(ray, color);
-
-                case Segment2d seg:
-                    return Outline(seg ,color);
-
-            }
-
-            return Instance;
-        }
-
-        public RendererBuilder Outline(Line2d line, Color lineColor)
-        {
-            double x1, y1, x2, y2;
-            double len = -100;
-
-            if (line.IsHorizontal)
-            {
-                x1 = -len;
-                y1 = line.Y(x1);
-
-                x2 = len;
-                y2 = line.Y(x2);
-            }
-            else
-            {
-                y1 = -len;
-                x1 = line.X(y1);
-
-                y2 = len;
-                x2 = line.X(y2);
-            }
-
-            var p1 = new Point2d(x1, y1);
-            var p2 = new Point2d(x2, y2);
-
-            var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
-            lines.Orientation = DRAW_ORIENTATION.XY;
-            lines.DefaultColor = lineColor;
-            lines.Load(ToVector2(new Point2d[] { p1, p2 }));
-
-            Renderer.Add(lines);
-
-            return Instance;
-        }
-
-        public RendererBuilder Outline(Ray2d ray, Color color)
-        {
-            return Outline(new Ray2d[] { ray }, color);
-        }
-
-        public RendererBuilder Outline(IList<Ray2d> rays, Color color)
-        {
-            var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
-            lines.Orientation = DRAW_ORIENTATION.XY;
-            lines.DefaultColor = color;
-            lines.Load(ToVector2(rays), BaseRenderer.SegmentIndices(rays.Count));
-
-            Renderer.Add(lines);
-
-            return Instance;
-        }
-
-        public RendererBuilder Outline(Segment2d segment, Color color)
-        {
-            return Outline(new Segment2d[] { segment }, color);
-        }
-
-        public RendererBuilder Outline(IList<Segment2d> segments, Color color)
-        {
-            var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
-            lines.Orientation = DRAW_ORIENTATION.XY;
-            lines.DefaultColor = color;
-            lines.Load(ToVector2(segments), BaseRenderer.SegmentIndices(segments.Count));
-
-            Renderer.Add(lines);
 
             return Instance;
         }

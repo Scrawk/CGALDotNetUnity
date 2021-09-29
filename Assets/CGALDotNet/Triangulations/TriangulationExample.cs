@@ -73,44 +73,9 @@ namespace CGALDotNetUnity.Triangulations
                     break;;
             }
 
-            /*
-            if (triangulation is ConstrainedTriangulation2<EEK> tri)
-            {
-
-                var va = new Point2d(5.0, 5.0);
-                var vb = new Point2d(-5.0, 5.0);
-                var vc = new Point2d(4.0, 3.0);
-                var vd = new Point2d(5.0, -5.0);
-                var ve = new Point2d(6.0, 6.0);
-                var vf = new Point2d(-6.0, 6.0);
-                var vg = new Point2d(-6.0, -6.0);
-                var vh = new Point2d(6.0, -6.0);
-
-                tri.Insert(va);
-                tri.Insert(vb);
-                tri.Insert(vc);
-                tri.Insert(vd);
-                tri.Insert(ve);
-                tri.Insert(vf);
-                tri.Insert(vg);
-                tri.Insert(vh);
-
-                tri.InsertConstraint(va, vb);
-                tri.InsertConstraint(vb, vc);
-                tri.InsertConstraint(vc, vd);
-                tri.InsertConstraint(vd, va);
-                tri.InsertConstraint(ve, vf);
-                tri.InsertConstraint(vf, vg);
-                tri.InsertConstraint(vg, vh);
-                tri.InsertConstraint(vh, ve);
-            }
-            else
-            {
-            */
-                triangulation.Insert(new Point2d(-5, -5));
-                triangulation.Insert(new Point2d(5, -5));
-                triangulation.Insert(new Point2d(0, 5));
-            //}
+            triangulation.Insert(new Point2d(-5, -5));
+            triangulation.Insert(new Point2d(5, -5));
+            triangulation.Insert(new Point2d(0, 5));
 
             Renderers.Clear();
             BuildTriangulationRenderer();
@@ -311,22 +276,6 @@ namespace CGALDotNetUnity.Triangulations
                     Renderers.Remove("Edge");
                     BuildTriangulationRenderer();
 
-                }
-            }
-            else if(Input.GetKeyDown(KeyCode.F4))
-            {
-                if (triangulation is ConstrainedTriangulation2<EEK> tri)
-                {
-                    tri.MakeDelaunay();
-                    BuildTriangulationRenderer();
-                }
-            }
-            else if (Input.GetKeyDown(KeyCode.F5))
-            {
-                if (triangulation is ConstrainedTriangulation2<EEK> tri)
-                {
-                    tri.MakeGabriel();
-                    BuildTriangulationRenderer();
                 }
             }
 
