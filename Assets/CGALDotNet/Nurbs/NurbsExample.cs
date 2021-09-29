@@ -28,7 +28,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
-        private bool DrawNormals;
+        private bool DrawNormals, DrawControlPoints;
 
         protected override void Start()
         {
@@ -69,30 +69,90 @@ namespace CGALDotNetUnity.Polygons
             CreateRenderer();
         }
 
+        private void SplitTest()
+        {
+            var points = new Point2d[]
+            {
+                new Point2d(-10,0),
+                new Point2d(0,10),
+                new Point2d(10,0),
+            };
+
+            var knots = new double[] { 0, 0, 0, 1, 1, 1 };
+
+            var curve = new NurbsCurve2d(2, knots, points);
+
+            NurbsCurve2d left, right;
+            NurbsCurve2d.Split(curve, 0.5, out left, out right);
+
+            CreateRenderer("Left", left, redColor);
+            CreateRenderer("Right", right, blueColor);
+        }
+
         private void CreateRenderer()
         {
             Renderers.Clear();
 
             for (int i = 0; i < Curves.Count; i++)
             {
-                if(DrawNormals)
+                var curve = Curves[i];
+
+                if (DrawNormals)
                 {
                     Renderers["Curve" + i] = Draw().
-                        Outline(Curves[i], redColor, 100).
-                        Tangents(Curves[i], greenColor, 10).
-                        Normals(Curves[i], blueColor, 10).
+                        Outline(curve, lineColor, 100).
+                        Tangents(curve, greenColor, 10).
+                        Normals(curve, blueColor, 10).
                         PopRenderer();
                 }
                 else
                 {
                     Renderers["Curve" + i] = Draw().
-                        Outline(Curves[i], redColor, 100).
+                        Outline(curve, lineColor, 100).
+                        PopRenderer();
+                }
+
+                if(DrawControlPoints)
+                {
+                    var points = new List<Point2d>();
+                    curve.GetCartesianControlPoints(points);
+
+                    Renderers["ControlPoints" + i] = Draw().
+                        Outline(points, redColor).
                         PopRenderer();
                 }
 
             }
-            
         }
+
+        private void CreateRenderer(string name, BaseNurbsCurve2d curve, Color col)
+        {
+            if (DrawNormals)
+            {
+                Renderers[name] = Draw().
+                    Outline(curve, col, 100).
+                    Tangents(curve, greenColor, 10).
+                    Normals(curve, blueColor, 10).
+                    PopRenderer();
+            }
+            else
+            {
+                Renderers[name] = Draw().
+                    Outline(curve, col, 100).
+                    PopRenderer();
+            }
+
+            if (DrawControlPoints)
+            {
+                var points = new List<Point2d>();
+                curve.GetCartesianControlPoints(points);
+
+                Renderers[name+"ControlPoints"] = Draw().
+                    Outline(points, redColor).
+                    PopRenderer();
+            }
+        }
+
         protected override void Update()
         {
             base.Update();
@@ -100,6 +160,11 @@ namespace CGALDotNetUnity.Polygons
             if (Input.GetKeyDown(KeyCode.F1))
             {
                 DrawNormals = !DrawNormals;
+                CreateRenderer();
+            }
+            else if (Input.GetKeyDown(KeyCode.F2))
+            {
+                DrawControlPoints = !DrawControlPoints;
                 CreateRenderer();
             }
 
@@ -123,6 +188,7 @@ namespace CGALDotNetUnity.Polygons
             GUI.color = Color.black;
 
             GUI.Label(new Rect(10, 10, textLen, textHeight), "F1 to draw tangents and normals.");
+            GUI.Label(new Rect(10, 10, textLen, textHeight), "F2 to draw control points.");
         }
 
 
