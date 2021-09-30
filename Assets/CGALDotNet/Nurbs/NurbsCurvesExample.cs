@@ -7,10 +7,10 @@ using CGALDotNet;
 using CGALDotNet.Nurbs;
 using CGALDotNet.Geometry;
 
-namespace CGALDotNetUnity.Polygons
+namespace CGALDotNetUnity.Nurbs
 {
 
-    public class NurbsExample : InputBehaviour
+    public class NurbsCurvesExample : InputBehaviour
     {
         private Color redColor = new Color32(200, 80, 80, 255);
 
