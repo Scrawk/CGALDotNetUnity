@@ -91,7 +91,7 @@ namespace CGALDotNetUnity.Polygons
             var results = new List<Polygon2<EEK>>();
             PolygonOffset2<EEK>.Instance.CreateInteriorOffset(Polygon, offset, results);
             
-            //PolygonOffset2<EEK>.Instance.CreateExteriorOffset(Polygon, offset, results);
+            PolygonOffset2<EEK>.Instance.CreateExteriorOffset(Polygon, offset, results);
 
             CreateRenderer(Polygon, results);
         }
