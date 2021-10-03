@@ -45,8 +45,6 @@ namespace CGALDotNetUnity.Triangulations
 
         private TriEdge2? SelectedEdge;
 
-        private Segment2d SelectedSegment;
-
         private Triangle2d SelectedTriangle;
 
         protected override void Start()
@@ -119,7 +117,7 @@ namespace CGALDotNetUnity.Triangulations
 
             if (triangulation.LocateVertex(point, out TriVertex2 vert))
             {
-                if (Point2d.Distance(vert.Point, point) < 0.2)
+                if (Point2d.Distance(vert.Point.xy, point) < 0.2)
                 {
                     SelectedVertex = vert;
                     BuildSelectionRenderer();
@@ -131,12 +129,11 @@ namespace CGALDotNetUnity.Triangulations
         {
             UnselectAll();
 
-            if (triangulation.LocateEdge(point, out TriEdge2 edge, out Segment2d seg))
+            if (triangulation.LocateEdge(point, out TriEdge2 edge))
             {
-                if (seg.Distance(point) < 0.2)
+                if (edge.Segment.Distance(point) < 0.2)
                 {
                     SelectedEdge = edge;
-                    SelectedSegment = seg;
                     BuildSelectionRenderer();
                 }
             }
@@ -196,12 +193,12 @@ namespace CGALDotNetUnity.Triangulations
             if(SelectedVertex != null)
             {
                 var point = SelectedVertex.Value.Point;
-                Renderers["Point"] = Draw().Points(point, lineColor, redColor).PopRenderer();
+                Renderers["Point"] = Draw().Points(point.xy, lineColor, redColor).PopRenderer();
             }
 
             if (SelectedEdge != null)
             {
-                var seg = SelectedSegment;
+                var seg = SelectedEdge.Value.Segment;
                 Renderers["Edge"] = Draw().Outline(seg, redColor).PopRenderer();
             }
 

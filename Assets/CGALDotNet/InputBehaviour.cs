@@ -163,6 +163,8 @@ namespace CGALDotNetUnity
 
         private void PointClickInputMode(Point2d point, bool leftMouseClicked, bool leftMouseDragged)
         {
+            point = SnapToTargets(point);
+
             if (leftMouseClicked)
             {
                 OnLeftClickDown(point);
@@ -254,6 +256,9 @@ namespace CGALDotNetUnity
 
         protected void AddSnapTargets(IList<Point2d> points)
         {
+            if (SnapTargets == null)
+                SnapTargets = new List<Point2d>();
+
             SnapTargets.AddRange(points);
         }
 
