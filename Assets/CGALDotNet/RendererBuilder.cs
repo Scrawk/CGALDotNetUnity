@@ -414,6 +414,18 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
+        public RendererBuilder Outline(IList<Segment3d> segments, Color color)
+        {
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.DefaultColor = color;
+            lines.Load(ToVector3(segments), BaseRenderer.SegmentIndices(segments.Count));
+
+            Renderer.Add(lines);
+
+            return Instance;
+        }
+
         public RendererBuilder Circles(IList<Circle2d> circles, Color lineCol, Color fillColor, bool filled = false, float size = POINT_SIZE)
         {
 
@@ -615,7 +627,18 @@ namespace CGALDotNetUnity
         {
             var pointBody = new VertexRenderer(size);
             pointBody.DefaultColor = pointCol;
-            pointBody.Load(ToVector2(points));
+            pointBody.Load(ToVector3(points));
+
+            Renderer.Add(pointBody);
+
+            return Instance;
+        }
+
+        public RendererBuilder Points(Vector3d[,] points, Color pointCol, float size)
+        {
+            var pointBody = new VertexRenderer(size);
+            pointBody.DefaultColor = pointCol;
+            pointBody.Load(ToVector3(points));
 
             Renderer.Add(pointBody);
 
@@ -706,6 +729,21 @@ namespace CGALDotNetUnity
             return array;
         }
 
+        private static Vector3[] ToVector3(IList<Segment3d> segments)
+        {
+            var array = new Vector3[segments.Count * 2];
+
+            for (int i = 0; i < segments.Count; i++)
+            {
+                var a = segments[i].A;
+                var b = segments[i].B;
+                array[i * 2 + 0] = new Vector3((float)a.x, (float)a.y, (float)a.z);
+                array[i * 2 + 1] = new Vector3((float)b.x, (float)b.y, (float)b.z);
+            }
+
+            return array;
+        }
+
         private static Vector2[] ToVector2(IList<Ray2d> rays)
         {
             var array = new Vector2[rays.Count * 2];
@@ -731,7 +769,7 @@ namespace CGALDotNetUnity
             return array;
         }
 
-        private static Vector3[] ToVector2(Point3d[,] points)
+        private static Vector3[] ToVector3(Point3d[,] points)
         {
             var array = new Vector3[points.Length];
 
@@ -741,6 +779,20 @@ namespace CGALDotNetUnity
             for (int i = 0; i < width; i++)
                 for (int j = 0; j < height; j++)
                     array[i + j * width] = new Vector3((float)points[i,j].x, (float)points[i,j].y, (float)points[i, j].z);
+
+            return array;
+        }
+
+        private static Vector3[] ToVector3(Vector3d[,] points)
+        {
+            var array = new Vector3[points.Length];
+
+            int width = points.GetLength(0);
+            int height = points.GetLength(1);
+
+            for (int i = 0; i < width; i++)
+                for (int j = 0; j < height; j++)
+                    array[i + j * width] = new Vector3((float)points[i, j].x, (float)points[i, j].y, (float)points[i, j].z);
 
             return array;
         }

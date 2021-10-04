@@ -88,36 +88,33 @@ namespace CGALDotNetUnity.Polygons
         {
             if (Polygon == null) return;
 
-            var results = new List<Polygon2<EEK>>();
-            PolygonOffset2<EEK>.Instance.CreateInteriorOffset(Polygon, offset, results);
-            
-            PolygonOffset2<EEK>.Instance.CreateExteriorOffset(Polygon, offset, results);
+            Polygon2<EEK> interior, exterior;
+            if (PolygonOffset2<EEK>.Instance.CreateInteriorOffset(Polygon, offset, out interior))
+            {
+                CreateRenderer("Interior", Polygon, interior);
+            }
+                
 
-            CreateRenderer(Polygon, results);
+            if(PolygonOffset2<EEK>.Instance.CreateExteriorOffset(Polygon, offset, out exterior))
+            {
+                CreateRenderer("Exterior", Polygon, exterior);
+            }
         }
 
-        private void CreateRenderer(Polygon2<EEK> polygon, List<Polygon2<EEK>> list)
+        private void CreateRenderer(string name, Polygon2<EEK> polygon, Polygon2<EEK> offset)
         {
-            Renderers.Clear();
-
             Renderers["Polygon"] = Draw().
                 Faces(polygon, faceColor).
                 Outline(polygon, lineColor).
                 Points(polygon, lineColor, pointColor).
                 PopRenderer();
 
-            for (int i = 0; i < list.Count; i++)
-            {
-                var poly = list[i];
 
-                Renderers["Polygon " + i] = Draw().
+            Renderers[name] = Draw().
                 //Faces(poly, faceColor).
-                Outline(poly, lineColor).
-                Points(poly, lineColor, pointColor).
+                Outline(offset, lineColor).
+                Points(offset, lineColor, pointColor).
                 PopRenderer();
-            }
-
-
         }
 
         protected void OnGUI()

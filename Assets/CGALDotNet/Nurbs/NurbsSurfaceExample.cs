@@ -21,15 +21,11 @@ namespace CGALDotNetUnity.Nurbs
 
         private Color blueColor = new Color32(80, 80, 200, 255);
 
-        private Color pointColor = new Color32(80, 80, 200, 255);
-
-        private Color faceColor = new Color32(80, 80, 200, 128);
-
-        private Color lineColor = new Color32(0, 0, 0, 255);
-
         private Dictionary<string, CompositeRenderer> Renderers;
 
-        private bool DrawNormals, DrawControlPoints;
+        private GameObject Sphere;
+
+        public Material material;
 
         protected override void Start()
         {
@@ -69,19 +65,102 @@ namespace CGALDotNetUnity.Nurbs
 
             var srf = new RationalNurbsSurface3d(degree_u, degree_v, knots_u, knots_v, control_points, weights);
 
-            //var split = RationalNurbsSurface3d.SplitV(srf, 0.25);
+            //RationalNurbsSurface3d left, right;
+            //RationalNurbsSurface3d.SplitV(srf, 0.25, out left, out right);
 
-            //CreateRenderers(srf, 100);
+            //CreateRenderers(srf, 100, false);
+
+            var mesh = CreateUnityMesh(srf, 100);
+
+            Sphere = new GameObject();
+            var filter = Sphere.AddComponent<MeshFilter>();
+            var renderer = Sphere.AddComponent<MeshRenderer>();
+
+            filter.mesh = mesh;
+            renderer.material = material;
         }
 
-        private void CreateRenderers(RationalNurbsSurface3d surface, int samples)
+        private Mesh CreateUnityMesh(RationalNurbsSurface3d srf, int samples)
+        {
+      
+            var positions = new Vector3[samples * samples];
+            var uv = new Vector2[samples * samples];
+            var normals = new Vector3[samples * samples];
+            var indices = new int[(samples * samples) * 6];
+
+            for (int j = 0; j < samples; j++)
+            {
+                for (int i = 0; i < samples; i++)
+                {
+                    double u = i / (samples - 1.0);
+                    double v = j / (samples - 1.0);
+
+                    var p = srf.CartesianPoint(u, v);
+                    var n = srf.Normal(u, v);
+
+                    positions[i + j * samples] = new Vector3((float)p.x, (float)p.y, (float)p.z);
+                    uv[i + j * samples] = new Vector2((float)u, (float)v);
+                    normals[i + j * samples] = new Vector3((float)n.x, (float)n.y, (float)n.z);
+                }
+            }
+
+            for (int j = 0; j < samples - 1; j++)
+            {
+                for (int i = 0; i < samples - 1; i++)
+                {
+                    indices[(i + j * samples) * 6 + 0] = i + j * samples;
+                    indices[(i + j * samples) * 6 + 1] = (i+1) + j * samples;
+                    indices[(i + j * samples) * 6 + 2] = i + (j+1) * samples;
+
+                    indices[(i + j * samples) * 6 + 3] = (i+1) +  j* samples;
+                    indices[(i + j * samples) * 6 + 4] = (i+1) + (j+1) * samples;
+                    indices[(i + j * samples) * 6 + 5] = i + (j+1) * samples;
+                }
+            }
+
+            var mesh = new Mesh();
+
+            mesh.vertices = positions;
+            mesh.uv = uv;
+            mesh.normals = normals;
+            mesh.triangles = indices;
+            mesh.RecalculateBounds();
+            //mesh.RecalculateNormals();
+            //mesh.RecalculateTangents();
+
+            return mesh;
+        }
+
+        private void CreateRenderers(RationalNurbsSurface3d srf, int samples, bool drawControl)
         {
             var points = new Point3d[samples, samples];
-            surface.GetCartesianPoints(samples, points);
+            srf.GetCartesianPoints(samples, points);
 
-            Renderers["Surface"] = Draw().
+            if (drawControl)
+            {
+                var control = new List<Segment3d>();
+                for (int j = 0; j < srf.Height; j++)
+                {
+                    for (int i = 0; i < srf.Width - 1; i++)
+                    {
+                        var a = srf.GetCartesianControlPoint(i, j);
+                        var b = srf.GetCartesianControlPoint(i+ 1, j);
+
+                        control.Add(new Segment3d(a, b));
+                    }
+                }
+
+                Renderers["Surface"] = Draw().
                 Points(points, redColor, 0.0025f).
+                Outline(control, greenColor).
                 PopRenderer();
+            }
+            else
+            {
+                Renderers["Surface"] = Draw().
+                    Points(points, redColor, 0.0025f).
+                    PopRenderer();
+            }
         }
 
         private void OnPostRender()
@@ -89,6 +168,7 @@ namespace CGALDotNetUnity.Nurbs
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
         }
+
 
     }
 
