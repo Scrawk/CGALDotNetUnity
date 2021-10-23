@@ -41,6 +41,21 @@ namespace CGALDotNetUnity
             }
         }
 
+        public RendererBuilder Faces(IList<Point2d> points, IList<int> indices, Color color)
+        {
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = color;
+            triangles.Load(ToVector2(points), indices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            Renderer.Add(triangles);
+
+            return Instance;
+        }
+
         public RendererBuilder Faces(Polygon2<EEK> polygon, Color color)
         {
             var indices = new List<int>();
@@ -137,6 +152,21 @@ namespace CGALDotNetUnity
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
             triangles.Load(ToVector2(points));
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            Renderer.Add(triangles);
+
+            return Instance;
+        }
+
+        public RendererBuilder Faces(IList<Triangle2d> tri, Color color)
+        {
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = color;
+            triangles.Load(ToVector2(tri));
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -766,6 +796,26 @@ namespace CGALDotNetUnity
             for (int i = 0; i < points.Count; i++)
                 array[i] = new Vector2((float)points[i].x, (float)points[i].y);
 
+            return array;
+        }
+
+        private static Vector2[] ToVector2(IList<Triangle2d> triangles)
+        {
+            var array = new Vector2[triangles.Count * 3];
+
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                var t = triangles[i];
+
+                var a = new Vector2((float)t.A.x, (float)t.A.y);
+                var b = new Vector2((float)t.B.x, (float)t.B.y);
+                var c = new Vector2((float)t.C.x, (float)t.C.y);
+
+                array[i * 3 + 0] = a;
+                array[i * 3 + 1] = b;
+                array[i * 3 + 2] = c;
+            }
+                
             return array;
         }
 
