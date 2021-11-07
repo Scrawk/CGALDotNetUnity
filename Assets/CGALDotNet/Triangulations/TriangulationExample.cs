@@ -115,13 +115,10 @@ namespace CGALDotNetUnity.Triangulations
         {
             UnselectAll();
 
-            if (triangulation.LocateVertex(point, out TriVertex2 vert))
+            if (triangulation.LocateVertex(point, 0.5, out TriVertex2 vert))
             {
-                if (Point2d.Distance(vert.Point.xy, point) < 0.2)
-                {
-                    SelectedVertex = vert;
-                    BuildSelectionRenderer();
-                }
+                SelectedVertex = vert;
+                BuildSelectionRenderer();
             }
         }
 
@@ -129,13 +126,10 @@ namespace CGALDotNetUnity.Triangulations
         {
             UnselectAll();
 
-            if (triangulation.LocateEdge(point, out TriEdge2 edge))
+            if (triangulation.LocateEdge(point, 0.5, out TriEdge2 edge))
             {
-                if (edge.Segment.Distance(point) < 0.2)
-                {
-                    SelectedEdge = edge;
-                    BuildSelectionRenderer();
-                }
+                SelectedEdge = edge;
+                BuildSelectionRenderer();
             }
         }
 
