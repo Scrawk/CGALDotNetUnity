@@ -199,7 +199,6 @@ namespace CGALDotNetUnity.Triangulations
             if (SelectedEdge != null)
             {
                 var seg = SelectedEdge.Value.Segment;
-                Debug.Log(seg);
                 Renderers["Edge"] = Draw().Outline(seg, redColor).PopRenderer();
             }
 

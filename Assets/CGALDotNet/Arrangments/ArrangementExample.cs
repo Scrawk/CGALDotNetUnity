@@ -22,6 +22,8 @@ namespace CGALDotNetUnity.Arrangements
             CLICK_TO_ADD_POINT,
             CLICK_TO_ADD_EDGE,
             CLICK_TO_ADD_POLYGON,
+            CLICK_TO_SELECT_VERTEX,
+            CLICK_TO_SELECT_EDGE,
             CLICK_TO_SELECT_FACE
         }
 
@@ -40,6 +42,10 @@ namespace CGALDotNetUnity.Arrangements
         private CLICK_MODE ClickMode = CLICK_MODE.CLICK_TO_ADD_POINT;
 
         private ArrFace2? SelectedFace;
+
+        private ArrHalfEdge2? SelectedEdge;
+
+        private ArrVertex2? SelectedVertex;
 
         protected override void Start()
         {
@@ -89,6 +95,14 @@ namespace CGALDotNetUnity.Arrangements
                 case CLICK_MODE.CLICK_TO_SELECT_FACE:
                     SelectFace(point);
                     break;
+
+                case CLICK_MODE.CLICK_TO_SELECT_EDGE:
+                    SelectEdge(point);
+                    break;
+
+                case CLICK_MODE.CLICK_TO_SELECT_VERTEX:
+                    SelectVertex(point);
+                    break;
             }
 
         }
@@ -123,15 +137,45 @@ namespace CGALDotNetUnity.Arrangements
 
             if (arrangement.LocateFace(point, out ArrFace2 face))
             {
-                if(face.Index != -1)
+                if (face.Index != -1)
+                {
                     SelectedFace = face;
+                    BuildSelectionRenderer();
+                }
+                else
+                    Debug.Log(face);
             }
+        }
 
+        private void SelectEdge(Point2d point)
+        {
+            UnselectAll();
+
+            if (arrangement.LocateEdge(point, 0.5, out ArrHalfEdge2 edge))
+            {
+                SelectedEdge = edge;
+                BuildSelectionRenderer();
+            }
+        }
+
+        private void SelectVertex(Point2d point)
+        {
+            UnselectAll();
+
+            if (arrangement.LocateVertex(point, 0.5, out ArrVertex2 vert))
+            {
+                SelectedVertex = vert;
+                BuildSelectionRenderer();
+            }
         }
 
         private void UnselectAll()
         {
             SelectedFace = null;
+            SelectedEdge = null;
+            SelectedVertex = null;
+            Renderers.Remove("Vertex");
+            Renderers.Remove("Edge");
         }
 
         private void BuildArrangementRenderer()
@@ -142,9 +186,29 @@ namespace CGALDotNetUnity.Arrangements
                 PopRenderer();
         }
 
+        private void BuildSelectionRenderer()
+        {
+            if (SelectedVertex != null)
+            {
+                var point = SelectedVertex.Value.Point;
+                Renderers["Vertex"] = Draw().Points(point, lineColor, redColor).PopRenderer();
+            }
+
+            if (SelectedEdge != null)
+            {
+                ArrVertex2 v1, v2;
+                arrangement.GetVertex(SelectedEdge.Value.SourceIndex, out v1);
+                arrangement.GetVertex(SelectedEdge.Value.TargetIndex, out v2);
+
+                var seg = new Segment2d(v1.Point, v2.Point);
+                Renderers["Edge"] = Draw().Outline(seg, redColor).PopRenderer();
+            }
+        }
+
         protected override void OnCleared()
         {
             UnselectAll();
+            Renderers.Clear();
             CreateArrangement();
         }
 
@@ -187,7 +251,20 @@ namespace CGALDotNetUnity.Arrangements
             GUI.Label(new Rect(10, 30, textLen, textHeight), "Tab to change mode.");
             GUI.Label(new Rect(10, 50, textLen, textHeight), "Current mode = " + ClickMode);
 
-            if (SelectedFace != null)
+            if (SelectedVertex != null)
+            {
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Vertex = " + SelectedVertex.Value);
+            }
+            else if (SelectedEdge != null)
+            {
+                var edge = SelectedEdge.Value;
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Edge = " + edge);
+
+                ArrHalfEdge2 twin;
+                arrangement.GetHalfEdge(edge.TwinIndex, out twin);
+                GUI.Label(new Rect(10, 90, textLen, textHeight), "Selected Twin = " + twin);
+            }
+            else if (SelectedFace != null)
             {
                 GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Face = " + SelectedFace.Value);
             }
