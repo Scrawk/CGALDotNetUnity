@@ -8,10 +8,9 @@ using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
 using CGALDotNet.Marching;
 using CGALDotNet.Triangulations;
-using CGALDotNet.DCEL;
 using CGALDotNet.CSG;
 
-namespace CGALDotNetUnity.Polygons
+namespace CGALDotNetUnity.Marching
 {
 
     public class MarchingSquaresExample : InputBehaviour
@@ -26,7 +25,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
-        private Node<Point2d, double> Root;
+        private Node2 Root;
 
         protected override void Start()
         {
@@ -43,13 +42,11 @@ namespace CGALDotNetUnity.Polygons
             int half = size / 2;
             Point2d translate = new Point2d(-half);
             
-            var bounds = new BoxNode2(new Point2d(1), new Point2d(size - 1));
             var circle = new CircleNode2(new Point2d(half), 5);
             var box = new BoxNode2(new Point2d(2), new Point2d(10));
             var union = new UnionNode2(circle, box);
-            var subtract = new SubtractionNode2(bounds, union);
-
-            Root = subtract;
+        
+            Root = union;
 
             var ms = new MarchingSquares();
             var tri = new ConstrainedTriangulation2<EEK>();
@@ -57,7 +54,7 @@ namespace CGALDotNetUnity.Polygons
             var vertices = new List<Point2d>();
             var indices = new List<int>();
 
-            ms.Generate(SDF, size + 1, size+ 1, vertices, indices);
+            ms.Generate(Root, size + 1, size+ 1, vertices, indices);
 
             var segments = new List<Segment2d>();
             for(int i = 0; i < indices.Count/2; i++)
@@ -101,7 +98,7 @@ namespace CGALDotNetUnity.Polygons
 
                 var center = (a + b + c) / 3.0;
 
-                if(SDF(center.x, center.y) > 0)
+                if(Root.Func(center) < 0)
                 {
                     indices2.Add(indices[i0]);
                     indices2.Add(indices[i1]);
@@ -114,12 +111,6 @@ namespace CGALDotNetUnity.Polygons
                 Faces(points, indices2, faceColor).
                 PopRenderer();
 
-        }
-
-        private double SDF(double x, double y)
-        {
-            var point = new Point2d(x, y);
-            return Root.Func(point);
         }
 
         private void OnPostRender()
