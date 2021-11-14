@@ -5,12 +5,12 @@ using UnityEngine;
 using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNet.Geometry;
-using CGALDotNet.Marching;
+using CGALDotNet.Meshing;
 using CGALDotNet.CSG;
 
-namespace CGALDotNetUnity.Marching
+namespace CGALDotNetUnity.Meshing
 {
-    public class MarchingCubesExample : MonoBehaviour
+    public class SurfaceMesherExample : MonoBehaviour
     {
 
         public Material material;
@@ -19,11 +19,12 @@ namespace CGALDotNetUnity.Marching
 
         void Start()
         {
-            PerformMarching();
+            PerformMeshing();
         }
 
-        private void PerformMarching()
+        private void PerformMeshing()
         {
+            /*
             int size = 20;
             int half = size / 2;
 
@@ -32,14 +33,15 @@ namespace CGALDotNetUnity.Marching
             var union = new UnionNode3(sphere, box);
 
             Root = union;
-
-            var mc = new MarchingCubes();
+            */
 
             var vertices = new List<Point3d>();
             var indices = new List<int>();
+            var bounds = new Box2d(0, 1);
+            var param = SurfaceMesherParams.Default;
 
-            mc.Generate(Root, size + 1, size + 1, size + 1, vertices, indices);
-
+            SurfaceMesher3<EIK>.Instance.Generate(vertices, indices, bounds, param);
+  
             Mesh mesh = new Mesh();
             mesh.SetVertices(ToVector3(vertices));
             mesh.SetTriangles(indices, 0);
@@ -51,7 +53,7 @@ namespace CGALDotNetUnity.Marching
             go.AddComponent<MeshRenderer>();
             go.GetComponent<Renderer>().material = material;
             go.GetComponent<MeshFilter>().mesh = mesh;
-            go.transform.localPosition = new Vector3(-half, -half, -half);
+            //go.transform.localPosition = new Vector3(-half, -half, -half);
 
         }
 
