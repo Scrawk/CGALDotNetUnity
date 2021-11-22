@@ -367,6 +367,9 @@ namespace CGALDotNetUnity
                 case Segment2d seg:
                     return Outline(seg ,color);
 
+                case Box2d box:
+                    return Outline(box, color);
+
             }
 
             return Instance;
@@ -420,6 +423,21 @@ namespace CGALDotNetUnity
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
             lines.Load(ToVector2(rays), BaseRenderer.SegmentIndices(rays.Count));
+
+            Renderer.Add(lines);
+
+            return Instance;
+        }
+
+        public RendererBuilder Outline(Box2d box, Color color)
+        {
+            var points = box.GetCorners();
+
+            var lines = new SegmentRenderer();
+            lines.LineMode = LINE_MODE.LINES;
+            lines.Orientation = DRAW_ORIENTATION.XY;
+            lines.DefaultColor = color;
+            lines.Load(ToVector2(points), BaseRenderer.PolygonIndices(4));
 
             Renderer.Add(lines);
 

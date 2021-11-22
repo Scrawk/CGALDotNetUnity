@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Common.Unity.Drawing;
-using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Marching;
-using CGALDotNet.CSG;
 
 namespace CGALDotNetUnity.Marching
 {
@@ -14,8 +11,6 @@ namespace CGALDotNetUnity.Marching
     {
 
         public Material material;
-
-        private Node3 Root;
 
         void Start()
         {
@@ -27,18 +22,12 @@ namespace CGALDotNetUnity.Marching
             int size = 20;
             int half = size / 2;
 
-            var sphere = new SphereNode3(new Point3d(half), 5);
-            var box = new BoxNode3(new Point3d(2), new Point3d(10));
-            var union = new UnionNode3(sphere, box);
-
-            Root = union;
-
             var mc = new MarchingCubes();
 
             var vertices = new List<Point3d>();
             var indices = new List<int>();
 
-            mc.Generate(Root, size + 1, size + 1, size + 1, vertices, indices);
+            mc.Generate(UnionSDF, size + 1, size + 1, size + 1, vertices, indices);
 
             Mesh mesh = new Mesh();
             mesh.SetVertices(ToVector3(vertices));
@@ -53,6 +42,40 @@ namespace CGALDotNetUnity.Marching
             go.GetComponent<MeshFilter>().mesh = mesh;
             go.transform.localPosition = new Vector3(-half, -half, -half);
 
+        }
+
+        private double UnionSDF(Point3d point)
+        {
+            double sdf1 = SphereSDF(point);
+            double sdf2 = BoxSDF(point);
+
+            return Math.Min(sdf1, sdf2);
+        }
+
+        private double SphereSDF(Point3d point)
+        {
+            double radius = 5;
+            Point3d Center = new Point3d(10);
+
+            point = point - Center;
+            return point.Magnitude - radius;
+        }
+
+        private double BoxSDF(Point3d point)
+        {
+            Point3d Min = new Point3d(2);
+            Point3d Max = new Point3d(10);
+            Point3d size = new Point3d(8);
+
+            Point3d p = point - (Min + Max) * 0.5;
+            p.x = Math.Abs(p.x);
+            p.y = Math.Abs(p.y);
+            p.z = Math.Abs(p.z);
+
+            Point3d d = p - size * 0.5;
+            Point3d max = Point3d.Max(d, 0);
+
+            return max.Magnitude + Math.Min(Math.Max(Math.Max(d.x, d.y), d.z), 0.0);
         }
 
         private List<Vector3> ToVector3(IList<Point3d> points)

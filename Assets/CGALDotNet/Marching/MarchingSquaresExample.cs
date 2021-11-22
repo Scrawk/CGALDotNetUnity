@@ -8,7 +8,6 @@ using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
 using CGALDotNet.Marching;
 using CGALDotNet.Triangulations;
-using CGALDotNet.CSG;
 
 namespace CGALDotNetUnity.Marching
 {
@@ -25,8 +24,6 @@ namespace CGALDotNetUnity.Marching
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
-        private Node2 Root;
-
         protected override void Start()
         {
             base.Start();
@@ -42,19 +39,13 @@ namespace CGALDotNetUnity.Marching
             int half = size / 2;
             Point2d translate = new Point2d(-half);
             
-            var circle = new CircleNode2(new Point2d(half), 5);
-            var box = new BoxNode2(new Point2d(2), new Point2d(10));
-            var union = new UnionNode2(circle, box);
-        
-            Root = union;
-
             var ms = new MarchingSquares();
             var tri = new ConstrainedTriangulation2<EEK>();
 
             var vertices = new List<Point2d>();
             var indices = new List<int>();
 
-            ms.Generate(Root, size + 1, size+ 1, vertices, indices);
+            ms.Generate(UnionSDF, size + 1, size+ 1, vertices, indices);
 
             var segments = new List<Segment2d>();
             for(int i = 0; i < indices.Count/2; i++)
@@ -73,7 +64,41 @@ namespace CGALDotNetUnity.Marching
             CreateRenderer(tri, translate);
 
             //Renderers["Tri"] = Draw().Outline(tri, lineColor).PopRenderer();
+            //Renderers["Bounds"] = Draw().Outline(new Box2d(-half, half), lineColor).PopRenderer();
             Renderers["Segments"] = Draw().Outline(segments, lineColor).PopRenderer();
+        }
+
+        private double UnionSDF(Point2d point)
+        {
+            double sdf1 = CircleSDF(point);
+            double sdf2 = BoxSDF(point);
+
+            return Math.Min(sdf1, sdf2);
+        }
+
+        private double CircleSDF(Point2d point)
+        {
+            double radius = 5;
+            Point2d Center = new Point2d(10);
+
+            point = point - Center;
+            return point.Magnitude - radius;
+        }
+
+        private double BoxSDF(Point2d point)
+        {
+            Point2d Min = new Point2d(2);
+            Point2d Max = new Point2d(10);
+            Point2d size = new Point2d(8);
+
+            Point2d p = point - (Min+Max)*0.5;
+            p.x = Math.Abs(p.x);
+            p.y = Math.Abs(p.y);
+
+            Point2d d = p - size * 0.5;
+            Point2d max = Point2d.Max(d, 0);
+
+            return max.Magnitude + Math.Min(Math.Max(d.x, d.y), 0.0);
         }
 
         private void CreateRenderer(ConstrainedTriangulation2<EEK> tri, Point2d translate)
@@ -98,7 +123,7 @@ namespace CGALDotNetUnity.Marching
 
                 var center = (a + b + c) / 3.0;
 
-                if(Root.Func(center) < 0)
+                if(UnionSDF(center) < 0)
                 {
                     indices2.Add(indices[i0]);
                     indices2.Add(indices[i1]);

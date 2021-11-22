@@ -9,7 +9,6 @@ using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
 using CGALDotNet.Arrangements;
-using CGALDotNet.DCEL;
 
 namespace CGALDotNetUnity.Arrangements
 {
