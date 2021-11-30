@@ -30,7 +30,7 @@ namespace CGALDotNetUnity.Polygons
             Renderers = new Dictionary<string, CompositeRenderer>();
 
             var star = PolygonFactory<EEK>.KochStar(20, 3);
-            var circle = PolygonFactory<EEK>.FromCircle(3, 32);
+            var circle = PolygonFactory<EEK>.CreateCircle(3, 32);
             circle.Reverse();
 
             Polygon = new PolygonWithHoles2<EEK>(star);

@@ -12,6 +12,7 @@ using CGALDotNet.Circular;
 using CGALDotNet.Triangulations;
 using CGALDotNet.Arrangements;
 using CGALDotNet.Nurbs;
+using CGALDotNet.Meshing;
 
 namespace CGALDotNetUnity
 {

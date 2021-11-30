@@ -81,8 +81,8 @@ namespace CGALDotNetUnity.Polygons
 
         private void CreateShape()
         {
-            //Shape = PolygonFactory<EEK>.FromBox(-0.5, 0.5);
-            Shape = PolygonFactory<EEK>.FromCircle(0.5, 16);
+            //Shape = PolygonFactory<EEK>.CreateBox(-0.5, 0.5);
+            Shape = PolygonFactory<EEK>.CreateCircle(0.5, 16);
         }
 
         private void CreateRenderer(string name, Polygon2<EEK> polygon)

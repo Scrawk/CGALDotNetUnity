@@ -111,7 +111,7 @@ namespace CGALDotNetUnity.Geometry
 
             if (geometry is Box2d box)
             {
-                var polygon = PolygonFactory<EEK>.FromBox(box);
+                var polygon = PolygonFactory<EEK>.CreateBox(box);
 
                 Renderers["Geometry" + count] = Draw().
                 Faces(polygon, faceColor).
@@ -120,7 +120,7 @@ namespace CGALDotNetUnity.Geometry
             }
             else if (geometry is Triangle2d tri)
             {
-                var polygon = PolygonFactory<EEK>.FromTriangle(tri);
+                var polygon = PolygonFactory<EEK>.CreateTriangle(tri);
 
                 Renderers["Geometry" + count] = Draw().
                 Faces(polygon, faceColor).

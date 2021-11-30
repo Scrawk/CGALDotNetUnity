@@ -58,7 +58,7 @@ namespace CGALDotNetUnity.Arrangements
         private void CreateArrangement()
         {
             arrangement = new Arrangement2<EEK>();
-            var box = PolygonFactory<EEK>.FromBox(-5, 5);
+            var box = PolygonFactory<EEK>.CreateBox(-5, 5);
 
             arrangement.InsertPolygon(box, true);
 
