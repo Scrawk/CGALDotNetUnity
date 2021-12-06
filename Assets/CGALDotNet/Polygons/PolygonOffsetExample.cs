@@ -17,6 +17,8 @@ namespace CGALDotNetUnity.Polygons
 
         private Color faceColor = new Color32(80, 80, 200, 128);
 
+        private Color skeletonColor = new Color32(200, 80, 80, 128);
+
         private Color lineColor = new Color32(0, 0, 0, 255);
 
         private Polygon2<EEK> Polygon;
@@ -24,6 +26,8 @@ namespace CGALDotNetUnity.Polygons
         private Dictionary<string, CompositeRenderer> Renderers;
 
         private double offset = 0.5;
+
+        private bool ShowSkeleton;
 
         protected override void Start()
         {
@@ -73,6 +77,11 @@ namespace CGALDotNetUnity.Polygons
 
                 PolygonOffset();
             }
+            else if(Input.GetKeyDown(KeyCode.F1))
+            {
+                ShowSkeleton = !ShowSkeleton;
+                PolygonOffset();
+            }
         }
 
         private void OnPostRender()
@@ -99,6 +108,21 @@ namespace CGALDotNetUnity.Polygons
             {
                 CreateRenderer("Exterior", Polygon, exterior);
             }
+
+            if (ShowSkeleton)
+            {
+                var skeleton = new List<Segment2d>();
+                PolygonOffset2<EEK>.Instance.CreateInteriorSkeleton(Polygon, false, skeleton);
+                CreateRenderer("InteriorSkeleton", skeleton);
+
+                //skeleton.Clear();
+                //PolygonOffset2<EEK>.Instance.CreateExteriorSkeleton(Polygon, 1, false, skeleton);
+                //CreateRenderer("ExteriorSkeleton", skeleton);
+            }
+            else
+            {
+                Renderers.Remove("InteriorSkeleton");
+            }
         }
 
         private void CreateRenderer(string name, Polygon2<EEK> polygon, Polygon2<EEK> offset)
@@ -117,6 +141,15 @@ namespace CGALDotNetUnity.Polygons
                 PopRenderer();
         }
 
+        private void CreateRenderer(string name, List<Segment2d> skeleton)
+        {
+            Renderers[name] = Draw().
+                Outline(skeleton, skeletonColor).
+                Points(skeleton, lineColor, skeletonColor).
+                PopRenderer();
+
+        }
+
         protected void OnGUI()
         {
             int textLen = 400;
@@ -128,6 +161,7 @@ namespace CGALDotNetUnity.Polygons
             GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
             GUI.Label(new Rect(10, 70, textLen, textHeight), "-/+ to adjust offset amount");
             GUI.Label(new Rect(10, 90, textLen, textHeight), "Offset amount =" + offset);
+            GUI.Label(new Rect(10, 110, textLen, textHeight), "F1 to toggle skeleton");
 
 
         }
