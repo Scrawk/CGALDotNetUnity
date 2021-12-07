@@ -254,7 +254,7 @@ namespace CGALDotNetUnity
         {
             var count = polygon.PointCount(POLYGON_ELEMENT.BOUNDARY);
             var points = new Point2d[count];
-            polygon.GetPoints(POLYGON_ELEMENT.BOUNDARY, points);
+            polygon.GetPoints(POLYGON_ELEMENT.BOUNDARY, points, points.Length);
 
             var indices = BaseRenderer.PolygonIndices(count);
 
@@ -591,7 +591,7 @@ namespace CGALDotNetUnity
         {
             var count = polygon.PointCount(POLYGON_ELEMENT.BOUNDARY);
             var points = new Point2d[count];
-            polygon.GetPoints(POLYGON_ELEMENT.BOUNDARY, points);
+            polygon.GetPoints(POLYGON_ELEMENT.BOUNDARY, points, points.Length);
 
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;

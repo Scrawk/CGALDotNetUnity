@@ -88,6 +88,10 @@ namespace CGALDotNetUnity.Polygons
                     Outline(region, redColor).
                     PopRenderer();
             }
+            else
+            {
+                Renderers.Remove("Region");
+            }
         }
 
         private void CreateRenderer(Polygon2<EEK> hole)
