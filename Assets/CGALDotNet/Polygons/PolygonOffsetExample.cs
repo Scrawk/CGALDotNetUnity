@@ -17,15 +17,17 @@ namespace CGALDotNetUnity.Polygons
 
         private Color faceColor = new Color32(80, 80, 200, 128);
 
-        private Color skeletonColor = new Color32(200, 80, 80, 128);
+        private Color skeletonColor = new Color32(200, 80, 80, 255);
 
         private Color lineColor = new Color32(0, 0, 0, 255);
 
-        private Polygon2<EEK> Polygon;
+        private PolygonWithHoles2<EEK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
-        private double offset = 0.5;
+        private double Offset = 0.5;
+
+        private bool AddHoles = true;
 
         private bool ShowSkeleton;
 
@@ -38,14 +40,43 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void OnInputComplete(List<Point2d> points)
         {
-            Polygon = new Polygon2<EEK>(points.ToArray());
-
-            if (Polygon.IsSimple)
+            if (Polygon == null)
             {
-                if (!Polygon.IsCounterClockWise)
-                    Polygon.Reverse();
+                var boundary = new Polygon2<EEK>(points.ToArray());
 
-                PolygonOffset();
+                if (boundary.IsSimple)
+                {
+                    if (!boundary.IsCounterClockWise)
+                        boundary.Reverse();
+
+                    Polygon = new PolygonWithHoles2<EEK>(boundary);
+
+                    CreateRenderer("Polygon", Polygon);
+                }
+                else
+                {
+                    Debug.Log("Polygon was not simple.");
+                }
+            }
+            else if (AddHoles)
+            {
+                var hole = new Polygon2<EEK>(points.ToArray());
+
+                if (!hole.IsClockWise)
+                    hole.Reverse();
+
+                if (PolygonWithHoles2.IsValidHole(Polygon, hole))
+                {
+                    Polygon.AddHole(hole);
+                    int holes = Polygon.HoleCount;
+
+                    CreateRenderer("Polygon", Polygon);
+                    CreateRenderer("Hole" + holes, hole, true);
+                }
+                else
+                {
+                    Debug.Log("Hole was not valid.");
+                }
             }
 
             InputPoints.Clear();
@@ -54,6 +85,8 @@ namespace CGALDotNetUnity.Polygons
         protected override void OnCleared()
         {
             Polygon = null;
+            AddHoles = false;
+            ShowSkeleton = false;
             Renderers.Clear();
             InputPoints.Clear();
             SetInputMode(INPUT_MODE.POLYGON);
@@ -63,51 +96,65 @@ namespace CGALDotNetUnity.Polygons
         {
             base.Update();
 
-            if (Input.GetKeyDown(KeyCode.KeypadMinus) || Input.GetKeyDown(KeyCode.Minus))
-            {
-                offset -= 0.1;
-                if (offset < 0)
-                    offset = 0;
+            if (Polygon == null) return;
 
-                PolygonOffset();
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                AddHoles = false;
+                CreateOffset();
+            }
+            else if (Input.GetKeyDown(KeyCode.F2))
+            {
+                AddHoles = true;
+                ClearOffsets();
+            }
+            else if (Input.GetKeyDown(KeyCode.KeypadMinus) || Input.GetKeyDown(KeyCode.Minus))
+            {
+                Offset -= 0.1;
+                if (Offset < 0)
+                    Offset = 0;
+
+                CreateOffset();
             }
             else if (Input.GetKeyDown(KeyCode.KeypadPlus) || Input.GetKeyDown(KeyCode.Plus))
             {
-                offset += 0.1;
+                Offset += 0.1;
 
-                PolygonOffset();
+                CreateOffset();
             }
-            else if(Input.GetKeyDown(KeyCode.F1))
+            else if(Input.GetKeyDown(KeyCode.F3))
             {
                 ShowSkeleton = !ShowSkeleton;
-                PolygonOffset();
+                CreateOffset();
             }
         }
 
         private void OnPostRender()
         {
             DrawGrid();
-            DrawInput(lineColor, pointColor, PointSize);
-
+            
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
+
+            DrawInput(lineColor, pointColor, PointSize);
         }
 
-        private void PolygonOffset()
+        private void CreateOffset()
         {
             if (Polygon == null) return;
 
-            Polygon2<EEK> interior, exterior;
-            if (PolygonOffset2<EEK>.Instance.CreateInteriorOffset(Polygon, offset, out interior))
-            {
-                CreateRenderer("Interior", Polygon, interior);
-            }
-                
+            var interior = new List<Polygon2<EEK>>();
+            PolygonOffset2<EEK>.Instance.CreateInteriorOffset(Polygon, Offset, interior);
 
-            if(PolygonOffset2<EEK>.Instance.CreateExteriorOffset(Polygon, offset, out exterior))
-            {
-                CreateRenderer("Exterior", Polygon, exterior);
-            }
+            for(int i = 0; i < interior.Count; i++)
+                CreateRenderer("InteriorOffset" + i, interior[i], true);
+
+            var exterior = new List<Polygon2<EEK>>();
+            PolygonOffset2<EEK>.Instance.CreateExteriorOffset(Polygon, Offset, exterior);
+
+            //The first polygon is the bounding box so ignore.
+            for (int i = 1; i < exterior.Count; i++)
+                CreateRenderer("ExteriorOffset" + i, exterior[i], true);
 
             if (ShowSkeleton)
             {
@@ -121,24 +168,60 @@ namespace CGALDotNetUnity.Polygons
             }
             else
             {
-                Renderers.Remove("InteriorSkeleton");
+                ClearSkeletons();
+            }
+           
+        }
+
+        private void ClearOffsets()
+        {
+            var keys = new List<string>(Renderers.Keys);
+
+            foreach(var key in keys)
+            {
+                if(key.Contains("Offset"))
+                    Renderers.Remove(key);
             }
         }
 
-        private void CreateRenderer(string name, Polygon2<EEK> polygon, Polygon2<EEK> offset)
+        private void ClearSkeletons()
         {
-            Renderers["Polygon"] = Draw().
+            var keys = new List<string>(Renderers.Keys);
+
+            foreach (var key in keys)
+            {
+                if (key.Contains("Skeleton"))
+                    Renderers.Remove(key);
+            }
+        }
+
+        private void CreateRenderer(string name, PolygonWithHoles2<EEK> pwh)
+        {
+            Renderers[name] = Draw().
+            Faces(pwh, faceColor).
+            Outline(pwh, lineColor).
+            Points(pwh, lineColor, pointColor, PointSize).
+            PopRenderer();
+        }
+
+        private void CreateRenderer(string name, Polygon2<EEK> polygon, bool outline)
+        {
+            if(outline)
+            {
+                Renderers[name] = Draw().
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor).
+                PopRenderer();
+            }
+            else
+            {
+                Renderers[name] = Draw().
                 Faces(polygon, faceColor).
                 Outline(polygon, lineColor).
                 Points(polygon, lineColor, pointColor).
                 PopRenderer();
+            }
 
-
-            Renderers[name] = Draw().
-                //Faces(poly, faceColor).
-                Outline(offset, lineColor).
-                Points(offset, lineColor, pointColor).
-                PopRenderer();
         }
 
         private void CreateRenderer(string name, List<Segment2d> skeleton)
@@ -152,16 +235,32 @@ namespace CGALDotNetUnity.Polygons
 
         protected void OnGUI()
         {
-            int textLen = 400;
+            int textLen = 1000;
             int textHeight = 25;
             GUI.color = Color.black;
 
-            GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
-            GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
-            GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
-            GUI.Label(new Rect(10, 70, textLen, textHeight), "-/+ to adjust offset amount");
-            GUI.Label(new Rect(10, 90, textLen, textHeight), "Offset amount =" + offset);
-            GUI.Label(new Rect(10, 110, textLen, textHeight), "F1 to toggle skeleton");
+            if (Polygon == null)
+            {
+                GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
+                GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
+                GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
+            }
+            else if (AddHoles)
+            {
+                GUI.Label(new Rect(10, 10, textLen, textHeight), "Add holes to polygon.");
+                GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
+                GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "F1 to stop adding holes and show the offsets.");
+                GUI.Label(new Rect(10, 90, textLen, textHeight), "Holes must be simple and not intersect the polygon boundary or other holes.");
+            }
+            else
+            {
+                GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
+                GUI.Label(new Rect(10, 30, textLen, textHeight), "-/+ to adjust offset amount");
+                GUI.Label(new Rect(10, 50, textLen, textHeight), "Offset amount = " + Offset);
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "F2 to start adding holes again.");
+                GUI.Label(new Rect(10, 90, textLen, textHeight), "F3 to toggle skeleton");
+            }
 
 
         }
