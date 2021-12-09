@@ -35,6 +35,19 @@ namespace CGALDotNetUnity.Polygons
             Renderers = new Dictionary<string, CompositeRenderer>();
         }
 
+        private void CreateKochStar()
+        {
+            var koch = PolygonFactory<EEK>.KochStar(30, 3);
+            var hole = PolygonFactory<EEK>.CreateCircle(5, 32);
+            hole.Reverse();
+
+            Polygon = new PolygonWithHoles2<EEK>(koch);
+            Polygon.AddHole(hole);
+
+            CreateRenderer("Polygon", Polygon);
+            CreateRenderer("Hole", hole);
+        }
+
         protected override void OnInputComplete(List<Point2d> points)
         {
 
@@ -49,7 +62,7 @@ namespace CGALDotNetUnity.Polygons
 
                     Polygon = new PolygonWithHoles2<EEK>(boundary);
 
-                    CreateRenderer(null);
+                    CreateRenderer("Polygon", Polygon);
                 }
                 else
                 {
@@ -66,7 +79,8 @@ namespace CGALDotNetUnity.Polygons
                 if (PolygonWithHoles2.IsValidHole(Polygon, hole))
                 {
                     Polygon.AddHole(hole);
-                    CreateRenderer(hole);
+                    int holes = Polygon.HoleCount;
+                    CreateRenderer("Hole"+holes, hole);
                 }
                 else
                 {
@@ -77,22 +91,21 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
-        private void CreateRenderer(Polygon2<EEK> hole)
+        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon)
         {
-            Renderers["Polygon"] = Draw().
-            Faces(Polygon, faceColor).
-            Outline(Polygon, lineColor).
-            Points(Polygon, lineColor, pointColor, PointSize).
+            Renderers[name] = Draw().
+            Faces(polygon, faceColor).
+            Outline(polygon, lineColor).
+            Points(polygon, lineColor, pointColor, PointSize).
             PopRenderer();
+        }
 
-            if (hole != null)
-            {
-                var holes = Polygon.HoleCount;
-                Renderers["Hole " + holes] = Draw().
-                Outline(hole, lineColor).
-                Points(hole, lineColor, pointColor, PointSize).
-                PopRenderer();
-            }
+        private void CreateRenderer(string name, Polygon2<EEK> hole)
+        {
+            Renderers[name] = Draw().
+            Outline(hole, lineColor).
+            Points(hole, lineColor, pointColor, PointSize).
+            PopRenderer();
         }
 
         protected override void OnCleared()

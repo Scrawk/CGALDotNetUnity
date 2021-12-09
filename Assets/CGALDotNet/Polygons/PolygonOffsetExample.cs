@@ -71,7 +71,7 @@ namespace CGALDotNetUnity.Polygons
                     int holes = Polygon.HoleCount;
 
                     CreateRenderer("Polygon", Polygon);
-                    CreateRenderer("Hole" + holes, hole, true);
+                    CreateRenderer("Hole" + holes, hole);
                 }
                 else
                 {
@@ -147,14 +147,14 @@ namespace CGALDotNetUnity.Polygons
             PolygonOffset2<EEK>.Instance.CreateInteriorOffset(Polygon, Offset, interior);
 
             for(int i = 0; i < interior.Count; i++)
-                CreateRenderer("InteriorOffset" + i, interior[i], true);
+                CreateRenderer("InteriorOffset" + i, interior[i]);
 
             var exterior = new List<Polygon2<EEK>>();
             PolygonOffset2<EEK>.Instance.CreateExteriorOffset(Polygon, Offset, exterior);
 
             //The first polygon is the bounding box so ignore.
             for (int i = 1; i < exterior.Count; i++)
-                CreateRenderer("ExteriorOffset" + i, exterior[i], true);
+                CreateRenderer("ExteriorOffset" + i, exterior[i]);
 
             if (ShowSkeleton)
             {
@@ -204,24 +204,12 @@ namespace CGALDotNetUnity.Polygons
             PopRenderer();
         }
 
-        private void CreateRenderer(string name, Polygon2<EEK> polygon, bool outline)
+        private void CreateRenderer(string name, Polygon2<EEK> polygon)
         {
-            if(outline)
-            {
-                Renderers[name] = Draw().
-                Outline(polygon, lineColor).
-                Points(polygon, lineColor, pointColor).
-                PopRenderer();
-            }
-            else
-            {
-                Renderers[name] = Draw().
-                Faces(polygon, faceColor).
-                Outline(polygon, lineColor).
-                Points(polygon, lineColor, pointColor).
-                PopRenderer();
-            }
-
+            Renderers[name] = Draw().
+            Outline(polygon, lineColor).
+            Points(polygon, lineColor, pointColor).
+            PopRenderer();
         }
 
         private void CreateRenderer(string name, List<Segment2d> skeleton)
