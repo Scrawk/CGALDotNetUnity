@@ -34,8 +34,8 @@ namespace CGALDotNetUnity.Polygons
             circle.Reverse();
 
             Polygon = new PolygonWithHoles2<EEK>(star);
-            Polygon.AddHole(circle);
-            Polygon.Translate(new Point2d(-15, 0));
+            //Polygon.AddHole(circle);
+            Polygon.Translate(new Point2d(-10, 0));
             CreateRenderer("Polygon", Polygon);
 
             Param = PolygonSimplificationParams.Default;
@@ -49,7 +49,7 @@ namespace CGALDotNetUnity.Polygons
         private void Simplify()
         {
             SimplifiedPolygon = PolygonSimplification2<EEK>.Instance.Simplify(Polygon, Param);
-            SimplifiedPolygon.Translate(new Point2d(30, 0));
+            SimplifiedPolygon.Translate(new Point2d(20, 0));
 
             CreateRenderer("Simplified", SimplifiedPolygon);
         }

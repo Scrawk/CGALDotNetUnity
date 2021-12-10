@@ -208,7 +208,6 @@ namespace CGALDotNetUnity.Polygons
         {
             Renderers[name] = Draw().
             Outline(polygon, lineColor).
-            Points(polygon, lineColor, pointColor).
             PopRenderer();
         }
 

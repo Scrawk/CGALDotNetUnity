@@ -35,17 +35,32 @@ namespace CGALDotNetUnity.Polygons
             Renderers = new Dictionary<string, CompositeRenderer>();
         }
 
-        private void CreateKochStar()
+        public static PolygonWithHoles2<EEK> CreateKochStar()
         {
             var koch = PolygonFactory<EEK>.KochStar(30, 3);
             var hole = PolygonFactory<EEK>.CreateCircle(5, 32);
             hole.Reverse();
 
-            Polygon = new PolygonWithHoles2<EEK>(koch);
-            Polygon.AddHole(hole);
+            var polygon = new PolygonWithHoles2<EEK>(koch);
+            polygon.AddHole(hole);
 
-            CreateRenderer("Polygon", Polygon);
-            CreateRenderer("Hole", hole);
+            return polygon;
+        }
+
+        public static PolygonWithHoles2<EEK> CreateRoom()
+        {
+            var room = PolygonFactory<EEK>.CreateBox(-15, 15);
+
+            var hole1 = PolygonFactory<EEK>.CreateBox(5, 10, false);
+            var hole2 = PolygonFactory<EEK>.CreateBox(-10, -5, false);
+            var hole3 = PolygonFactory<EEK>.CreateBox(new Point2d(-10,5), new Point2d(-5,10), false);
+
+            var polygon = new PolygonWithHoles2<EEK>(room);
+            polygon.AddHole(hole1);
+            polygon.AddHole(hole2);
+            polygon.AddHole(hole3);
+
+            return polygon;
         }
 
         protected override void OnInputComplete(List<Point2d> points)
@@ -80,6 +95,7 @@ namespace CGALDotNetUnity.Polygons
                 {
                     Polygon.AddHole(hole);
                     int holes = Polygon.HoleCount;
+                    CreateRenderer("Polygon", Polygon);
                     CreateRenderer("Hole"+holes, hole);
                 }
                 else
@@ -145,10 +161,11 @@ namespace CGALDotNetUnity.Polygons
         private void OnPostRender()
         {
             DrawGrid();
-            DrawInput(lineColor, pointColor, PointSize);
-
+            
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
+
+            DrawInput(lineColor, pointColor, PointSize);
 
         }
 
@@ -169,30 +186,31 @@ namespace CGALDotNetUnity.Polygons
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Add holes to polygon.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
                 GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
-                GUI.Label(new Rect(10, 70, textLen, textHeight), "F1 to stop adding holes and F2 to start adding holes again.");
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "F1 to stop adding holes and show the polygons properties.");
                 GUI.Label(new Rect(10, 90, textLen, textHeight), "Holes must be simple and not intersect the polygon boundary or other holes.");
             }
             else
             {
 
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
-                GUI.Label(new Rect(10, 30, textLen, textHeight), "Hole Count = " + Polygon.HoleCount);
+                GUI.Label(new Rect(10, 30, textLen, textHeight), "F2 to start adding holes again.");
+                GUI.Label(new Rect(10, 50, textLen, textHeight), "Hole Count = " + Polygon.HoleCount);
 
                 bool isSimple = Polygon.FindIfSimple(POLYGON_ELEMENT.BOUNDARY);
-                GUI.Label(new Rect(10, 50, textLen, textHeight), "Is Simple = " + isSimple);
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "Is Simple = " + isSimple);
 
                 if (isSimple)
                 {
-                    GUI.Label(new Rect(10, 70, textLen, textHeight), "Is Convex = " + Polygon.FindIfConvex(POLYGON_ELEMENT.BOUNDARY));
-                    GUI.Label(new Rect(10, 90, textLen, textHeight), "Area = " + Polygon.FindArea(POLYGON_ELEMENT.BOUNDARY));
-                    GUI.Label(new Rect(10, 110, textLen, textHeight), "Orientation = " + Polygon.FindOrientation(POLYGON_ELEMENT.BOUNDARY));
+                    GUI.Label(new Rect(10, 90, textLen, textHeight), "Is Convex = " + Polygon.FindIfConvex(POLYGON_ELEMENT.BOUNDARY));
+                    GUI.Label(new Rect(10, 110, textLen, textHeight), "Area = " + Polygon.FindArea(POLYGON_ELEMENT.BOUNDARY));
+                    GUI.Label(new Rect(10, 130, textLen, textHeight), "Orientation = " + Polygon.FindOrientation(POLYGON_ELEMENT.BOUNDARY));
 
                     if (Point != null)
                     {
-                        GUI.Label(new Rect(10, 130, textLen, textHeight), "Contains point = " + Polygon.ContainsPoint(Point.Value));
+                        GUI.Label(new Rect(10, 150, textLen, textHeight), "Contains point = " + Polygon.ContainsPoint(Point.Value));
                     }
                     else
-                        GUI.Label(new Rect(10, 130, textLen, textHeight), "Click to test contains point.");
+                        GUI.Label(new Rect(10, 150, textLen, textHeight), "Click to test contains point.");
                 }
 
             }

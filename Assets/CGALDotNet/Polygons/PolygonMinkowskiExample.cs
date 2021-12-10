@@ -21,13 +21,17 @@ namespace CGALDotNetUnity.Polygons
 
         private Color lineColor = new Color32(0, 0, 0, 255);
 
-        private MINKOWSKI_DECOMPOSITION Decomposition = MINKOWSKI_DECOMPOSITION.SMALL_SIDE_ANGLE_BISECTOR;
+        private MINKOWSKI_DECOMPOSITION_PWH Decomposition = MINKOWSKI_DECOMPOSITION_PWH.TRIANGULATION;
 
-        private Polygon2<EEK> Polygon, Shape;
+        private PolygonWithHoles2<EEK> Polygon;
+
+        private Polygon2<EEK> Shape;
 
         private PolygonWithHoles2<EEK> Sum;
 
         private Dictionary<string, CompositeRenderer> Renderers;
+
+        private bool AddHoles = true;
 
         protected override void Start()
         {
@@ -40,43 +44,46 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void OnInputComplete(List<Point2d> points)
         {
-            Polygon = new Polygon2<EEK>(points.ToArray());
-
-            if (Polygon.IsSimple)
+            if (Polygon == null)
             {
-                if (!Polygon.IsCounterClockWise)
-                    Polygon.Reverse();
+                var boundary = new Polygon2<EEK>(points.ToArray());
 
-                PerformMinkowskiSum();
+                if (boundary.IsSimple)
+                {
+                    if (!boundary.IsCounterClockWise)
+                        boundary.Reverse();
+
+                    Polygon = new PolygonWithHoles2<EEK>(boundary);
+
+                    CreateRenderer("Polygon", Polygon, false);
+                }
+                else
+                {
+                    Debug.Log("Polygon was not simple.");
+                }
             }
-            else
+            else if (AddHoles)
             {
-                Polygon = null;
+                var hole = new Polygon2<EEK>(points.ToArray());
+
+                if (!hole.IsClockWise)
+                    hole.Reverse();
+
+                if (PolygonWithHoles2.IsValidHole(Polygon, hole))
+                {
+                    Polygon.AddHole(hole);
+                    int holes = Polygon.HoleCount;
+
+                    CreateRenderer("Polygon", Polygon, false);
+                    CreateRenderer("Hole" + holes, hole);
+                }
+                else
+                {
+                    Debug.Log("Hole was not valid.");
+                }
             }
 
             InputPoints.Clear();
-        }
-
-        private void PerformMinkowskiSum()
-        {
-            if (Polygon == null || Shape == null)
-            {
-                OnCleared();
-                return;
-            }
-
-            //Dont need the decomposite type. Default is fine.
-            //Sum = PolygonMinkowski<EEK>.Instance.Sum(Polygon, Shape);
-
-            float start = Time.realtimeSinceStartup;
-
-            Sum = PolygonMinkowski<EEK>.Instance.Sum(Polygon, Shape, Decomposition);
-
-            float end = Time.realtimeSinceStartup;
-
-            Debug.Log(Decomposition + " Time = " + (end - start) * 1000 + " ms");
-
-            CreateRenderer("Sum", Sum);
         }
 
         private void CreateShape()
@@ -88,19 +95,28 @@ namespace CGALDotNetUnity.Polygons
         private void CreateRenderer(string name, Polygon2<EEK> polygon)
         {
             Renderers[name] = Draw().
-            Faces(polygon, faceColor).
             Outline(polygon, lineColor).
-            //Points(polygon, lineColor, pointColor).
+            Points(polygon, lineColor, pointColor).
             PopRenderer();
         }
 
-        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon)
+        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon, bool outlineOnly)
         {
-            Renderers[name] = Draw().
-            Faces(polygon, faceColor).
-            Outline(polygon, lineColor).
-            //Points(polygon, lineColor, pointColor).
-            PopRenderer();
+            if (outlineOnly)
+            {
+                Renderers[name] = Draw().
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor).
+                PopRenderer();
+            }
+            else
+            {
+                Renderers[name] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor).
+                PopRenderer();
+            }
         }
 
         protected override void OnCleared()
@@ -115,7 +131,19 @@ namespace CGALDotNetUnity.Polygons
         {
             base.Update();
 
+            if (Polygon == null) return;
+
             if (Input.GetKeyDown(KeyCode.F1))
+            {
+                AddHoles = false;
+                PerformMinkowskiSum();
+            }
+            else if (Input.GetKeyDown(KeyCode.F2))
+            {
+                AddHoles = true;
+                ClearMinkowskiSum();
+            }
+            else if (Input.GetKeyDown(KeyCode.Tab))
             {
                 Decomposition = CGALEnum.Next(Decomposition);
                 PerformMinkowskiSum();
@@ -125,31 +153,61 @@ namespace CGALDotNetUnity.Polygons
         private void OnPostRender()
         {
             DrawGrid();
-            DrawInput(lineColor, pointColor, PointSize);
 
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
 
+            DrawInput(lineColor, pointColor, PointSize);
+
+        }
+
+        private void PerformMinkowskiSum()
+        {
+            Sum = PolygonMinkowski<EEK>.Instance.Sum(Decomposition, Polygon, Shape);
+            CreateRenderer("Sum", Sum, true);
+
+            for(int i = 0; i < Sum.HoleCount; i++)
+                CreateRenderer("SumHole"+i, Sum.GetHole(i));
+
+        }
+
+        private void ClearMinkowskiSum()
+        {
+            var keys = new List<string>(Renderers.Keys);
+
+            foreach (var key in keys)
+            {
+                if (key.Contains("Sum"))
+                    Renderers.Remove(key);
+            }
         }
 
         protected void OnGUI()
         {
-            int textLen = 400;
+            int textLen = 1000;
             int textHeight = 25;
             GUI.color = Color.black;
 
-            if (Polygon == null || !Polygon.IsSimple)
+            if (Polygon == null)
             {
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
                 GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
-
-                GUI.Label(new Rect(10, 70, textLen, textHeight), "F1 to change decomposition type.");
-                GUI.Label(new Rect(10, 90, textLen, textHeight), "Current decomposition = " + Decomposition);
+            }
+            else if (AddHoles)
+            {
+                GUI.Label(new Rect(10, 10, textLen, textHeight), "Add holes to polygon.");
+                GUI.Label(new Rect(10, 30, textLen, textHeight), "Left click to place point.");
+                GUI.Label(new Rect(10, 50, textLen, textHeight), "Click on first point to close polygon.");
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "F1 to stop adding holes and show the minkowski sum.");
+                GUI.Label(new Rect(10, 90, textLen, textHeight), "Holes must be simple and not intersect the polygon boundary or other holes.");
             }
             else
             {
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Space to clear polygon.");
+                GUI.Label(new Rect(10, 30, textLen, textHeight), "Tab to change decomposition mode");
+                GUI.Label(new Rect(10, 50, textLen, textHeight), "Decomposition = " + Decomposition);
+                GUI.Label(new Rect(10, 70, textLen, textHeight), "F2 to start adding holes again.");
             }
 
         }

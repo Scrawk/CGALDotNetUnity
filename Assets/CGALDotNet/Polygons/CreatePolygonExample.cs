@@ -43,32 +43,32 @@ namespace CGALDotNetUnity.Polygons
                     Polygon.Reverse();
 
                 SetInputMode(INPUT_MODE.POINT_CLICK);
-                CreateRenderer(true);
+                CreateRenderer("Polygon", Polygon);
             }
             else
             {
-                CreateRenderer(false);
+                CreateRenderer("Polygon", Polygon);
             }
 
             InputPoints.Clear();
         }
 
-        private void CreateRenderer(bool isSimple)
+        private void CreateRenderer(string name, Polygon2<EEK> polygon)
         {
-            if(isSimple)
+            if(polygon.IsSimple)
             {
-                Renderers["Polygon"] = Draw().
-                Faces(Polygon, faceColor).
-                Outline(Polygon, lineColor).
-                Points(Polygon, lineColor, pointColor).
+                Renderers[name] = Draw().
+                Faces(polygon, faceColor).
+                Outline(polygon, lineColor).
+                Points(polygon, lineColor, pointColor).
                 PopRenderer();
             }
             else
             {
-                Renderers["Polygon"] = Draw().
-                Faces(Polygon, redColor).
-                Outline(Polygon, redColor).
-                Points(Polygon, lineColor, pointColor).
+                Renderers[name] = Draw().
+                Faces(polygon, redColor).
+                Outline(polygon, redColor).
+                Points(polygon, lineColor, pointColor).
                 PopRenderer();
             }
 

@@ -12,7 +12,7 @@ namespace CGALDotNetUnity.Polygons
 
     public class PolygonVisibilityExample : InputBehaviour
     {
-        private Color redColor = new Color32(200, 80, 80, 255);
+        private Color redColor = new Color32(200, 80, 80, 128);
 
         private Color pointColor = new Color32(80, 80, 200, 255);
 
@@ -33,6 +33,12 @@ namespace CGALDotNetUnity.Polygons
             base.Start();
             SetInputMode(INPUT_MODE.POLYGON);
             Renderers = new Dictionary<string, CompositeRenderer>();
+
+            Polygon = CreatePolygonWithHolesExample.CreateRoom();
+            CreateRenderer("Polygon", Polygon);
+            CreateRenderer("Hole0", Polygon.GetHole(0));
+            CreateRenderer("Hole1", Polygon.GetHole(1));
+            CreateRenderer("Hole2", Polygon.GetHole(2));
         }
 
         protected override void OnInputComplete(List<Point2d> points)
@@ -49,7 +55,7 @@ namespace CGALDotNetUnity.Polygons
 
                     Polygon = new PolygonWithHoles2<EEK>(boundary);
 
-                    CreateRenderer(null);
+                    CreateRenderer("Polygon", Polygon);
                 }
                 else
                 {
@@ -66,7 +72,10 @@ namespace CGALDotNetUnity.Polygons
                 if (PolygonWithHoles2.IsValidHole(Polygon, hole))
                 {
                     Polygon.AddHole(hole);
-                    CreateRenderer(hole);
+                    int holes = Polygon.HoleCount;
+
+                    CreateRenderer("Polygon", Polygon);
+                    CreateRenderer("Hole" + holes, hole);
                 }
                 else
                 {
@@ -85,7 +94,8 @@ namespace CGALDotNetUnity.Polygons
             if(PolygonVisibility<EEK>.Instance.ComputeVisibility(method, point, Polygon, out region))
             {
                 Renderers["Region"] = Draw().
-                    Outline(region, redColor).
+                    Faces(region, redColor).
+                    Outline(region, lineColor).
                     PopRenderer();
             }
             else
@@ -94,22 +104,20 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
-        private void CreateRenderer(Polygon2<EEK> hole)
+        private void CreateRenderer(string name, PolygonWithHoles2<EEK> pwh)
         {
-            Renderers["Polygon"] = Draw().
-            Faces(Polygon, faceColor).
-            Outline(Polygon, lineColor).
-            Points(Polygon, lineColor, pointColor, PointSize).
+            Renderers[name] = Draw().
+            Faces(pwh, faceColor).
+            Outline(pwh, lineColor).
+            Points(pwh, lineColor, pointColor, PointSize).
             PopRenderer();
+        }
 
-            if (hole != null)
-            {
-                var holes = Polygon.HoleCount;
-                Renderers["Hole " + holes] = Draw().
-                Outline(hole, lineColor).
-                Points(hole, lineColor, pointColor, PointSize).
-                PopRenderer();
-            }
+        private void CreateRenderer(string name, Polygon2<EEK> polygon)
+        {
+            Renderers[name] = Draw().
+            Outline(polygon, lineColor).
+            PopRenderer();
         }
 
         protected override void OnCleared()
@@ -124,12 +132,12 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void OnLeftClickDown(Point2d point)
         {
+            ComputeVisibility(point);
+
             Point = point;
             Renderers["Point"] = Draw().
                 Points(point, lineColor, redColor).
                 PopRenderer();
-
-            ComputeVisibility(point);
         }
 
         protected override void Update()
@@ -151,10 +159,11 @@ namespace CGALDotNetUnity.Polygons
         private void OnPostRender()
         {
             DrawGrid();
-            DrawInput(lineColor, pointColor, PointSize);
 
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
+
+            DrawInput(lineColor, pointColor, PointSize);
 
         }
 
