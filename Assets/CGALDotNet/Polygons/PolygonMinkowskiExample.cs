@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Unity.Drawing;
+using Common.Unity.Utility;
 using CGALDotNet;
 using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
@@ -13,7 +14,7 @@ namespace CGALDotNetUnity.Polygons
 
     public class PolygonMinkowskiExample : InputBehaviour
     {
-        private Color redColor = new Color32(200, 80, 80, 255);
+        private Color sumColor = new Color32(200, 80, 80, 128);
 
         private Color pointColor = new Color32(80, 80, 200, 255);
 
@@ -55,7 +56,7 @@ namespace CGALDotNetUnity.Polygons
 
                     Polygon = new PolygonWithHoles2<EEK>(boundary);
 
-                    CreateRenderer("Polygon", Polygon, false);
+                    CreateRenderer("Polygon", Polygon, faceColor);
                 }
                 else
                 {
@@ -74,8 +75,8 @@ namespace CGALDotNetUnity.Polygons
                     Polygon.AddHole(hole);
                     int holes = Polygon.HoleCount;
 
-                    CreateRenderer("Polygon", Polygon, false);
-                    CreateRenderer("Hole" + holes, hole);
+                    CreateRenderer("Polygon", Polygon, faceColor);
+                    CreateRenderer("Hole" + holes, hole, faceColor);
                 }
                 else
                 {
@@ -92,31 +93,21 @@ namespace CGALDotNetUnity.Polygons
             Shape = PolygonFactory<EEK>.CreateCircle(0.5, 16);
         }
 
-        private void CreateRenderer(string name, Polygon2<EEK> polygon)
+        private void CreateRenderer(string name, Polygon2<EEK> polygon, Color col)
         {
             Renderers[name] = Draw().
             Outline(polygon, lineColor).
-            Points(polygon, lineColor, pointColor).
+            Points(polygon, lineColor, col).
             PopRenderer();
         }
 
-        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon, bool outlineOnly)
+        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon, Color col)
         {
-            if (outlineOnly)
-            {
-                Renderers[name] = Draw().
-                Outline(polygon, lineColor).
-                Points(polygon, lineColor, pointColor).
-                PopRenderer();
-            }
-            else
-            {
-                Renderers[name] = Draw().
-                Faces(polygon, faceColor).
-                Outline(polygon, lineColor).
-                Points(polygon, lineColor, pointColor).
-                PopRenderer();
-            }
+            Renderers[name] = Draw().
+            Faces(polygon, col).
+            Outline(polygon, lineColor).
+            Points(polygon, lineColor, col).
+            PopRenderer();
         }
 
         protected override void OnCleared()
@@ -141,7 +132,7 @@ namespace CGALDotNetUnity.Polygons
             else if (Input.GetKeyDown(KeyCode.F2))
             {
                 AddHoles = true;
-                ClearMinkowskiSum();
+                ClearRenderer("Sum");
             }
             else if (Input.GetKeyDown(KeyCode.Tab))
             {
@@ -163,21 +154,36 @@ namespace CGALDotNetUnity.Polygons
 
         private void PerformMinkowskiSum()
         {
-            Sum = PolygonMinkowski<EEK>.Instance.Sum(Decomposition, Polygon, Shape);
-            CreateRenderer("Sum", Sum, true);
+            ClearRenderer("Polygon");
+            ClearRenderer("Sum");
 
-            for(int i = 0; i < Sum.HoleCount; i++)
-                CreateRenderer("SumHole"+i, Sum.GetHole(i));
+            Sum = PolygonMinkowski<EEK>.Instance.Sum(Decomposition, Polygon, Shape);
+
+            var results = new List<PolygonWithHoles2<EEK>>();
+            PolygonBoolean2<EEK>.Instance.Op(POLYGON_BOOLEAN.DIFFERENCE, Sum, Polygon, results);
+
+            for(int j = 0; j < results.Count; j++)
+            {
+                CreateRenderer("Sum"+j, results[j], sumColor);
+
+                for(int i = 0; i < results[j].HoleCount; i++)
+                    CreateRenderer("SumHole" + j + " " + i, results[j].GetHole(i), sumColor);   
+            }
+            
+            CreateRenderer("Polygon", Polygon, faceColor);
+
+            for (int i = 0; i < Polygon.HoleCount; i++)
+               CreateRenderer("PolygonHole" + i, Polygon.GetHole(i), faceColor);
 
         }
 
-        private void ClearMinkowskiSum()
+        private void ClearRenderer(string name)
         {
             var keys = new List<string>(Renderers.Keys);
 
             foreach (var key in keys)
             {
-                if (key.Contains("Sum"))
+                if (key.Contains(name))
                     Renderers.Remove(key);
             }
         }

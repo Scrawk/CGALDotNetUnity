@@ -124,7 +124,7 @@ namespace CGALDotNetUnity.Polygons
                 Op = CGALEnum.Next(Op);
 
                 //Triangulation polygons for symetric difference
-                //not allows working at the moment.
+                //not working at the moment so skip.
                 if (Op == POLYGON_BOOLEAN.SYMMETRIC_DIFFERENCE)
                     Op = POLYGON_BOOLEAN.JOIN;
             }
