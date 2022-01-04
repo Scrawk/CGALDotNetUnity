@@ -49,7 +49,9 @@ namespace CGALDotNetUnity.Triangulations
             TranslatePoints(points, width, height);
 
             triangulation = new DelaunayTriangulation2<EEK>();
-            triangulation.Insert(points.ToArray());
+
+            var array = points.ToArray();
+            triangulation.Insert(array, array.Length);
 
             CreateRenderers();
         }

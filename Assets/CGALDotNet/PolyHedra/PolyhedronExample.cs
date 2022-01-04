@@ -31,8 +31,8 @@ namespace CGALDotNetUnity.Polyhedra
             var points = new Point3d[poly.VertexCount];
             var indices = new int[poly.FaceCount * 3];
 
-            poly.GetPoints(points);
-            poly.GetTriangleIndices(indices);
+            poly.GetPoints(points, points.Length);
+            poly.GetTriangleIndices(indices, indices.Length);
 
             SplitFaces(points, indices, out Point3d[] splitPoints, out int[] spliIndices);
             CreateMesh(splitPoints, spliIndices, translation);
@@ -45,8 +45,8 @@ namespace CGALDotNetUnity.Polyhedra
             var points = new Point3d[poly.VertexCount];
             var indices = new int[poly.FaceCount * 3];
 
-            poly.GetPoints(points);
-            poly.GetTriangleIndices(indices);
+            poly.GetPoints(points, points.Length);
+            poly.GetTriangleIndices(indices, indices.Length);
 
             SplitFaces(points, indices, out Point3d[] splitPoints, out int[] spliIndices);
             CreateMesh(splitPoints, spliIndices, translation);
@@ -59,8 +59,8 @@ namespace CGALDotNetUnity.Polyhedra
             var points = new Point3d[poly.VertexCount];
             var indices = new int[poly.FaceCount * 3];
 
-            poly.GetPoints(points);
-            poly.GetTriangleIndices(indices);
+            poly.GetPoints(points, points.Length);
+            poly.GetTriangleIndices(indices, indices.Length);
 
             SplitFaces(points, indices, out Point3d[] splitPoints, out int[] spliIndices);
             CreateMesh(splitPoints, spliIndices, translation);
@@ -73,8 +73,8 @@ namespace CGALDotNetUnity.Polyhedra
             var points = new Point3d[poly.VertexCount];
             var indices = new int[poly.FaceCount * 3];
 
-            poly.GetPoints(points);
-            poly.GetTriangleIndices(indices);
+            poly.GetPoints(points, points.Length);
+            poly.GetTriangleIndices(indices, indices.Length);
 
             SplitFaces(points, indices, out Point3d[] splitPoints, out int[] spliIndices);
             CreateMesh(splitPoints, spliIndices, translation);

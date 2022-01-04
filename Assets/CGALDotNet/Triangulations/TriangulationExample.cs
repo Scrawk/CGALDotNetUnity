@@ -60,7 +60,7 @@ namespace CGALDotNetUnity.Triangulations
         {
             switch (type)
             {
-                case TRIANGULATION_TYPE.REGULAR:
+                case TRIANGULATION_TYPE.TRIANGULATION:
                     triangulation = new Triangulation2<EEK>();
                     break;
                 case TRIANGULATION_TYPE.DELAUNAY:
@@ -174,7 +174,7 @@ namespace CGALDotNetUnity.Triangulations
                 if (count == 0) return;
 
                 var segments = new Segment2d[count];
-                tri.GetConstraints(segments);
+                tri.GetConstraints(segments, segments.Length);
 
                 Renderers["Segment"] = Draw().
                     Outline(segments, redColor).
@@ -187,7 +187,7 @@ namespace CGALDotNetUnity.Triangulations
             if(SelectedVertex != null)
             {
                 var point = SelectedVertex.Value.Point;
-                Renderers["Point"] = Draw().Points(point.xy, lineColor, redColor).PopRenderer();
+                Renderers["Point"] = Draw().Points(point, lineColor, redColor).PopRenderer();
             }
 
             if (SelectedEdge != null)
@@ -207,7 +207,7 @@ namespace CGALDotNetUnity.Triangulations
         {
             int count = triangulation.TriangleCount;
             var triangles = new Triangle2d[count];
-            triangulation.GetTriangles(triangles);
+            triangulation.GetTriangles(triangles, triangles.Length);
 
             var circles = new Circle2d[count];
             for (int i = 0; i < count; i++)

@@ -104,10 +104,10 @@ namespace CGALDotNetUnity.Marching
         private void CreateRenderer(ConstrainedTriangulation2<EEK> tri, Point2d translate)
         {
             var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
+            tri.GetPoints(points, points.Length);
 
             var indices = new int[tri.IndiceCount];
-            tri.GetIndices(indices);
+            tri.GetIndices(indices, indices.Length);
 
             var indices2 = new List<int>();
 

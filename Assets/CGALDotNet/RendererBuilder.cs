@@ -102,10 +102,10 @@ namespace CGALDotNetUnity
         public RendererBuilder Faces(BaseTriangulation2 tri, Color color)
         {
             var indices = new int[tri.IndiceCount];
-            tri.GetIndices(indices);
+            tri.GetIndices(indices, indices.Length);
 
             var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
+            tri.GetPoints(points, points.Length);
 
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -197,7 +197,7 @@ namespace CGALDotNetUnity
             var edgeCount = arr.EdgeCount;
 
             var segments = new Segment2d[edgeCount];
-            arr.GetSegments(segments);
+            arr.GetSegments(segments, segments.Length);
 
             var indices = BaseRenderer.SegmentIndices(edgeCount);
 
@@ -272,10 +272,10 @@ namespace CGALDotNetUnity
         public RendererBuilder Outline(BaseTriangulation2 tri, Color color)
         {
             var indices = new int[tri.IndiceCount];
-            tri.GetIndices(indices);
+            tri.GetIndices(indices, indices.Length);
 
             var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
+            tri.GetPoints(points, points.Length);
 
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.TRIANGLES;
@@ -510,7 +510,7 @@ namespace CGALDotNetUnity
         public RendererBuilder Points(BaseTriangulation2 tri, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
             var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
+            tri.GetPoints(points, points.Length);
 
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;
@@ -619,7 +619,7 @@ namespace CGALDotNetUnity
         {
             var vertCount = arr.VertexCount;
             var points = new Point2d[vertCount];
-            arr.GetPoints(points);
+            arr.GetPoints(points, points.Length);
 
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;
