@@ -44,8 +44,8 @@ namespace CGALDotNetUnity.Arrangements
                 new Segment2d(new Point2d(8,5), new Point2d(8,8))
             };
 
-            SubCurves = SweepLine<EEK>.Instance.ComputeSubcurves(segments);
-            Points = SweepLine<EEK>.Instance.ComputeIntersectionPoints(segments);
+            SubCurves = SweepLine<EEK>.Instance.ComputeSubcurves(segments, segments.Length);
+            Points = SweepLine<EEK>.Instance.ComputeIntersectionPoints(segments, segments.Length);
 
             Renderers["Segments"] = Draw().
                 Outline(SubCurves, lineColor).

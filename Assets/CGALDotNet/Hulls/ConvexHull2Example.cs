@@ -42,7 +42,7 @@ namespace CGALDotNetUnity.Hulls
 
             float start = Time.realtimeSinceStartup;
 
-            Hull = ConvexHull2<EEK>.Instance.CreateHull(points, Method);
+            Hull = ConvexHull2<EEK>.Instance.CreateHull(points, points.Length, Method);
 
             float end = Time.realtimeSinceStartup;
             float ms= (end - start) * 1000;

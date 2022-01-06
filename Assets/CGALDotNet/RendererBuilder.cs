@@ -123,10 +123,10 @@ namespace CGALDotNetUnity
         public RendererBuilder Faces(ConformingTriangulation2 tri, Color color)
         {
             var indices = new int[tri.IndiceCount];
-            tri.GetIndices(indices);
+            tri.GetIndices(indices, indices.Length);
 
             var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
+            tri.GetPoints(points, points.Length);
 
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -291,10 +291,10 @@ namespace CGALDotNetUnity
         public RendererBuilder Outline(ConformingTriangulation2 tri, Color color)
         {
             var indices = new int[tri.IndiceCount];
-            tri.GetIndices(indices);
+            tri.GetIndices(indices, indices.Length);
 
             var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
+            tri.GetPoints(points, points.Length);
 
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.TRIANGLES;
@@ -537,7 +537,7 @@ namespace CGALDotNetUnity
         public RendererBuilder Points(ConformingTriangulation2 tri, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
             var points = new Point2d[tri.VertexCount];
-            tri.GetPoints(points);
+            tri.GetPoints(points, points.Length);
 
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;
