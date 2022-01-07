@@ -12,6 +12,7 @@ namespace CGALDotNetUnity.Polygons
 
     public class CreatePolygonExample : InputBehaviour
     {
+
         private Color redColor = new Color32(200, 80, 80, 255);
 
         private Color pointColor = new Color32(80, 80, 200, 255);
