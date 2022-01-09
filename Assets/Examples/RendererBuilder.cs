@@ -672,6 +672,17 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
+        public RendererBuilder Points(Point3d[] points, Color pointCol, float size)
+        {
+            var pointBody = new VertexRenderer(size);
+            pointBody.DefaultColor = pointCol;
+            pointBody.Load(ToVector3(points));
+
+            Renderer.Add(pointBody);
+
+            return Instance;
+        }
+
         public RendererBuilder Points(Point3d[,] points, Color pointCol, float size)
         {
             var pointBody = new VertexRenderer(size);
@@ -814,6 +825,16 @@ namespace CGALDotNetUnity
 
             for (int i = 0; i < points.Count; i++)
                 array[i] = new Vector2((float)points[i].x, (float)points[i].y);
+
+            return array;
+        }
+
+        private static Vector3[] ToVector3(IList<Point3d> points)
+        {
+            var array = new Vector3[points.Count];
+
+            for (int i = 0; i < points.Count; i++)
+                array[i] = new Vector3((float)points[i].x, (float)points[i].y, (float)points[i].z);
 
             return array;
         }
