@@ -11,127 +11,67 @@ using Common.Unity.Drawing;
 namespace CGALDotNetUnity.Triangulations
 {
 
-    public class Triangulation3Example : InputBehaviour
+    public class Triangulation3Example : MonoBehaviour
     {
 
-        private Dictionary<string, CompositeRenderer> Renderers;
+        public Material vertexMaterial;
 
-        private SegmentRenderer m_segmentRenderer;
+        public Material edgeMaterial;
 
-        protected override void Start()
+        private GameObject m_triangulation;
+
+        void Start()
         {
-            base.Start();
-
-            Renderers = new Dictionary<string, CompositeRenderer>();
-
             var box = new Box3d(-5, 5);
             var corners = box.GetCorners();
 
             var tri = new Triangulation3<EEK>(corners);
 
-            var points = new Point3d[tri.VertexCount];
-            tri.GetPoints(points, points.Length);
-
-            Renderers["Points"] = Draw().
-            Points(points, Color.yellow, 0.25f).
-            PopRenderer();
-
-            var segments = ToTetrahedronSegmentIndices(tri);
-
-            //Debug.Log("Segments = " + segments.Count);
-            segments = GetUniqueSegments(segments);
-            //Debug.Log("Segments = " + segments.Count);
-
-            DrawSegments(segments, points);
-
-        }
-
-        private List<SegmentIndex> GetUniqueSegments(List<SegmentIndex> segments)
-        {
-            var set = new HashSet<SegmentIndex>();
-            var list = new List<SegmentIndex>();
-
-            for (int i = 0; i < segments.Count; i++)
-            {
-                var seg = segments[i];
-                var opp = seg.Reversed;
-
-                if (!set.Contains(seg) && !set.Contains(opp))
-                {
-                    set.Add(seg);
-                    set.Add(opp);
-                    list.Add(seg);
-                }
-                    
-            }
-
-            return list;
-        }
-
-        private void DrawSegments(List<SegmentIndex> segments, Point3d[] points)
-        {
-            m_segmentRenderer = new SegmentRenderer();
-            m_segmentRenderer.DefaultColor = Color.red;
-
-            for (int i = 0; i < segments.Count; i++)
-            {
-                var seg = segments[i];
-                m_segmentRenderer.Load(ToVector3(points[seg.A]), ToVector3(points[seg.B]));
-            }
-
-        }
-
-        private List<SegmentIndex> ToTetrahedronSegmentIndices(Triangulation3<EEK> tri)
-        {
-
-            int count = tri.TetrahdronIndiceCount;
-            var indices = new int[count];
-
-            tri.GetTetrahedronIndices(indices, count);
+            var points = new List<Point3d>();
+            tri.GetPoints(points);
 
             var segments = new List<SegmentIndex>();
+            tri.GetSegmentsIndices(segments);
 
-            for (int i = 0; i < indices.Length / 4; i++)
+            m_triangulation = new GameObject("Triangulation");
+
+            foreach(var p in points)
             {
-                int i0 = indices[i * 4 + 0];
-                int i1 = indices[i * 4 + 1];
-                int i2 = indices[i * 4 + 2];
-                int i3 = indices[i * 4 + 3];
-
-                var i01 = new SegmentIndex(i0, i1);
-                var i02 = new SegmentIndex(i0, i2);
-                var i03 = new SegmentIndex(i0, i3);
-
-                var i12 = new SegmentIndex(i1, i2);
-                var i23 = new SegmentIndex(i2, i3);
-                var i31 = new SegmentIndex(i3, i1);
-
-                if (!i01.HasNullIndex) segments.Add(i01);
-                if (!i02.HasNullIndex) segments.Add(i02);
-                if (!i03.HasNullIndex) segments.Add(i03);
-
-                if (!i12.HasNullIndex) segments.Add(i12);
-                if (!i23.HasNullIndex) segments.Add(i23);
-                if (!i31.HasNullIndex) segments.Add(i31);
-
+                var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.transform.parent = m_triangulation.transform;
+                sphere.GetComponent<Renderer>().sharedMaterial = vertexMaterial;
+                sphere.transform.position = ToVector3(p);
+                sphere.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             }
 
-            return segments;
+            foreach(var seg in segments)
+            {
+                var a = points[seg.A];
+                var b = points[seg.B];
+
+                CreateCylinderBetweenPoints(ToVector3(a), ToVector3(b), 0.1f);
+            }
+
+        }
+
+        private void CreateCylinderBetweenPoints(Vector3 start, Vector3 end, float width)
+        {
+            var offset = end - start;
+            var scale = new Vector3(width, offset.magnitude / 2.0f, width);
+            var position = start + (offset / 2.0f);
+
+            var cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            cylinder.transform.parent = m_triangulation.transform;
+            cylinder.GetComponent<Renderer>().sharedMaterial = edgeMaterial;
+            cylinder.transform.position = position;
+            cylinder.transform.up = offset;
+            cylinder.transform.localScale = scale;
         }
 
         private Vector3 ToVector3(Point3d point)
         {
             return new Vector3((float)point.x, (float)point.y, (float)point.z);
         }
-
-        private void OnPostRender()
-        {
-            m_segmentRenderer.Draw();
-
-            foreach (var renderer in Renderers.Values)
-                renderer.Draw();
-        }
-
 
     }
 }
