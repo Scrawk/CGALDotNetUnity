@@ -5,6 +5,7 @@ using UnityEngine;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Triangulations;
+using CGALDotNet.Meshing;
 
 using Common.Unity.Drawing;
 
@@ -26,6 +27,7 @@ namespace CGALDotNetUnity.Triangulations
             var corners = box.GetCorners();
 
             var tri = new Triangulation3<EEK>(corners);
+            tri.Refine(0.1, 1);
 
             var points = new List<Point3d>();
             tri.GetPoints(points);

@@ -25,6 +25,14 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject m_torus;
 
+        private GameObject m_tetrahedron;
+
+        private GameObject m_octohedron;
+
+        private GameObject m_dodecahedron;
+
+        private GameObject m_cylinder;
+
         private void Start()
         {
             m_cube = CreateCube(new Vector3(3, 0.5f, 0));
@@ -38,6 +46,14 @@ namespace CGALDotNetUnity.Polyhedra
             m_plane = CreatePlane(new Vector3(3, 0, 3));
 
             m_torus = CreateTorus(new Vector3(1, 0, 3));
+
+            m_tetrahedron = CreateTetrahedron(new Vector3(-1, 0, 3));
+
+            m_octohedron = CreateOctohedron(new Vector3(-3, 0, 3));
+
+            m_dodecahedron = CreateDodecahedron(new Vector3(3, 0, 6));
+
+            m_cylinder = CreateCylinder(new Vector3(1, 0, 6));
         }
 
         private GameObject CreateCube(Vector3 translation)
@@ -60,10 +76,28 @@ namespace CGALDotNetUnity.Polyhedra
             return poly.ToUnityMesh("Normalized cube", translation, material, true);
         }
 
+        private GameObject CreateTetrahedron(Vector3 translation)
+        {
+            var poly = PolyhedronFactory<EEK>.CreateTetrahedron();
+            return poly.ToUnityMesh("Tetrahedron", translation, material, true);
+        }
+
         private GameObject CreateIcosahedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateIcosahedron();
             return poly.ToUnityMesh("Icosahedron", translation, material, true);
+        }
+
+        private GameObject CreateOctohedron(Vector3 translation)
+        {
+            var poly = PolyhedronFactory<EEK>.CreateOctahedron();
+            return poly.ToUnityMesh("Octahedron", translation, material, true);
+        }
+
+        private GameObject CreateDodecahedron(Vector3 translation)
+        {
+            var poly = PolyhedronFactory<EEK>.CreateDodecahedron();
+            return poly.ToUnityMesh("Dodecahedron", translation, material, true);
         }
 
         private GameObject CreatePlane(Vector3 translation)
@@ -78,6 +112,14 @@ namespace CGALDotNetUnity.Polyhedra
             var param = TorusParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateTorus(param);
             return poly.ToUnityMesh("Torus", translation, material, true);
+        }
+
+        private GameObject CreateCylinder(Vector3 translation)
+        {
+            //TODO - missing the caps
+            var param = CylinderParams.Default;
+            var poly = PolyhedronFactory<EEK>.CreateCylinder(param);
+            return poly.ToUnityMesh("Cylinder", translation, material, true);
         }
     }
 

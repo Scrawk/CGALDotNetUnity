@@ -25,17 +25,36 @@ namespace CGALDotNetUnity.Polyhedra
 
             var nef3 = nef1.Join(nef2);
 
+            nef3.ConvexDecomposition();
+
             var volumes = new List<Polyhedron3<EEK>>();
             nef3.GetVolumes(volumes);
 
-            foreach (var poly in volumes)
+            for(int i = 0; i < volumes.Count; i++)
             {
-                if(!poly.IsPureTriangle)
-                    poly.ConvertQuadsToTriangles();
+                //first poly if the original so skip.
+                if (i == 0) continue;
 
-                poly.ToUnityMesh("Convex", Vector3.zero, material);
+                var poly = volumes[i];
+
+                if(!poly.IsPureTriangle)
+                    poly.Triangulate();
+
+                var mat = new Material(material);
+                mat.color = RandomColor();
+
+                poly.ToUnityMesh("Convex", Vector3.zero, mat);
             }
 
+        }
+
+        private Color RandomColor()
+        {
+            Color col = new Color();
+            col.r = Random.value;
+            col.g = Random.value;
+            col.b = Random.value;
+            return col;
         }
 
     }
