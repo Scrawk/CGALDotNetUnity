@@ -5,6 +5,7 @@ using UnityEngine;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polyhedra;
+using CGALDotNet.Processing;
 
 namespace CGALDotNetUnity.Polyhedra
 {
