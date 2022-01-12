@@ -31,7 +31,7 @@ namespace CGALDotNetUnity.Triangulations
             var box = new Box3d(-20, 20);
             var randomPoints = Point3d.RandomPoints(0, 20, box);
 
-            var tri = new Triangulation3<EEK>(randomPoints);
+            var tri = new DelaunayTriangulation3<EEK>(box.GetCorners());
             tri.Refine(0.1, 1);
 
             var hull = tri.ComputeHull();
