@@ -6,6 +6,8 @@ using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
+using CGALDotNet.Triangulations;
+using CGALDotNet.Meshing;
 
 namespace CGALDotNetUnity.Polygons
 {
@@ -23,7 +25,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Point2d? Point;
 
-        private Polygon2<EEK> Polygon;
+        private Polygon2<EIK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
@@ -36,7 +38,7 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void OnInputComplete(List<Point2d> points)
         {
-            Polygon = new Polygon2<EEK>(points.ToArray());
+            Polygon = new Polygon2<EIK>(points.ToArray());
 
             if (Polygon.IsSimple)
             {
@@ -45,6 +47,8 @@ namespace CGALDotNetUnity.Polygons
 
                 SetInputMode(INPUT_MODE.POINT_CLICK);
                 CreateRenderer("Polygon", Polygon);
+
+                //Refine(Polygon);
             }
             else
             {
@@ -54,7 +58,14 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
-        private void CreateRenderer(string name, Polygon2<EEK> polygon)
+        private void Refine(Polygon2<EIK> polygon)
+        {
+            var tri = polygon.Refine(2);
+            CreateRenderer("Refined", tri);
+            CreateRenderer("Hull", tri.ComputeHull(), Color.yellow);
+        }
+
+        private void CreateRenderer(string name, Polygon2 polygon)
         {
             if(polygon.IsSimple)
             {
@@ -72,7 +83,20 @@ namespace CGALDotNetUnity.Polygons
                 Points(polygon, lineColor, pointColor).
                 PopRenderer();
             }
+        }
 
+        private void CreateRenderer(string name, Polygon2 polygon, Color col)
+        {
+            Renderers[name] = Draw().
+            Outline(polygon, col).
+            PopRenderer();
+        }
+
+        private void CreateRenderer(string name, BaseTriangulation2 triangulation)
+        {
+            Renderers[name] = Draw().
+            Outline(triangulation, lineColor).
+            PopRenderer();
         }
 
         protected override void OnCleared()

@@ -370,6 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vertexMaterial: {fileID: 2100000, guid: 0760eede4a9db604f8699c03e3497a4c, type: 2}
   edgeMaterial: {fileID: 2100000, guid: 9100d3f5442282a4d9db03b0412e72e7, type: 2}
+  hullMaterial: {fileID: 2100000, guid: e92f670c398a1e541b24f3dfb0b93fa5, type: 2}
 --- !u!1 &762780502
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Triangulations;
 using CGALDotNet.Meshing;
+using CGALDotNet.Polyhedra;
 
 using Common.Unity.Drawing;
 
@@ -19,15 +20,22 @@ namespace CGALDotNetUnity.Triangulations
 
         public Material edgeMaterial;
 
+        public Material hullMaterial;
+
         private GameObject m_triangulation;
+
+        private GameObject m_hull;
 
         void Start()
         {
-            var box = new Box3d(-5, 5);
-            var corners = box.GetCorners();
+            var box = new Box3d(-20, 20);
+            var randomPoints = Point3d.RandomPoints(0, 20, box);
 
-            var tri = new Triangulation3<EEK>(corners);
+            var tri = new Triangulation3<EEK>(randomPoints);
             tri.Refine(0.1, 1);
+
+            var hull = tri.ComputeHull();
+            m_hull = hull.ToUnityMesh("hull", Vector3.zero, hullMaterial);
 
             var points = new List<Point3d>();
             tri.GetPoints(points);

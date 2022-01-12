@@ -57,7 +57,7 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Faces(Polygon2<EEK> polygon, Color color)
+        public RendererBuilder Faces(Polygon2 polygon, Color color)
         {
             var indices = new List<int>();
             polygon.Triangulate(indices);
@@ -78,7 +78,7 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Faces(PolygonWithHoles2<EEK> polygon, Color color)
+        public RendererBuilder Faces(PolygonWithHoles2 polygon, Color color)
         {
             var indices = new List<int>();
             polygon.Triangulate(indices);
@@ -176,7 +176,7 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Outline(Polygon2<EEK> polygon, Color color)
+        public RendererBuilder Outline(Polygon2 polygon, Color color)
         {
             var lineIndices = BaseRenderer.PolygonIndices(polygon.Count);
             var points = polygon.ToArray();
@@ -212,7 +212,7 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder TriangleOutline(Polygon2<EEK> polygon, Color color)
+        public RendererBuilder TriangleOutline(Polygon2 polygon, Color color)
         {
             var indices = new List<int>();
             polygon.Triangulate(indices);
@@ -250,7 +250,7 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Outline(PolygonWithHoles2<EEK> polygon, Color color)
+        public RendererBuilder Outline(PolygonWithHoles2 polygon, Color color)
         {
             var count = polygon.PointCount(POLYGON_ELEMENT.BOUNDARY);
             var points = new Point2d[count];
@@ -561,7 +561,7 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Points(Polygon2<EEK> polygon, Color lineCol, Color pointCol, float size = POINT_SIZE)
+        public RendererBuilder Points(Polygon2 polygon, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
             var points = polygon.ToArray();
 
@@ -587,7 +587,7 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Points(PolygonWithHoles2<EEK> polygon, Color lineCol, Color pointCol, float size = POINT_SIZE)
+        public RendererBuilder Points(PolygonWithHoles2 polygon, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
             var count = polygon.PointCount(POLYGON_ELEMENT.BOUNDARY);
             var points = new Point2d[count];
