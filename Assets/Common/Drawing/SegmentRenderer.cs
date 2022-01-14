@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Common.Unity.Drawing
 {
 
-    public enum LINE_MODE { LINES = 2, TRIANGLES = 3, TETRAHEDRON = 4 };
+    public enum LINE_MODE { LINES, TRIANGLES, QUADS, TETRAHEDRON };
 
     public class SegmentRenderer : BaseRenderer
     {
@@ -241,6 +241,10 @@ namespace Common.Unity.Drawing
                     DrawVerticesAsTriangles(camera, localToWorld);
                     break;
 
+                case LINE_MODE.QUADS:
+                    DrawVerticesAsQuads(camera, localToWorld);
+                    break;
+
                 case LINE_MODE.TETRAHEDRON:
                     DrawVerticesAsTetrahedron(camera, localToWorld);
                     break;
@@ -317,6 +321,60 @@ namespace Common.Unity.Drawing
                 GL.Vertex(Vertices[i2]);
                 GL.Color(Colors[i1]);
                 GL.Vertex(Vertices[i1]);
+            }
+
+            GL.End();
+
+            GL.PopMatrix();
+        }
+
+        private void DrawVerticesAsQuads(Camera camera, Matrix4x4 localToWorld)
+        {
+            GL.PushMatrix();
+
+            GL.LoadIdentity();
+            GL.MultMatrix(camera.worldToCameraMatrix * localToWorld);
+            GL.LoadProjectionMatrix(camera.projectionMatrix);
+
+            Material.SetPass(0);
+            GL.Begin(GL.LINES);
+            GL.Color(DefaultColor);
+
+            int vertexCount = Vertices.Count;
+
+            for (int i = 0; i < Indices.Count / 4; i++)
+            {
+                int i0 = Indices[i * 4 + 0];
+                int i1 = Indices[i * 4 + 1];
+                int i2 = Indices[i * 4 + 2];
+                int i3 = Indices[i * 4 + 3];
+
+                if (i0 < 0 || i0 >= vertexCount) continue;
+                if (i1 < 0 || i1 >= vertexCount) continue;
+                if (i2 < 0 || i2 >= vertexCount) continue;
+                if (i3 < 0 || i3 >= vertexCount) continue;
+
+                GL.Color(Colors[i0]);
+                GL.Vertex(Vertices[i0]);
+                GL.Color(Colors[i1]);
+                GL.Vertex(Vertices[i1]);
+
+                GL.Color(Colors[i0]);
+                GL.Vertex(Vertices[i0]);
+                GL.Color(Colors[i3]);
+                GL.Vertex(Vertices[i3]);
+
+                GL.Color(Colors[i2]);
+                GL.Vertex(Vertices[i2]);
+                GL.Color(Colors[i1]);
+                GL.Vertex(Vertices[i1]);
+
+                GL.Color(Colors[i3]);
+                GL.Vertex(Vertices[i3]);
+                GL.Color(Colors[i2]);
+                GL.Vertex(Vertices[i2]);
+
+
             }
 
             GL.End();
