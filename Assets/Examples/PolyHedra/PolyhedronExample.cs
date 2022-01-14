@@ -20,6 +20,8 @@ namespace CGALDotNetUnity.Polyhedra
 
         public bool drawSegments = false;
 
+        public Color lineColor = Color.black;
+
         private GameObject m_cube;
 
         private GameObject m_uvsphere;
@@ -40,17 +42,19 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject m_cylinder;
 
+        private GameObject m_cone;
+
         private SegmentRenderer m_triangleRenderer, m_quadRenderer;
 
         private void Start()
         {
 
             m_triangleRenderer = new SegmentRenderer();
-            m_triangleRenderer.DefaultColor = Color.red;
+            m_triangleRenderer.DefaultColor = lineColor;
             m_triangleRenderer.LineMode = LINE_MODE.TRIANGLES;
 
             m_quadRenderer = new SegmentRenderer();
-            m_quadRenderer.DefaultColor = Color.red;
+            m_quadRenderer.DefaultColor = lineColor;
             m_quadRenderer.LineMode = LINE_MODE.QUADS;
 
             m_cube = CreateCube(new Vector3(3, 0.5f, 0));
@@ -72,6 +76,8 @@ namespace CGALDotNetUnity.Polyhedra
             m_dodecahedron = CreateDodecahedron(new Vector3(3, 0, 6));
 
             m_cylinder = CreateCylinder(new Vector3(1, 0, 6));
+
+            m_cone = CreateCone(new Vector3(-1, 0, 6));
         }
 
         private void OnRenderObject()
@@ -179,14 +185,25 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateCylinder(Vector3 translation)
         {
-            //TODO - missing the caps
             var param = CylinderParams.Default;
-            var poly = PolyhedronFactory<EEK>.CreateCylinder(param);
+            var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
 
             if (drawSegments)
                 DrawSegments(poly, translation);
 
             return poly.ToUnityMesh("Cylinder", translation, material, true);
+        }
+
+        private GameObject CreateCone(Vector3 translation)
+        {
+            var param = CylinderParams.Default;
+            param.radiusTop = 0;
+            var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
+
+            if (drawSegments)
+                DrawSegments(poly, translation);
+
+            return poly.ToUnityMesh("Cone", translation, material, true);
         }
 
         private void DrawSegments(Polyhedron3 poly, Vector3 translation)
