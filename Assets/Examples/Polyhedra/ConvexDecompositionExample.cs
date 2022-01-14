@@ -37,9 +37,6 @@ namespace CGALDotNetUnity.Polyhedra
 
                 var poly = volumes[i];
 
-                if(!poly.IsPureTriangle)
-                    poly.Triangulate();
-
                 var mat = new Material(material);
                 mat.color = RandomColor();
 

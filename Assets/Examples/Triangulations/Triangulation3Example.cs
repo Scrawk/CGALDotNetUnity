@@ -5,7 +5,7 @@ using UnityEngine;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Triangulations;
-using CGALDotNet.Meshing;
+using CGALDotNet.Geometry;
 using CGALDotNet.Polyhedra;
 
 using Common.Unity.Drawing;
@@ -31,11 +31,14 @@ namespace CGALDotNetUnity.Triangulations
             var box = new Box3d(-20, 20);
             var randomPoints = Point3d.RandomPoints(0, 20, box);
 
-            var tri = new DelaunayTriangulation3<EEK>(box.GetCorners());
-            tri.Refine(0.1, 1);
+            var tri = new DelaunayTriangulation3<EEK>(randomPoints);
+            //tri.Refine(0.1, 1);
 
-            var hull = tri.ComputeHull();
-            m_hull = hull.ToUnityMesh("hull", Vector3.zero, hullMaterial);
+            if(hullMaterial != null)
+            {
+                var hull = tri.ComputeHull();
+                m_hull = hull.ToUnityMesh("hull", Vector3.zero, hullMaterial);
+            }
 
             var points = new List<Point3d>();
             tri.GetPoints(points);
@@ -45,21 +48,35 @@ namespace CGALDotNetUnity.Triangulations
 
             m_triangulation = new GameObject("Triangulation");
 
-            foreach(var p in points)
+            if (vertexMaterial != null)
             {
-                var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.parent = m_triangulation.transform;
-                sphere.GetComponent<Renderer>().sharedMaterial = vertexMaterial;
-                sphere.transform.position = ToVector3(p);
-                sphere.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                foreach (var p in points)
+                {
+                    if (!p.IsFinite) continue;
+
+                    var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    sphere.transform.parent = m_triangulation.transform;
+
+                    var renderer = sphere.GetComponent<Renderer>();
+                    if (renderer != null)
+                        renderer.sharedMaterial = vertexMaterial;
+
+                    sphere.transform.position = ToVector3(p);
+                    sphere.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                }
             }
 
-            foreach(var seg in segments)
+            if (edgeMaterial != null)
             {
-                var a = points[seg.A];
-                var b = points[seg.B];
+                foreach (var seg in segments)
+                {
+                    var a = points[seg.A];
+                    var b = points[seg.B];
 
-                CreateCylinderBetweenPoints(ToVector3(a), ToVector3(b), 0.1f);
+                    if (!a.IsFinite || !b.IsFinite) continue;
+
+                    CreateCylinderBetweenPoints(ToVector3(a), ToVector3(b), 0.1f);
+                }
             }
 
         }
@@ -72,7 +89,11 @@ namespace CGALDotNetUnity.Triangulations
 
             var cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             cylinder.transform.parent = m_triangulation.transform;
-            cylinder.GetComponent<Renderer>().sharedMaterial = edgeMaterial;
+
+            var renderer = cylinder.GetComponent<Renderer>();
+            if (renderer != null)
+                renderer.sharedMaterial = edgeMaterial;
+
             cylinder.transform.position = position;
             cylinder.transform.up = offset;
             cylinder.transform.localScale = scale;

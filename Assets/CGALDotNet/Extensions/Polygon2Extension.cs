@@ -11,6 +11,12 @@ namespace CGALDotNet.Polygons
     {
         public static GameObject ToUnityMesh(this Polygon2 poly, string name, Vector3 position, Material material)
         {
+            if (!poly.IsSimple)
+            {
+                Debug.Log("Polygon is not simple");
+                return new GameObject(name);
+            }
+
             var indices = new List<int>();
             poly.Triangulate(indices);
 

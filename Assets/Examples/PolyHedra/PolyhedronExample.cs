@@ -59,7 +59,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateCube(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateCube();
+            var poly = PolyhedronFactory<EEK>.CreateCube(1, true);
             return poly.ToUnityMesh("Cube", translation, material, true);
         }
 

@@ -11,11 +11,25 @@ namespace CGALDotNet.Polyhedra
     {
         public static GameObject ToUnityMesh(this Polyhedron3 poly, string name, Vector3 position, Material material, bool splitFaces = true)
         {
-            var points = new Point3d[poly.VertexCount];
-            var indices = new int[poly.FaceCount * 3];
+            if (!poly.IsValid())
+            {
+                Debug.Log("Polyhedron3 is not valid");
+                return new GameObject(name);
+            }
+                
+            if (!poly.IsTriangle)
+                poly.Triangulate();
 
+            var points = new Point3d[poly.VertexCount];
+            var indices = new int[poly.FaceCount * 3];   
             poly.GetPoints(points, points.Length);
             poly.GetTriangleIndices(indices, indices.Length);
+
+            if (!points.IsFinite())
+            {
+                Debug.Log("Polyhedron3 points are not finite.");
+                return new GameObject(name);
+            }
 
             Mesh mesh;
 
