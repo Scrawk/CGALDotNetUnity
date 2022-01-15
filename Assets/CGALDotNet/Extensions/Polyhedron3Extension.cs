@@ -20,7 +20,14 @@ namespace CGALDotNet.Polyhedra
             if (!poly.IsTriangle)
                 poly.Triangulate();
 
-            var points = new Point3d[poly.VertexCount];
+            int count = poly.VertexCount;
+            if(count == 0)
+            {
+                Debug.Log("Polyhedron3 is empty");
+                return new GameObject(name);
+            }
+
+            var points = new Point3d[count];
             var indices = new int[poly.FaceCount * 3];   
             poly.GetPoints(points, points.Length);
             poly.GetTriangleIndices(indices, indices.Length);

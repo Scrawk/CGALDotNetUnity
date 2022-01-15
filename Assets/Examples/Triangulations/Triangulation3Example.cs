@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
 using CGALDotNet.Triangulations;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polyhedra;
