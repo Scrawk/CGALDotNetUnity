@@ -11,7 +11,7 @@ namespace CGALDotNet.Polyhedra
     {
         public static GameObject ToUnityMesh(this Polyhedron3 poly, string name, Vector3 position, Material material, bool splitFaces = true)
         {
-            if (!poly.IsValid())
+            if (!poly.IsValid)
             {
                 Debug.Log("Polyhedron3 is not valid");
                 return new GameObject(name);
