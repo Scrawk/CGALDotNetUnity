@@ -18,15 +18,9 @@ namespace CGALDotNetUnity.Meshing
 
         void Start()
         {
-            var ponts = new HPoint3d[]
-            {
-                new HPoint3d(1, -1, -1, 1.25),
-                new HPoint3d(1, 1, 1, 1.25),
-                new HPoint3d(-1, 1, -1, 1.25),
-                new HPoint3d(-1, -1, 1, 1.25),
-            };
+            var points = Point3d.RandomPoints(0, 10, new Box3d(-10, 10));
 
-            var poly = SkinSurfaceMeshing<EEK>.Instance.CreateSkinPolyhedra(0.5, false, ponts, ponts.Length);
+            var poly = SkinSurfaceMeshing<EEK>.Instance.CreateSkinPolyhedra(0.5, true, points, points.Length);
 
             poly.Print();
 

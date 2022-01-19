@@ -19,13 +19,21 @@ namespace CGALDotNetUnity.Polyhedra
 
         public bool drawSegments = false;
 
+        public bool drawVertexNormals = false;
+
+        public bool drawFaceNormals = false;
+
         public Color lineColor = Color.black;
+
+        public Color vertexNormalColor = Color.red;
+
+        public Color faceNormalColor = Color.blue;
 
         public string file;
 
         private SegmentRenderer m_triangleRenderer, m_quadRenderer;
 
-        private bool createdSegments;
+        private NormalRenderer m_vertNormalRenderer, m_faceNormalRenderer;
 
         private Polyhedron3<EEK> poly;
 
@@ -46,6 +54,12 @@ namespace CGALDotNetUnity.Polyhedra
             m_quadRenderer.DefaultColor = lineColor;
             m_quadRenderer.LineMode = LINE_MODE.QUADS;
 
+            m_vertNormalRenderer = new NormalRenderer();
+            m_vertNormalRenderer.DefaultColor = vertexNormalColor;
+
+            m_faceNormalRenderer = new NormalRenderer();
+            m_faceNormalRenderer.DefaultColor = faceNormalColor;
+
             string filename = Application.dataPath + "/Examples/Data/" + file;
 
             var split = filename.Split('/', '.');
@@ -58,8 +72,8 @@ namespace CGALDotNetUnity.Polyhedra
 
             m_object = CreateGameobject(name, translation, poly);
 
+            CreateSegments(poly, translation);
             Print(poly);
-
             LookAt(m_object);
         }
 
@@ -74,25 +88,19 @@ namespace CGALDotNetUnity.Polyhedra
         {
             if (drawSegments)
             {
-                if (!createdSegments)
-                {
-                    createdSegments = true;
-                    CreateSegments(poly, translation);
-                }
-
                 m_triangleRenderer.Draw();
                 m_quadRenderer.Draw();
             }
+
+            if (drawVertexNormals)
+                m_vertNormalRenderer.Draw();
+
+            if (drawFaceNormals)
+                m_faceNormalRenderer.Draw();
         }
 
         private GameObject CreateGameobject(string name, Vector3 translation, Polyhedron3<EEK> poly)
         {
-            if (drawSegments)
-            {
-                createdSegments = true;
-                CreateSegments(poly, translation);
-            }
-
             return poly.ToUnityMesh(name, translation, material, false);
         }
 
@@ -115,14 +123,31 @@ namespace CGALDotNetUnity.Polyhedra
             var points = new Point3d[poly.VertexCount];
             poly.GetPoints(points, points.Length);
 
-            var vectors = ToVector3(points, translation);
+            var centroids = new Point3d[poly.FaceCount];
+            poly.GetCentroids(centroids, centroids.Length);
+
+            var vertNormals = new Vector3d[poly.VertexCount];
+            poly.ComputeVertexNormals();
+            poly.GetVertexNormals(vertNormals, vertNormals.Length);
+
+            var faceNormals = new Vector3d[poly.FaceCount];
+            poly.ComputeFaceNormals();
+            poly.GetFaceNormals(faceNormals, faceNormals.Length);
+
+            var upoints = ToVector3(points, translation);
+            var ucentroids = ToVector3(centroids, translation);
+            var vnormals = ToVector3(vertNormals, 0.01f);
+            var fnormals = ToVector3(faceNormals, 0.01f);
+
+            m_vertNormalRenderer.Load(upoints, vnormals);
+            m_faceNormalRenderer.Load(ucentroids, fnormals);
 
             if (primatives.triangleCount > 0)
             {
                 var triangles = new int[primatives.triangleCount * 3];
                 poly.GetTriangleIndices(triangles, triangles.Length);
 
-                m_triangleRenderer.Load(vectors, triangles);
+                m_triangleRenderer.Load(upoints, triangles);
             }
 
             if (primatives.quadCount > 0)
@@ -130,7 +155,7 @@ namespace CGALDotNetUnity.Polyhedra
                 var quads = new int[primatives.quadCount * 4];
                 poly.GetQuadIndices(quads, quads.Length);
 
-                m_quadRenderer.Load(vectors, quads);
+                m_quadRenderer.Load(upoints, quads);
             }
         }
 
@@ -141,6 +166,18 @@ namespace CGALDotNetUnity.Polyhedra
             {
                 var p = points[i];
                 vectors[i] = new Vector3((float)p.x, (float)p.y, (float)p.z) + translation;
+            }
+
+            return vectors;
+        }
+
+        private Vector3[] ToVector3(Vector3d[] normals, float scale)
+        {
+            var vectors = new Vector3[normals.Length];
+            for (int i = 0; i < normals.Length; i++)
+            {
+                var p = normals[i];
+                vectors[i] = new Vector3((float)p.x, (float)p.y, (float)p.z) * scale;
             }
 
             return vectors;

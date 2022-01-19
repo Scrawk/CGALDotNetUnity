@@ -70,6 +70,27 @@ namespace Common.Unity.Drawing
             }
         }
 
+        public void Load(IList<Vector2> vertices, IList<Vector2> normals, Color col)
+        {
+            foreach (var v in vertices)
+            {
+                if (Orientation == DRAW_ORIENTATION.XY)
+                    Vertices.Add(v);
+                else if (Orientation == DRAW_ORIENTATION.XZ)
+                    Vertices.Add(new Vector4(v.x, 0, v.y, 1));
+
+                Colors.Add(col);
+            }
+
+            foreach (var n in normals)
+            {
+                if (Orientation == DRAW_ORIENTATION.XY)
+                    m_normals.Add(n);
+                else if (Orientation == DRAW_ORIENTATION.XZ)
+                    m_normals.Add(new Vector4(n.x, 0, n.y, 1));
+            }
+        }
+
         public override void Load(IList<Vector3> vertices)
         {
             foreach (var v in vertices)
@@ -87,6 +108,18 @@ namespace Common.Unity.Drawing
             {
                 Vertices.Add(v);
                 Colors.Add(DefaultColor);
+            }
+
+            foreach (var n in normals)
+                m_normals.Add(n);
+        }
+
+        public void Load(IList<Vector3> vertices, IList<Vector3> normals, Color col)
+        {
+            foreach (var v in vertices)
+            {
+                Vertices.Add(v);
+                Colors.Add(col);
             }
 
             foreach (var n in normals)
