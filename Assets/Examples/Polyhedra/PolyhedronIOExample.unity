@@ -281,7 +281,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 013641634e8dfc14292e0f32c2520056, type: 2}
-  drawSegments: 0
+  drawSegments: 1
   lineColor: {r: 0, g: 0, b: 0, a: 0.3882353}
   file: cow.off
 --- !u!1 &762780502

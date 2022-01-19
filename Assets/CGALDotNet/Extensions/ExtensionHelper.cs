@@ -27,6 +27,16 @@ public static class ExtensionHelper
         return mesh;
     }
 
+    public static Mesh CreateMeshXZ(Point2d[] points, int[] indices)
+    {
+        Mesh mesh = new Mesh();
+        mesh.SetVertices(ToVector3XZ(points));
+        mesh.SetTriangles(indices, 0);
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+        return mesh;
+    }
+
     public static Mesh CreateMesh(Point2d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();
@@ -66,7 +76,7 @@ public static class ExtensionHelper
         var list = new List<Vector3>(points.Count);
 
         for (int i = 0; i < points.Count; i++)
-            list.Add(ToVector3(points[i]));
+            list.Add((points[i].ToUnityVector3()));
 
         return list;
     }
@@ -76,18 +86,19 @@ public static class ExtensionHelper
         var list = new List<Vector3>(points.Count);
 
         for (int i = 0; i < points.Count; i++)
-            list.Add(ToVector3(points[i]));
+            list.Add(points[i].ToUnityVector3());
 
         return list;
     }
 
-    public static Vector3 ToVector3(Point3d p)
+    public static List<Vector3> ToVector3XZ(IList<Point2d> points)
     {
-        return new Vector3((float)p.x, (float)p.y, (float)p.z);
+        var list = new List<Vector3>(points.Count);
+
+        for (int i = 0; i < points.Count; i++)
+            list.Add(points[i].ToUnityVector3XZ());
+
+        return list;
     }
 
-    public static Vector3 ToVector3(Point2d p)
-    {
-        return new Vector3((float)p.x, (float)p.y, 0);
-    }
 }
