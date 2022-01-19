@@ -92,106 +92,116 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateCube(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateCube(1, allowQuads);
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Cube", translation, material, true);
+            return poly.ToUnityMesh("Cube", material, true);
         }
 
         private GameObject CreateUVSphere(Vector3 translation)
         {
             var param = UVSphereParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateUVSphere(param, allowQuads);
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("UV sphere", translation, material, true);
+            return poly.ToUnityMesh("UV sphere", material, true);
         }
 
         private GameObject CreateNormalizedCube(Vector3 translation)
         {
             var param = NormalizedCubeParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateNormalizedCube(param, allowQuads);
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Normalized cube", translation, material, true);
+            return poly.ToUnityMesh("Normalized cube", material, true);
         }
 
         private GameObject CreateTetrahedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateTetrahedron();
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Tetrahedron", translation, material, true);
+            return poly.ToUnityMesh("Tetrahedron",  material, true);
         }
 
         private GameObject CreateIcosahedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateIcosahedron();
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Icosahedron", translation, material, true);
+            return poly.ToUnityMesh("Icosahedron",  material, true);
         }
 
         private GameObject CreateOctohedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateOctahedron();
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Octahedron", translation, material, true);
+            return poly.ToUnityMesh("Octahedron", material, true);
         }
 
         private GameObject CreateDodecahedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateDodecahedron();
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Dodecahedron", translation, material, true);
+            return poly.ToUnityMesh("Dodecahedron", material, true);
         }
 
         private GameObject CreatePlane(Vector3 translation)
         {
             var param = PlaneParams.Default;
             var poly = PolyhedronFactory<EEK>.CreatePlane(param, allowQuads);
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Plane", translation, material, true);
+            return poly.ToUnityMesh("Plane", material, true);
         }
 
         private GameObject CreateTorus(Vector3 translation)
         {
             var param = TorusParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateTorus(param, allowQuads);
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Torus", translation, material, true);
+            return poly.ToUnityMesh("Torus", material, true);
         }
 
         private GameObject CreateCylinder(Vector3 translation)
         {
             var param = CylinderParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Cylinder", translation, material, true);
+            return poly.ToUnityMesh("Cylinder", material, true);
         }
 
         private GameObject CreateCone(Vector3 translation)
@@ -199,20 +209,21 @@ namespace CGALDotNetUnity.Polyhedra
             var param = CylinderParams.Default;
             param.radiusTop = 0;
             var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
+            poly.Translate(translation.ToCGALPoint3());
 
             if (drawSegments)
-                DrawSegments(poly, translation);
+                DrawSegments(poly);
 
-            return poly.ToUnityMesh("Cone", translation, material, true);
+            return poly.ToUnityMesh("Cone", material, true);
         }
 
-        private void DrawSegments(Polyhedron3 poly, Vector3 translation)
+        private void DrawSegments(Polyhedron3 poly)
         {
             var primatives = poly.GetPrimativeCount();
             var points = new Point3d[poly.VertexCount];
             poly.GetPoints(points, points.Length);
 
-            var vectors = ToVector3(points, translation);
+            var vectors = points.ToUnityVector3();
 
             if (primatives.triangleCount > 0)
             {
@@ -231,17 +242,6 @@ namespace CGALDotNetUnity.Polyhedra
             }
         }
 
-        private Vector3[] ToVector3(Point3d[] points, Vector3 translation)
-        {
-            var vectors = new Vector3[points.Length];
-            for(int i = 0; i < points.Length; i++)
-            {
-                var p = points[i];
-                vectors[i] = new Vector3((float)p.x, (float)p.y, (float)p.z) + translation;
-            }
-
-            return vectors;
-        }
     }
 
 }

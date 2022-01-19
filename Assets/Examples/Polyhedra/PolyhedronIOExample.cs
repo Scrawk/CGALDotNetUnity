@@ -31,13 +31,11 @@ namespace CGALDotNetUnity.Polyhedra
 
         public string file;
 
-        private SegmentRenderer m_triangleRenderer, m_quadRenderer;
+        private CompositeRenderer m_wirefameRender;
 
         private NormalRenderer m_vertNormalRenderer, m_faceNormalRenderer;
 
         private Polyhedron3<EEK> poly;
-
-        private Vector3 translation = Vector3.zero;
 
         private GameObject m_object;
 
@@ -45,20 +43,6 @@ namespace CGALDotNetUnity.Polyhedra
         {
             //Used for debuging.
             //dont recommend loading meshes like this.
-
-            m_triangleRenderer = new SegmentRenderer();
-            m_triangleRenderer.DefaultColor = lineColor;
-            m_triangleRenderer.LineMode = LINE_MODE.TRIANGLES;
-
-            m_quadRenderer = new SegmentRenderer();
-            m_quadRenderer.DefaultColor = lineColor;
-            m_quadRenderer.LineMode = LINE_MODE.QUADS;
-
-            m_vertNormalRenderer = new NormalRenderer();
-            m_vertNormalRenderer.DefaultColor = vertexNormalColor;
-
-            m_faceNormalRenderer = new NormalRenderer();
-            m_faceNormalRenderer.DefaultColor = faceNormalColor;
 
             string filename = Application.dataPath + "/Examples/Data/" + file;
 
@@ -70,9 +54,9 @@ namespace CGALDotNetUnity.Polyhedra
             poly.ReadOFF(filename);
             //poly.Triangulate();
 
-            m_object = CreateGameobject(name, translation, poly);
+            m_object = CreateGameobject(name, poly);
 
-            CreateSegments(poly, translation);
+            CreateSegments(poly);
             Print(poly);
             LookAt(m_object);
         }
@@ -88,8 +72,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             if (drawSegments)
             {
-                m_triangleRenderer.Draw();
-                m_quadRenderer.Draw();
+                m_wirefameRender.Draw();
             }
 
             if (drawVertexNormals)
@@ -99,9 +82,9 @@ namespace CGALDotNetUnity.Polyhedra
                 m_faceNormalRenderer.Draw();
         }
 
-        private GameObject CreateGameobject(string name, Vector3 translation, Polyhedron3<EEK> poly)
+        private GameObject CreateGameobject(string name, Polyhedron3<EEK> poly)
         {
-            return poly.ToUnityMesh(name, translation, material, false);
+            return poly.ToUnityMesh(name, material, false);
         }
 
         private void LookAt(GameObject go)
@@ -117,70 +100,11 @@ namespace CGALDotNetUnity.Polyhedra
             Camera.main.transform.LookAt(center, Vector3.up);
         }
 
-        private void CreateSegments(Polyhedron3 poly, Vector3 translation)
+        private void CreateSegments(Polyhedron3 poly)
         {
-            var primatives = poly.GetPrimativeCount();
-            var points = new Point3d[poly.VertexCount];
-            poly.GetPoints(points, points.Length);
-
-            var centroids = new Point3d[poly.FaceCount];
-            poly.GetCentroids(centroids, centroids.Length);
-
-            var vertNormals = new Vector3d[poly.VertexCount];
-            poly.ComputeVertexNormals();
-            poly.GetVertexNormals(vertNormals, vertNormals.Length);
-
-            var faceNormals = new Vector3d[poly.FaceCount];
-            poly.ComputeFaceNormals();
-            poly.GetFaceNormals(faceNormals, faceNormals.Length);
-
-            var upoints = ToVector3(points, translation);
-            var ucentroids = ToVector3(centroids, translation);
-            var vnormals = ToVector3(vertNormals, 0.01f);
-            var fnormals = ToVector3(faceNormals, 0.01f);
-
-            m_vertNormalRenderer.Load(upoints, vnormals);
-            m_faceNormalRenderer.Load(ucentroids, fnormals);
-
-            if (primatives.triangleCount > 0)
-            {
-                var triangles = new int[primatives.triangleCount * 3];
-                poly.GetTriangleIndices(triangles, triangles.Length);
-
-                m_triangleRenderer.Load(upoints, triangles);
-            }
-
-            if (primatives.quadCount > 0)
-            {
-                var quads = new int[primatives.quadCount * 4];
-                poly.GetQuadIndices(quads, quads.Length);
-
-                m_quadRenderer.Load(upoints, quads);
-            }
-        }
-
-        private Vector3[] ToVector3(Point3d[] points, Vector3 translation)
-        {
-            var vectors = new Vector3[points.Length];
-            for (int i = 0; i < points.Length; i++)
-            {
-                var p = points[i];
-                vectors[i] = new Vector3((float)p.x, (float)p.y, (float)p.z) + translation;
-            }
-
-            return vectors;
-        }
-
-        private Vector3[] ToVector3(Vector3d[] normals, float scale)
-        {
-            var vectors = new Vector3[normals.Length];
-            for (int i = 0; i < normals.Length; i++)
-            {
-                var p = normals[i];
-                vectors[i] = new Vector3((float)p.x, (float)p.y, (float)p.z) * scale;
-            }
-
-            return vectors;
+            m_vertNormalRenderer = poly.CreateVertexNormalRenderer(vertexNormalColor, 0.01f);
+            m_faceNormalRenderer = poly.CreateFaceNormalRenderer(faceNormalColor, 0.01f);
+            m_wirefameRender = poly.CreateWireframeRenderer(lineColor);
         }
     }
 

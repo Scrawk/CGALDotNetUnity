@@ -5,6 +5,7 @@ using UnityEngine;
 using CGALDotNet;
 using CGALDotNet.Geometry;
 using CGALDotNet.Polyhedra;
+using Common.Unity.Drawing;
 
 namespace CGALDotNetUnity.Polyhedra
 {
@@ -14,6 +15,8 @@ namespace CGALDotNetUnity.Polyhedra
         public Material material;
 
         private GameObject m_mesh;
+
+        private CompositeRenderer m_wireframeRender;
 
         private void Start()
         {
@@ -29,9 +32,18 @@ namespace CGALDotNetUnity.Polyhedra
 
             if (nef3.ConvertToPolyhedron(out Polyhedron3<EEK> poly))
             {
-                m_mesh = poly.ToUnityMesh("Mesh", new Vector3(0, 0.5f, 0), material, true);
+                m_mesh = poly.ToUnityMesh("Mesh", material, true);
+                m_mesh.transform.position = new Vector3(0, 0.5f, 0);
+
+                m_wireframeRender = poly.CreateWireframeRenderer(Color.black);
             }
 
+        }
+
+        private void OnRenderObject()
+        {
+            m_wireframeRender?.SetLocalToWorld(m_mesh.transform.localToWorldMatrix);
+            m_wireframeRender?.Draw();
         }
 
     }

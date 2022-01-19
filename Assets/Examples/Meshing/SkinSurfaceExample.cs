@@ -24,7 +24,7 @@ namespace CGALDotNetUnity.Meshing
 
             poly.Print();
 
-            poly.ToUnityMesh("Mesh", Vector3.zero, material, false);
+            poly.ToUnityMesh("Mesh", material, false);
         }
 
     }

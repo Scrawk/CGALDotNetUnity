@@ -40,7 +40,7 @@ namespace CGALDotNetUnity.Polyhedra
                 var mat = new Material(material);
                 mat.color = RandomColor();
 
-                poly.ToUnityMesh("Convex", Vector3.zero, mat);
+                poly.ToUnityMesh("Convex", mat);
             }
 
         }

@@ -44,7 +44,17 @@ namespace Common.Unity.Drawing
                 Renderers[i].Clear();
         }
 
-        public void SetTransform(Matrix4x4 mat, string name = "")
+        public void Translate(Vector3 translation, string name = "")
+        {
+            Matrix4x4 mat = Matrix4x4.Translate(translation);
+            for (int i = 0; i < Renderers.Count; i++)
+            {
+                if (name == "" || Renderers[i].Name == name)
+                    Renderers[i].LocalToWorld = mat;
+            }
+        }
+
+        public void SetLocalToWorld(Matrix4x4 mat, string name = "")
         {
             for (int i = 0; i < Renderers.Count; i++)
             {

@@ -9,10 +9,8 @@ public static class ExtensionHelper
     public static GameObject CreateGameobject(string name, Mesh mesh, Vector3 translation, Material material)
     {
         GameObject go = new GameObject(name);
-        go.AddComponent<MeshFilter>();
-        go.AddComponent<MeshRenderer>();
-        go.GetComponent<Renderer>().material = material;
-        go.GetComponent<MeshFilter>().mesh = mesh;
+        go.AddComponent<MeshRenderer>().material = material;
+        go.AddComponent<MeshFilter>().mesh = mesh;
         go.transform.localPosition = translation;
         return go;
     }
@@ -20,7 +18,7 @@ public static class ExtensionHelper
     public static Mesh CreateMesh(Point3d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();
-        mesh.SetVertices(ToVector3(points));
+        mesh.SetVertices(points.ToUnityVector3());
         mesh.SetTriangles(indices, 0);
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
@@ -30,7 +28,7 @@ public static class ExtensionHelper
     public static Mesh CreateMeshXZ(Point2d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();
-        mesh.SetVertices(ToVector3XZ(points));
+        mesh.SetVertices(points.ToUnityVector3XZ());
         mesh.SetTriangles(indices, 0);
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
@@ -40,7 +38,7 @@ public static class ExtensionHelper
     public static Mesh CreateMesh(Point2d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();
-        mesh.SetVertices(ToVector3(points));
+        mesh.SetVertices(points.ToUnityVector3());
         mesh.SetTriangles(indices, 0);
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
@@ -69,36 +67,6 @@ public static class ExtensionHelper
             splitIndices[i * 3 + 2] = i * 3 + 2;
         }
 
-    }
-
-    public static List<Vector3> ToVector3(IList<Point3d> points)
-    {
-        var list = new List<Vector3>(points.Count);
-
-        for (int i = 0; i < points.Count; i++)
-            list.Add((points[i].ToUnityVector3()));
-
-        return list;
-    }
-
-    public static List<Vector3> ToVector3(IList<Point2d> points)
-    {
-        var list = new List<Vector3>(points.Count);
-
-        for (int i = 0; i < points.Count; i++)
-            list.Add(points[i].ToUnityVector3());
-
-        return list;
-    }
-
-    public static List<Vector3> ToVector3XZ(IList<Point2d> points)
-    {
-        var list = new List<Vector3>(points.Count);
-
-        for (int i = 0; i < points.Count; i++)
-            list.Add(points[i].ToUnityVector3XZ());
-
-        return list;
     }
 
 }

@@ -36,7 +36,7 @@ namespace CGALDotNetUnity.Triangulations
             if(hullMaterial != null)
             {
                 var hull = tri.ComputeHull();
-                m_hull = hull.ToUnityMesh("hull", Vector3.zero, hullMaterial);
+                m_hull = hull.ToUnityMesh("hull", hullMaterial);
             }
 
             var points = new List<Point3d>();

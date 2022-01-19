@@ -23,7 +23,7 @@ namespace CGALDotNetUnity.Hulls
 
             var poly = ConvexHull3<EEK>.Instance.CreateHullAsPolyhedron(points, points.Length);
 
-            m_hull = poly.ToUnityMesh("Hull", Vector3.zero, material);
+            m_hull = poly.ToUnityMesh("Hull", material);
         }
 
 

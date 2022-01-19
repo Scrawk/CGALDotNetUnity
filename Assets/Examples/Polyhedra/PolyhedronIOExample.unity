@@ -370,8 +370,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 013641634e8dfc14292e0f32c2520056, type: 2}
   drawSegments: 1
-  drawVertexNormals: 0
-  drawFaceNormals: 0
+  drawVertexNormals: 1
+  drawFaceNormals: 1
   lineColor: {r: 0, g: 0, b: 0, a: 0.3882353}
   vertexNormalColor: {r: 1, g: 0, b: 0, a: 0.46666667}
   faceNormalColor: {r: 0, g: 0, b: 1, a: 0.5019608}

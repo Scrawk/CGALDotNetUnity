@@ -120,7 +120,12 @@ namespace Common.Unity.Drawing
                 Colors[i] = color;
         }
 
-        public void SetLocalToWorld(float x, float y, float z)
+        public void Translate(Vector3 translation)
+        {
+            LocalToWorld = Matrix4x4.TRS(translation, Quaternion.identity, Vector3.one);
+        }
+
+        public void Translate(float x, float y, float z)
         {
             LocalToWorld = Matrix4x4.TRS(new Vector3(x, y, z), Quaternion.identity, Vector3.one);
         }
