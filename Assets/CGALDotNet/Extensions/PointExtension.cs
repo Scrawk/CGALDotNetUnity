@@ -102,7 +102,7 @@ namespace CGALDotNet.Geometry
             return uvectors;
         }
 
-        public static List<Vector3> ToVector3(IList<Point3d> points)
+        public static List<Vector3> ToUnityVector3(IList<Point3d> points)
         {
             var list = new List<Vector3>(points.Count);
 
@@ -111,6 +111,34 @@ namespace CGALDotNet.Geometry
 
             return list;
         }
+
+        public static Point2d[] ToCGALVector2(this Vector2[] vectors)
+        {
+            var points = new Point2d[vectors.Length];
+            for (int i = 0; i < vectors.Length; i++)
+                points[i] = vectors[i].ToCGALPoint2();
+
+            return points;
+        }
+
+        public static Point3d[] ToCGALVector3(this Vector3[] vectors)
+        {
+            var points = new Point3d[vectors.Length];
+            for (int i = 0; i < vectors.Length; i++)
+                points[i] = vectors[i].ToCGALPoint3();
+
+            return points;
+        }
+
+        public static Point4d[] ToCGALVector4(this Vector4[] vectors)
+        {
+            var points = new Point4d[vectors.Length];
+            for (int i = 0; i < vectors.Length; i++)
+                points[i] = vectors[i].ToCGALPoint4();
+
+            return points;
+        }
+
 
     }
 

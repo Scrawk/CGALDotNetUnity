@@ -7,7 +7,6 @@ using Common.Unity.Drawing;
 
 namespace CGALDotNet.Polyhedra
 {
-
     public static class Polyhedron3Extension
     {
         public static GameObject ToUnityMesh(this Polyhedron3 poly, string name, Material material, bool splitFaces = true)
@@ -33,11 +32,11 @@ namespace CGALDotNet.Polyhedra
             poly.GetPoints(points, points.Length);
             poly.GetTriangleIndices(indices, indices.Length);
 
-            if (!points.IsFinite())
-            {
-                Debug.Log("Polyhedron3 points are not finite.");
-                return new GameObject(name);
-            }
+            //if (!points.IsFinite())
+            //{
+            //    Debug.Log("Polyhedron3 points are not finite.");
+            //    return new GameObject(name);
+            //}
 
             Mesh mesh;
 
@@ -64,9 +63,9 @@ namespace CGALDotNet.Polyhedra
 
             var vectors = points.ToUnityVector3();
 
-            if (primatives.triangleCount > 0)
+            if (primatives.three > 0)
             {
-                var triangles = new int[primatives.triangleCount * 3];
+                var triangles = new int[primatives.three * 3];
                 poly.GetTriangleIndices(triangles, triangles.Length);
 
                 var triangleRenderer = new SegmentRenderer();
@@ -77,9 +76,9 @@ namespace CGALDotNet.Polyhedra
                 renderer.Add(triangleRenderer);
             }
 
-            if (primatives.quadCount > 0)
+            if (primatives.four > 0)
             {
-                var quads = new int[primatives.quadCount * 4];
+                var quads = new int[primatives.four * 4];
                 poly.GetQuadIndices(quads, quads.Length);
 
                 var quadRenderer = new SegmentRenderer();

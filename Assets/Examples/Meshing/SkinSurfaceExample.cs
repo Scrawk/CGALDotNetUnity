@@ -22,9 +22,27 @@ namespace CGALDotNetUnity.Meshing
 
             var poly = SkinSurfaceMeshing<EEK>.Instance.CreateSkinPolyhedra(0.5, true, points, points.Length);
 
-            poly.Print();
+            var split = new List<Polyhedron3<EEK>>();
+            poly.Split(split);
 
-            poly.ToUnityMesh("Mesh", material, false);
+            for (int i = 0; i < split.Count; i++)
+            {
+                var p = split[i];
+
+                var mat = new Material(material);
+                mat.color = RandomColor();
+
+                p.ToUnityMesh("SkinSurface", mat);
+            }
+        }
+
+        private Color RandomColor()
+        {
+            Color col = new Color();
+            col.r = Random.value;
+            col.g = Random.value;
+            col.b = Random.value;
+            return col;
         }
 
     }

@@ -52,6 +52,25 @@ namespace CGALDotNet.Geometry
             return new Vector4d(vec.x, vec.y, vec.w, vec.z);
         }
 
+        public static Vector2[] ToUnityVector2(this Vector2d[] vectors)
+        {
+            var uvectors = new Vector2[vectors.Length];
+            for (int i = 0; i < vectors.Length; i++)
+                uvectors[i] = vectors[i].ToUnityVector2();
+
+            return uvectors;
+        }
+
+        public static List<Vector3> ToUnityVector3(IList<Vector3d> points)
+        {
+            var list = new List<Vector3>(points.Count);
+
+            for (int i = 0; i < points.Count; i++)
+                list.Add((points[i].ToUnityVector3()));
+
+            return list;
+        }
+
     }
 
 }

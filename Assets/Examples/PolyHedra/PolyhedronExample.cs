@@ -225,17 +225,17 @@ namespace CGALDotNetUnity.Polyhedra
 
             var vectors = points.ToUnityVector3();
 
-            if (primatives.triangleCount > 0)
+            if (primatives.three > 0)
             {
-                var triangles = new int[primatives.triangleCount * 3];
+                var triangles = new int[primatives.three * 3];
                 poly.GetTriangleIndices(triangles, triangles.Length);
 
                 m_triangleRenderer.Load(vectors, triangles);
             }
 
-            if (primatives.quadCount > 0)
+            if (primatives.four > 0)
             {
-                var quads = new int[primatives.quadCount * 4];
+                var quads = new int[primatives.four * 4];
                 poly.GetQuadIndices(quads, quads.Length);
 
                 m_quadRenderer.Load(vectors, quads);
