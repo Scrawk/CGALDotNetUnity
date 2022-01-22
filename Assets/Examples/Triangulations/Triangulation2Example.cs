@@ -37,7 +37,7 @@ namespace CGALDotNetUnity.Triangulations
 
         private CLICK_MODE ClickMode = CLICK_MODE.CLICK_TO_ADD_POINT;
 
-        private TRIANGULATION2 Type = TRIANGULATION2.CONSTRAINED;
+        private TRIANGULATION2 Type = TRIANGULATION2.CONSTRAINED_DELAUNAY;
 
         private TriVertex2? SelectedVertex;
 
@@ -68,7 +68,10 @@ namespace CGALDotNetUnity.Triangulations
                     break;
                 case TRIANGULATION2.CONSTRAINED:
                     triangulation = new ConstrainedTriangulation2<EEK>();
-                    break;;
+                    break;
+                case TRIANGULATION2.CONSTRAINED_DELAUNAY:
+                    triangulation = new ConstrainedDelaunayTriangulation2<EEK>();
+                    break; ;
             }
 
             triangulation.Insert(new Point2d(-5, -5));
