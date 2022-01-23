@@ -1,11 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
+using CGALDotNet;
 using CGALDotNet.Geometry;
 
 public static class ExtensionHelper
 {
+    private static StringBuilder builder = new StringBuilder();
+
+    public static void PrintToUnity(this CGALObject obj)
+    {
+        builder.Clear();
+        obj.Print(builder);
+        Debug.Log(builder);
+    }
+
     public static GameObject CreateGameobject(string name, Mesh mesh, Vector3 translation, Material material)
     {
         GameObject go = new GameObject(name);

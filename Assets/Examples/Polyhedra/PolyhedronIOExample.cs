@@ -57,29 +57,31 @@ namespace CGALDotNetUnity.Polyhedra
             m_object = CreateGameobject(name, poly);
 
             CreateSegments(poly);
-            Print(poly);
             LookAt(m_object);
-        }
 
-        private void Print(Polyhedron3 poly)
-        {
-            var builder = new StringBuilder();
-            poly.Print(builder);
-            Debug.Log(builder.ToString());
+            poly.PrintToUnity();
         }
 
         private void OnRenderObject()
         {
             if (drawSegments)
             {
+                m_wirefameRender.SetColor(lineColor);
                 m_wirefameRender.Draw();
             }
 
             if (drawVertexNormals)
+            {
+                m_vertNormalRenderer.SetColor(vertexNormalColor);
                 m_vertNormalRenderer.Draw();
-
+            }
+                
             if (drawFaceNormals)
+            {
+                m_faceNormalRenderer.SetColor(faceNormalColor);
                 m_faceNormalRenderer.Draw();
+            }
+                
         }
 
         private GameObject CreateGameobject(string name, Polyhedron3<EEK> poly)
@@ -102,9 +104,9 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void CreateSegments(Polyhedron3 poly)
         {
-            m_vertNormalRenderer = poly.CreateVertexNormalRenderer(vertexNormalColor, 0.01f);
-            m_faceNormalRenderer = poly.CreateFaceNormalRenderer(faceNormalColor, 0.01f);
-            m_wirefameRender = poly.CreateWireframeRenderer(lineColor);
+            m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(poly, vertexNormalColor, 0.01f);
+            m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(poly, faceNormalColor, 0.01f);
+            m_wirefameRender = RendererBuilder.CreateWireframeRenderer(poly, lineColor);
         }
     }
 

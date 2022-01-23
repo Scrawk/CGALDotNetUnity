@@ -13,6 +13,7 @@ using CGALDotNet.Triangulations;
 using CGALDotNet.Arrangements;
 using CGALDotNet.Nurbs;
 using CGALDotNet.Meshing;
+using CGALDotNet.Polyhedra;
 
 namespace CGALDotNetUnity
 {
@@ -48,7 +49,7 @@ namespace CGALDotNetUnity
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
-            triangles.Load(ToVector2(points), indices);
+            triangles.Load(points.ToUnityVector2(), indices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -69,7 +70,7 @@ namespace CGALDotNetUnity
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
-            triangles.Load(ToVector2(points), indices);
+            triangles.Load(points.ToUnityVector2(), indices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -90,7 +91,7 @@ namespace CGALDotNetUnity
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
-            triangles.Load(ToVector2(points), indices);
+            triangles.Load(points.ToUnityVector2(), indices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -111,7 +112,7 @@ namespace CGALDotNetUnity
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
-            triangles.Load(ToVector2(points), indices);
+            triangles.Load(points.ToUnityVector2(), indices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -132,7 +133,7 @@ namespace CGALDotNetUnity
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
-            triangles.Load(ToVector2(points), indices);
+            triangles.Load(points.ToUnityVector2(), indices);
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -152,7 +153,7 @@ namespace CGALDotNetUnity
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
-            triangles.Load(ToVector2(points));
+            triangles.Load(points.ToUnityVector2());
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -167,7 +168,7 @@ namespace CGALDotNetUnity
             triangles.FaceMode = FACE_MODE.TRIANGLES;
             triangles.Orientation = DRAW_ORIENTATION.XY;
             triangles.DefaultColor = color;
-            triangles.Load(ToVector2(tri));
+            triangles.Load(tri.ToUnityVector2());
             triangles.ZWrite = false;
             triangles.SrcBlend = BlendMode.One;
 
@@ -185,7 +186,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), lineIndices);
+            lines.Load(points.ToUnityVector2(), lineIndices);
 
             Renderer.Add(lines);
 
@@ -205,7 +206,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(segments), indices);
+            lines.Load(segments.ToUnityVector2(), indices);
 
             Renderer.Add(lines);
 
@@ -224,7 +225,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), indices);
+            lines.Load(points.ToUnityVector2(), indices);
 
             Renderer.Add(lines);
 
@@ -243,7 +244,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), indices);
+            lines.Load(points.ToUnityVector2(), indices);
 
             Renderer.Add(lines);
 
@@ -262,7 +263,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), indices);
+            lines.Load(points.ToUnityVector2(), indices);
 
             Renderer.Add(lines);
 
@@ -281,7 +282,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), indices);
+            lines.Load(points.ToUnityVector2(), indices);
 
             Renderer.Add(lines);
 
@@ -300,7 +301,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), indices);
+            lines.Load(points.ToUnityVector2(), indices);
 
             Renderer.Add(lines);
 
@@ -318,7 +319,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points));
+            lines.Load(points.ToUnityVector2());
 
             Renderer.Add(lines);
 
@@ -331,7 +332,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points));
+            lines.Load(points.ToUnityVector2());
 
             Renderer.Add(lines);
 
@@ -347,7 +348,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points));
+            lines.Load(points.ToUnityVector2());
 
             Renderer.Add(lines);
 
@@ -400,12 +401,13 @@ namespace CGALDotNetUnity
 
             var p1 = new Point2d(x1, y1);
             var p2 = new Point2d(x2, y2);
+            var points = new Point2d[] { p1, p2 };
 
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
-            lines.Load(ToVector2(new Point2d[] { p1, p2 }));
+            lines.Load(points.ToUnityVector2());
 
             Renderer.Add(lines);
 
@@ -423,7 +425,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(rays), BaseRenderer.SegmentIndices(rays.Count));
+            lines.Load(rays.ToUnityVector2(), BaseRenderer.SegmentIndices(rays.Count));
 
             Renderer.Add(lines);
 
@@ -438,7 +440,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(points), BaseRenderer.PolygonIndices(4));
+            lines.Load(points.ToUnityVector2(), BaseRenderer.PolygonIndices(4));
 
             Renderer.Add(lines);
 
@@ -456,7 +458,7 @@ namespace CGALDotNetUnity
             lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(ToVector2(segments), BaseRenderer.SegmentIndices(segments.Count));
+            lines.Load(segments.ToUnityVector2(), BaseRenderer.SegmentIndices(segments.Count));
 
             Renderer.Add(lines);
 
@@ -468,7 +470,7 @@ namespace CGALDotNetUnity
             var lines = new SegmentRenderer();
             lines.LineMode = LINE_MODE.LINES;
             lines.DefaultColor = color;
-            lines.Load(ToVector3(segments), BaseRenderer.SegmentIndices(segments.Count));
+            lines.Load(segments.ToUnityVector3(), BaseRenderer.SegmentIndices(segments.Count));
 
             Renderer.Add(lines);
 
@@ -478,8 +480,8 @@ namespace CGALDotNetUnity
         public RendererBuilder Circles(IList<Circle2d> circles, Color lineCol, Color fillColor, bool filled = false, float size = POINT_SIZE)
         {
 
-            var points = ToVector2(circles);
-            var radius = ToRadius(circles);
+            var points = circles.ToUnityVector2();
+            var radius = circles.ToRadius();
 
             if (filled)
             {
@@ -518,7 +520,7 @@ namespace CGALDotNetUnity
             pointBody.DefaultColor = pointCol;
             pointBody.Fill = true;
             pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
+            pointBody.Load(points.ToUnityVector2());
 
             var pointOutline = new CircleRenderer();
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
@@ -526,7 +528,7 @@ namespace CGALDotNetUnity
             pointOutline.DefaultColor = lineCol;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
+            pointOutline.Load(points.ToUnityVector2());
 
             Renderer.Add(pointBody);
             Renderer.Add(pointOutline);
@@ -545,7 +547,7 @@ namespace CGALDotNetUnity
             pointBody.DefaultColor = pointCol;
             pointBody.Fill = true;
             pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
+            pointBody.Load(points.ToUnityVector2());
 
             var pointOutline = new CircleRenderer();
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
@@ -553,7 +555,7 @@ namespace CGALDotNetUnity
             pointOutline.DefaultColor = lineCol;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
+            pointOutline.Load(points.ToUnityVector2());
 
             Renderer.Add(pointBody);
             Renderer.Add(pointOutline);
@@ -571,7 +573,7 @@ namespace CGALDotNetUnity
             pointBody.DefaultColor = pointCol;
             pointBody.Fill = true;
             pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
+            pointBody.Load(points.ToUnityVector2());
 
             var pointOutline = new CircleRenderer();
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
@@ -579,7 +581,7 @@ namespace CGALDotNetUnity
             pointOutline.DefaultColor = lineCol;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
+            pointOutline.Load(points.ToUnityVector2());
 
             Renderer.Add(pointBody);
             Renderer.Add(pointOutline);
@@ -599,7 +601,7 @@ namespace CGALDotNetUnity
             pointBody.DefaultColor = pointCol;
             pointBody.Fill = true;
             pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
+            pointBody.Load(points.ToUnityVector2());
 
             var pointOutline = new CircleRenderer();
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
@@ -607,7 +609,7 @@ namespace CGALDotNetUnity
             pointOutline.DefaultColor = lineCol;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
+            pointOutline.Load(points.ToUnityVector2());
 
             Renderer.Add(pointBody);
             Renderer.Add(pointOutline);
@@ -627,7 +629,7 @@ namespace CGALDotNetUnity
             pointBody.DefaultColor = pointCol;
             pointBody.Fill = true;
             pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
+            pointBody.Load(points.ToUnityVector2());
 
             var pointOutline = new CircleRenderer();
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
@@ -635,7 +637,7 @@ namespace CGALDotNetUnity
             pointOutline.DefaultColor = lineCol;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
+            pointOutline.Load(points.ToUnityVector2());
 
             Renderer.Add(pointBody);
             Renderer.Add(pointOutline);
@@ -656,7 +658,7 @@ namespace CGALDotNetUnity
             pointBody.DefaultColor = pointCol;
             pointBody.Fill = true;
             pointBody.DefaultRadius = size * 0.5f;
-            pointBody.Load(ToVector2(points));
+            pointBody.Load(points.ToUnityVector2());
 
             var pointOutline = new CircleRenderer();
             pointOutline.Orientation = DRAW_ORIENTATION.XY;
@@ -664,7 +666,7 @@ namespace CGALDotNetUnity
             pointOutline.DefaultColor = lineCol;
             pointOutline.Fill = false;
             pointOutline.DefaultRadius = size * 0.5f;
-            pointOutline.Load(ToVector2(points));
+            pointOutline.Load(points.ToUnityVector2());
 
             Renderer.Add(pointBody);
             Renderer.Add(pointOutline);
@@ -676,7 +678,7 @@ namespace CGALDotNetUnity
         {
             var pointBody = new VertexRenderer(size);
             pointBody.DefaultColor = pointCol;
-            pointBody.Load(ToVector3(points));
+            pointBody.Load(points.ToUnityVector3());
 
             Renderer.Add(pointBody);
 
@@ -687,7 +689,7 @@ namespace CGALDotNetUnity
         {
             var pointBody = new VertexRenderer(size);
             pointBody.DefaultColor = pointCol;
-            pointBody.Load(ToVector3(points));
+            pointBody.Load(points.ToUnityVector3());
 
             Renderer.Add(pointBody);
 
@@ -698,7 +700,7 @@ namespace CGALDotNetUnity
         {
             var pointBody = new VertexRenderer(size);
             pointBody.DefaultColor = pointCol;
-            pointBody.Load(ToVector3(points));
+            pointBody.Load(points.ToUnityVector3());
 
             Renderer.Add(pointBody);
 
@@ -707,7 +709,7 @@ namespace CGALDotNetUnity
 
         public RendererBuilder Points(IList<Segment2d> segments, Color lineCol, Color pointCol, float size = POINT_SIZE)
         {
-            var points = ToVector2(segments);
+            var points = segments.ToUnityVector2();
 
             var pointBody = new CircleRenderer();
             pointBody.Orientation = DRAW_ORIENTATION.XY;
@@ -742,7 +744,7 @@ namespace CGALDotNetUnity
             var renderer = new NormalRenderer();
             renderer.Orientation = DRAW_ORIENTATION.XY;
             renderer.DefaultColor = color;
-            renderer.Load(ToVector2(points), ToVector2(tangents));
+            renderer.Load(points.ToUnityVector2(), tangents.ToUnityVector2());
 
             Renderer.Add(renderer);
 
@@ -760,7 +762,7 @@ namespace CGALDotNetUnity
             var normal = new NormalRenderer();
             normal.Orientation = DRAW_ORIENTATION.XY;
             normal.DefaultColor = color;
-            normal.Load(ToVector2(points), ToVector2(normals));
+            normal.Load(points.ToUnityVector2(), normals.ToUnityVector2());
 
             Renderer.Add(normal);
 
@@ -774,167 +776,86 @@ namespace CGALDotNetUnity
             return renderer;
         }
 
-        private static Vector2[] ToVector2(IList<Segment2d> segments)
-        {
-            var array = new Vector2[segments.Count * 2];
 
-            for (int i = 0; i < segments.Count; i++)
+        public static CompositeRenderer CreateWireframeRenderer(Polyhedron3 poly, Color col)
+        {
+            var renderer = new CompositeRenderer();
+
+            var primatives = poly.GetPrimativeCount();
+            var points = new Point3d[poly.VertexCount];
+            poly.GetPoints(points, points.Length);
+
+            var vectors = points.ToUnityVector3();
+
+            if (primatives.three > 0)
             {
-                var a = segments[i].A;
-                var b = segments[i].B;
-                array[i * 2 + 0] = new Vector2((float)a.x, (float)a.y);
-                array[i * 2 + 1] = new Vector2((float)b.x, (float)b.y);
+                var triangles = new int[primatives.three * 3];
+                poly.GetTriangleIndices(triangles, triangles.Length);
+
+                var triangleRenderer = new SegmentRenderer();
+                triangleRenderer.DefaultColor = col;
+                triangleRenderer.LineMode = LINE_MODE.TRIANGLES;
+                triangleRenderer.Load(vectors, triangles);
+
+                renderer.Add(triangleRenderer);
             }
 
-            return array;
-        }
-
-        private static Vector3[] ToVector3(IList<Segment3d> segments)
-        {
-            var array = new Vector3[segments.Count * 2];
-
-            for (int i = 0; i < segments.Count; i++)
+            if (primatives.four > 0)
             {
-                var a = segments[i].A;
-                var b = segments[i].B;
-                array[i * 2 + 0] = new Vector3((float)a.x, (float)a.y, (float)a.z);
-                array[i * 2 + 1] = new Vector3((float)b.x, (float)b.y, (float)b.z);
+                var quads = new int[primatives.four * 4];
+                poly.GetQuadIndices(quads, quads.Length);
+
+                var quadRenderer = new SegmentRenderer();
+                quadRenderer.DefaultColor = col;
+                quadRenderer.LineMode = LINE_MODE.QUADS;
+                quadRenderer.Load(vectors, quads);
+
+                renderer.Add(quadRenderer);
             }
 
-            return array;
+            return renderer;
         }
 
-        private static Vector2[] ToVector2(IList<Ray2d> rays)
+        public static NormalRenderer CreateVertexNormalRenderer(Polyhedron3 poly, Color col, float len)
         {
-            var array = new Vector2[rays.Count * 2];
+            var points = new Point3d[poly.VertexCount];
+            poly.GetPoints(points, points.Length);
 
-            for (int i = 0; i < rays.Count; i++)
-            {
-                var a = rays[i].Position;
-                var b = a + (Point2d)rays[i].Direction;
-                array[i * 2 + 0] = new Vector2((float)a.x, (float)a.y);
-                array[i * 2 + 1] = new Vector2((float)b.x, (float)b.y);
-            }
+            var vertNormals = new Vector3d[poly.VertexCount];
+            poly.ComputeVertexNormals();
+            poly.GetVertexNormals(vertNormals, vertNormals.Length);
 
-            return array;
+            var upoints = points.ToUnityVector3();
+            var vnormals = vertNormals.ToUnityVector3();
+
+            var renderer = new NormalRenderer();
+            renderer.DefaultColor = col;
+            renderer.Length = len;
+            renderer.Load(upoints, vnormals);
+
+            return renderer;
         }
 
-        private static Vector2[] ToVector2(IList<Point2d> points)
+        public static NormalRenderer CreateFaceNormalRenderer(Polyhedron3 poly, Color col, float len)
         {
-            var array = new Vector2[points.Count];
+            var centroids = new Point3d[poly.FaceCount];
+            poly.GetCentroids(centroids, centroids.Length);
 
-            for (int i = 0; i < points.Count; i++)
-                array[i] = new Vector2((float)points[i].x, (float)points[i].y);
+            var faceNormals = new Vector3d[poly.FaceCount];
+            poly.ComputeFaceNormals();
+            poly.GetFaceNormals(faceNormals, faceNormals.Length);
 
-            return array;
+            var ucentroids = centroids.ToUnityVector3();
+            var fnormals = faceNormals.ToUnityVector3();
+
+            var renderer = new NormalRenderer();
+            renderer.DefaultColor = col;
+            renderer.Length = len;
+            renderer.Load(ucentroids, fnormals);
+
+            return renderer;
         }
 
-        private static Vector3[] ToVector3(IList<Point3d> points)
-        {
-            var array = new Vector3[points.Count];
-
-            for (int i = 0; i < points.Count; i++)
-                array[i] = new Vector3((float)points[i].x, (float)points[i].y, (float)points[i].z);
-
-            return array;
-        }
-
-        private static Vector2[] ToVector2(IList<Triangle2d> triangles)
-        {
-            var array = new Vector2[triangles.Count * 3];
-
-            for (int i = 0; i < triangles.Count; i++)
-            {
-                var t = triangles[i];
-
-                var a = new Vector2((float)t.A.x, (float)t.A.y);
-                var b = new Vector2((float)t.B.x, (float)t.B.y);
-                var c = new Vector2((float)t.C.x, (float)t.C.y);
-
-                array[i * 3 + 0] = a;
-                array[i * 3 + 1] = b;
-                array[i * 3 + 2] = c;
-            }
-                
-            return array;
-        }
-
-        private static Vector3[] ToVector3(Point3d[,] points)
-        {
-            var array = new Vector3[points.Length];
-
-            int width = points.GetLength(0);
-            int height = points.GetLength(1);
-
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
-                    array[i + j * width] = new Vector3((float)points[i,j].x, (float)points[i,j].y, (float)points[i, j].z);
-
-            return array;
-        }
-
-        private static Vector3[] ToVector3(Vector3d[,] points)
-        {
-            var array = new Vector3[points.Length];
-
-            int width = points.GetLength(0);
-            int height = points.GetLength(1);
-
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
-                    array[i + j * width] = new Vector3((float)points[i, j].x, (float)points[i, j].y, (float)points[i, j].z);
-
-            return array;
-        }
-
-        private static Vector2[] ToVector2(IList<Vector2d> points)
-        {
-            var array = new Vector2[points.Count];
-
-            for (int i = 0; i < points.Count; i++)
-                array[i] = new Vector2((float)points[i].x, (float)points[i].y);
-
-            return array;
-        }
-
-        private static Vector2 ToVector2(Point2d point)
-        {
-            return new Vector2((float)point.x, (float)point.y);
-        }
-
-        private static Vector2[] ToVector2(IList<Circle2d> points)
-        {
-            var array = new Vector2[points.Count];
-
-            for (int i = 0; i < points.Count; i++)
-                array[i] = new Vector2((float)points[i].Center.x, (float)points[i].Center.y);
-
-            return array;
-        }
-
-        private static float[] ToRadius(IList<Circle2d> circles)
-        {
-            var array = new float[circles.Count];
-
-            for (int i = 0; i < circles.Count; i++)
-                array[i] = (float)circles[i].Radius;
-
-            return array;
-        }
-
-        private static List<Vector2> ToVector2(List<Segment2d> segments)
-        {
-            var list = new List<Vector2>();
-            foreach (var seg in segments)
-            {
-                var a = new Vector2((float)seg.A.x, (float)seg.A.y);
-                var b = new Vector2((float)seg.B.x, (float)seg.B.y);
-                list.Add(a);
-                list.Add(b);
-            }
-
-            return list;
-        }
     }
 
 }

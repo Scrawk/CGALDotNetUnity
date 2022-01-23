@@ -72,12 +72,30 @@ namespace Common.Unity.Drawing
             }
         }
 
+        public void SetColor(Color color, string name = "")
+        {
+            for (int i = 0; i < Renderers.Count; i++)
+            {
+                if (name == "" || Renderers[i].Name == name)
+                    Renderers[i].SetColor(color);
+            }
+        }
+
         public void SetColor<T>(Color color, string name = "") where T : BaseRenderer
         {
             for (int i = 0; i < Renderers.Count; i++)
             {
                 if(Renderers[i] is T r && (name == "" || r.Name == name))
                     r.SetColor(color);
+            }
+        }
+
+        public void SetEnabled(bool enabled, string name = "")
+        {
+            for (int i = 0; i < Renderers.Count; i++)
+            {
+                if (name == "" || Renderers[i].Name == name)
+                    Renderers[i].Enabled = enabled;
             }
         }
 

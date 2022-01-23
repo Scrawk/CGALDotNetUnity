@@ -92,7 +92,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateCube(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateCube(1, allowQuads);
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -104,7 +104,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             var param = UVSphereParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateUVSphere(param, allowQuads);
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -116,7 +116,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             var param = NormalizedCubeParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateNormalizedCube(param, allowQuads);
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -127,7 +127,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateTetrahedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateTetrahedron();
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -138,7 +138,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateIcosahedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateIcosahedron();
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -149,7 +149,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateOctohedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateOctahedron();
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -160,7 +160,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateDodecahedron(Vector3 translation)
         {
             var poly = PolyhedronFactory<EEK>.CreateDodecahedron();
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -172,7 +172,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             var param = PlaneParams.Default;
             var poly = PolyhedronFactory<EEK>.CreatePlane(param, allowQuads);
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -184,7 +184,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             var param = TorusParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateTorus(param, allowQuads);
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -196,7 +196,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             var param = CylinderParams.Default;
             var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
@@ -209,7 +209,7 @@ namespace CGALDotNetUnity.Polyhedra
             var param = CylinderParams.Default;
             param.radiusTop = 0;
             var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
-            poly.Translate(translation.ToCGALPoint3());
+            poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);

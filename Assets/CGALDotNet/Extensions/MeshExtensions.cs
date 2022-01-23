@@ -12,7 +12,7 @@ public static class CGALMeshExtensions
     public static Polyhedron3<K> ToCGALPolyhedron3<K>(this Mesh mesh) where K : CGALKernel, new()
     {
         int[] triangles = mesh.triangles;
-        var points = mesh.vertices.ToCGALVector3();
+        var points = mesh.vertices.ToCGALPoint3d();
 
         var poly = new Polyhedron3<K>();
 
