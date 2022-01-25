@@ -78,6 +78,7 @@ namespace CGALDotNetUnity.Polyhedra
             m_cylinder = CreateCylinder(new Vector3(1, 0, 6));
 
             m_cone = CreateCone(new Vector3(-1, 0, 6));
+            
         }
 
         private void OnRenderObject()
@@ -219,23 +220,23 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void DrawSegments(Polyhedron3 poly)
         {
-            var primatives = poly.GetPrimativeCount();
+            var pfaceVertCount = poly.GetFaceVertexCount();
             var points = new Point3d[poly.VertexCount];
             poly.GetPoints(points, points.Length);
 
             var vectors = points.ToUnityVector3();
 
-            if (primatives.three > 0)
+            if (pfaceVertCount.triangles > 0)
             {
-                var triangles = new int[primatives.three * 3];
+                var triangles = new int[pfaceVertCount.triangles * 3];
                 poly.GetTriangleIndices(triangles, triangles.Length);
 
                 m_triangleRenderer.Load(vectors, triangles);
             }
 
-            if (primatives.four > 0)
+            if (pfaceVertCount.quads > 0)
             {
-                var quads = new int[primatives.four * 4];
+                var quads = new int[pfaceVertCount.quads * 4];
                 poly.GetQuadIndices(quads, quads.Length);
 
                 m_quadRenderer.Load(vectors, quads);

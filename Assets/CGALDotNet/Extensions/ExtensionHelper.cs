@@ -5,12 +5,20 @@ using UnityEngine;
 
 using CGALDotNet;
 using CGALDotNet.Geometry;
+using CGALDotNet.Polyhedra;
 
 public static class ExtensionHelper
 {
     private static StringBuilder builder = new StringBuilder();
 
     public static void PrintToUnity(this CGALObject obj)
+    {
+        builder.Clear();
+        obj.Print(builder);
+        Debug.Log(builder);
+    }
+
+    public static void PrintToUnity(this IMesh obj)
     {
         builder.Clear();
         obj.Print(builder);

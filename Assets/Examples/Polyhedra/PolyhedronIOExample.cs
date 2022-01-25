@@ -31,11 +31,13 @@ namespace CGALDotNetUnity.Polyhedra
 
         public string file;
 
+        public MESH_TYPE meshType = MESH_TYPE.SURFACE_MESH;
+
         private CompositeRenderer m_wirefameRender;
 
         private NormalRenderer m_vertNormalRenderer, m_faceNormalRenderer;
 
-        private Polyhedron3<EEK> poly;
+        private IMesh imesh;
 
         private GameObject m_object;
 
@@ -50,16 +52,16 @@ namespace CGALDotNetUnity.Polyhedra
             int i = split.Length - 2;
             var name = i > 0 ? split[i] : "Mesh";
 
-            poly = new Polyhedron3<EEK>();
-            poly.ReadOFF(filename);
-            //poly.Triangulate();
+            imesh = CreateMesh();
+            imesh.ReadOFF(filename);
+            //imesh.Triangulate();
 
-            m_object = CreateGameobject(name, poly);
+            m_object = CreateGameobject(name, imesh);
 
-            CreateSegments(poly);
+            CreateSegments(imesh);
             LookAt(m_object);
 
-            poly.PrintToUnity();
+            imesh.PrintToUnity();
         }
 
         private void OnRenderObject()
@@ -84,9 +86,24 @@ namespace CGALDotNetUnity.Polyhedra
                 
         }
 
-        private GameObject CreateGameobject(string name, Polyhedron3<EEK> poly)
+        private IMesh CreateMesh()
         {
-            return poly.ToUnityMesh(name, material, false);
+            switch (meshType)
+            {
+                case MESH_TYPE.POLYHEDRON:
+                    return new Polyhedron3<EEK>();
+
+                case MESH_TYPE.SURFACE_MESH:
+                    return new SurfaceMesh3<EEK>();
+
+                default:
+                    return new SurfaceMesh3<EEK>();
+            }
+        }
+
+        private GameObject CreateGameobject(string name, IMesh imesh)
+        {
+            return imesh.ToUnityMesh(name, material, false);
         }
 
         private void LookAt(GameObject go)
@@ -102,11 +119,11 @@ namespace CGALDotNetUnity.Polyhedra
             Camera.main.transform.LookAt(center, Vector3.up);
         }
 
-        private void CreateSegments(Polyhedron3 poly)
+        private void CreateSegments(IMesh imesh)
         {
-            m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(poly, vertexNormalColor, 0.01f);
-            m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(poly, faceNormalColor, 0.01f);
-            m_wirefameRender = RendererBuilder.CreateWireframeRenderer(poly, lineColor);
+            m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(imesh, vertexNormalColor, 0.01f);
+            m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(imesh, faceNormalColor, 0.01f);
+            m_wirefameRender = RendererBuilder.CreateWireframeRenderer(imesh, lineColor);
         }
     }
 

@@ -776,21 +776,20 @@ namespace CGALDotNetUnity
             return renderer;
         }
 
-
-        public static CompositeRenderer CreateWireframeRenderer(Polyhedron3 poly, Color col)
+        public static CompositeRenderer CreateWireframeRenderer(IMesh imesh, Color col)
         {
             var renderer = new CompositeRenderer();
 
-            var primatives = poly.GetPrimativeCount();
-            var points = new Point3d[poly.VertexCount];
-            poly.GetPoints(points, points.Length);
+            var faceVertCount = imesh.GetFaceVertexCount();
+            var points = new Point3d[imesh.VertexCount];
+            imesh.GetPoints(points, points.Length);
 
             var vectors = points.ToUnityVector3();
 
-            if (primatives.three > 0)
+            if (faceVertCount.triangles > 0)
             {
-                var triangles = new int[primatives.three * 3];
-                poly.GetTriangleIndices(triangles, triangles.Length);
+                var triangles = new int[faceVertCount.triangles * 3];
+                imesh.GetTriangleIndices(triangles, triangles.Length);
 
                 var triangleRenderer = new SegmentRenderer();
                 triangleRenderer.DefaultColor = col;
@@ -800,10 +799,10 @@ namespace CGALDotNetUnity
                 renderer.Add(triangleRenderer);
             }
 
-            if (primatives.four > 0)
+            if (faceVertCount.quads > 0)
             {
-                var quads = new int[primatives.four * 4];
-                poly.GetQuadIndices(quads, quads.Length);
+                var quads = new int[faceVertCount.quads * 4];
+                imesh.GetQuadIndices(quads, quads.Length);
 
                 var quadRenderer = new SegmentRenderer();
                 quadRenderer.DefaultColor = col;
@@ -816,14 +815,14 @@ namespace CGALDotNetUnity
             return renderer;
         }
 
-        public static NormalRenderer CreateVertexNormalRenderer(Polyhedron3 poly, Color col, float len)
+        public static NormalRenderer CreateVertexNormalRenderer(IMesh imesh, Color col, float len)
         {
-            var points = new Point3d[poly.VertexCount];
-            poly.GetPoints(points, points.Length);
+            var points = new Point3d[imesh.VertexCount];
+            imesh.GetPoints(points, points.Length);
 
-            var vertNormals = new Vector3d[poly.VertexCount];
-            poly.ComputeVertexNormals();
-            poly.GetVertexNormals(vertNormals, vertNormals.Length);
+            var vertNormals = new Vector3d[imesh.VertexCount];
+            imesh.ComputeVertexNormals();
+            imesh.GetVertexNormals(vertNormals, vertNormals.Length);
 
             var upoints = points.ToUnityVector3();
             var vnormals = vertNormals.ToUnityVector3();
@@ -836,14 +835,14 @@ namespace CGALDotNetUnity
             return renderer;
         }
 
-        public static NormalRenderer CreateFaceNormalRenderer(Polyhedron3 poly, Color col, float len)
+        public static NormalRenderer CreateFaceNormalRenderer(IMesh imesh, Color col, float len)
         {
-            var centroids = new Point3d[poly.FaceCount];
-            poly.GetCentroids(centroids, centroids.Length);
+            var centroids = new Point3d[imesh.FaceCount];
+            imesh.GetCentroids(centroids, centroids.Length);
 
-            var faceNormals = new Vector3d[poly.FaceCount];
-            poly.ComputeFaceNormals();
-            poly.GetFaceNormals(faceNormals, faceNormals.Length);
+            var faceNormals = new Vector3d[imesh.FaceCount];
+            imesh.ComputeFaceNormals();
+            imesh.GetFaceNormals(faceNormals, faceNormals.Length);
 
             var ucentroids = centroids.ToUnityVector3();
             var fnormals = faceNormals.ToUnityVector3();
