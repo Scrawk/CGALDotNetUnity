@@ -44,6 +44,8 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject m_cone;
 
+        private GameObject m_dual;
+
         private SegmentRenderer m_triangleRenderer, m_quadRenderer;
 
         private void Start()
@@ -78,6 +80,8 @@ namespace CGALDotNetUnity.Polyhedra
             m_cylinder = CreateCylinder(new Vector3(1, 0, 6));
 
             m_cone = CreateCone(new Vector3(-1, 0, 6));
+
+            m_dual = CreateDual(new Vector3(-3, 0, 6));
             
         }
 
@@ -216,6 +220,20 @@ namespace CGALDotNetUnity.Polyhedra
                 DrawSegments(poly);
 
             return poly.ToUnityMesh("Cone", material, true);
+        }
+
+        private GameObject CreateDual(Vector3 translation)
+        {
+            var poly = PolyhedronFactory<EEK>.CreateIcosahedron();
+            poly.Translate(translation.ToCGALPoint3d());
+            poly.Subdivide(2);
+
+            var dual = poly.CreateDualMesh();
+
+            if (drawSegments)
+                DrawSegments(dual);
+
+            return dual.ToUnityMesh("Dual", material, true);
         }
 
         private void DrawSegments(Polyhedron3 poly)

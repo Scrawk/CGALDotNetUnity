@@ -11,14 +11,14 @@ public static class ExtensionHelper
 {
     private static StringBuilder builder = new StringBuilder();
 
-    public static void PrintToUnity(this CGALObject obj)
+    public static void PrintObjectToUnity(this CGALObject obj)
     {
         builder.Clear();
         obj.Print(builder);
         Debug.Log(builder);
     }
 
-    public static void PrintToUnity(this IMesh obj)
+    public static void PrintMeshToUnity(this IMesh obj)
     {
         builder.Clear();
         obj.Print(builder);

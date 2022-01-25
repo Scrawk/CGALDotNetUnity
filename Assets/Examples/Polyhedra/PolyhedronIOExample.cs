@@ -61,7 +61,7 @@ namespace CGALDotNetUnity.Polyhedra
             CreateSegments(imesh);
             LookAt(m_object);
 
-            imesh.PrintToUnity();
+            imesh.PrintMeshToUnity();
         }
 
         private void OnRenderObject()
