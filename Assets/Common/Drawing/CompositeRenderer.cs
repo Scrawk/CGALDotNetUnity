@@ -63,6 +63,7 @@ namespace Common.Unity.Drawing
             }
         }
 
+        /*
         public void Load(IList<Vector2> points, string name = "")
         {
             for (int i = 0; i < Renderers.Count; i++)
@@ -71,6 +72,7 @@ namespace Common.Unity.Drawing
                     Renderers[i].Load(points);
             }
         }
+        */
 
         public void SetColor(Color color, string name = "")
         {

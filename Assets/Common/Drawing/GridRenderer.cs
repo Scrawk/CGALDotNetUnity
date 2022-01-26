@@ -43,19 +43,19 @@ namespace Common.Unity.Drawing
         public void Create()
         {
 
-            m_vertical = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
+            m_vertical = new SegmentRenderer(DRAW_ORIENTATION.XY);
             m_vertical.DefaultColor = LineColor;
             m_vertical.Load(new Vector2(0, -Range), new Vector2(0, Range));
 
-            m_horizontal = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
+            m_horizontal = new SegmentRenderer(DRAW_ORIENTATION.XY);
             m_horizontal.DefaultColor = LineColor;
             m_horizontal.Load(new Vector2(-Range, 0), new Vector2(Range, 0));
 
-            m_yaxis = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
+            m_yaxis = new SegmentRenderer(DRAW_ORIENTATION.XY);
             m_yaxis.DefaultColor = AxisColor;
             m_yaxis.Load(new Vector2(0, -Range), new Vector2(0, Range));
 
-            m_xaxis = new SegmentRenderer(LINE_MODE.LINES, DRAW_ORIENTATION.XY);
+            m_xaxis = new SegmentRenderer(DRAW_ORIENTATION.XY);
             m_xaxis.DefaultColor = AxisColor;
             m_xaxis.Load(new Vector2(-Range, 0), new Vector2(Range, 0));
 

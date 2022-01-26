@@ -46,18 +46,12 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject m_dual;
 
-        private SegmentRenderer m_triangleRenderer, m_quadRenderer;
+        private SegmentRenderer m_wireframeRender;
 
         private void Start()
         {
-
-            m_triangleRenderer = new SegmentRenderer();
-            m_triangleRenderer.DefaultColor = lineColor;
-            m_triangleRenderer.LineMode = LINE_MODE.TRIANGLES;
-
-            m_quadRenderer = new SegmentRenderer();
-            m_quadRenderer.DefaultColor = lineColor;
-            m_quadRenderer.LineMode = LINE_MODE.QUADS;
+            m_wireframeRender = new SegmentRenderer();
+            m_wireframeRender.DefaultColor = lineColor;
 
             m_cube = CreateCube(new Vector3(3, 0.5f, 0));
 
@@ -89,8 +83,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             if (drawSegments)
             {
-                m_triangleRenderer.Draw();
-                m_quadRenderer.Draw();
+                m_wireframeRender.Draw();
             }
         }
 
@@ -238,26 +231,33 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void DrawSegments(Polyhedron3 poly)
         {
-            var pfaceVertCount = poly.GetFaceVertexCount();
+            var faceVertCount = poly.GetFaceVertexCount();
             var points = new Point3d[poly.VertexCount];
             poly.GetPoints(points, points.Length);
 
             var vectors = points.ToUnityVector3();
 
-            if (pfaceVertCount.triangles > 0)
-            {
-                var triangles = new int[pfaceVertCount.triangles * 3];
-                poly.GetTriangleIndices(triangles, triangles.Length);
+            var indices = faceVertCount.Indices();
+            poly.GetPolygonalIndices(ref indices);
 
-                m_triangleRenderer.Load(vectors, triangles);
+            if (faceVertCount.triangles > 0)
+            {
+                m_wireframeRender.Load(vectors, indices.triangles, LINE_MODE.TRIANGLES);
             }
 
-            if (pfaceVertCount.quads > 0)
+            if (faceVertCount.quads > 0)
             {
-                var quads = new int[pfaceVertCount.quads * 4];
-                poly.GetQuadIndices(quads, quads.Length);
+                m_wireframeRender.Load(vectors, indices.quads, LINE_MODE.QUADS);
+            }
 
-                m_quadRenderer.Load(vectors, quads);
+            if (faceVertCount.pentagons > 0)
+            {
+                m_wireframeRender.Load(vectors, indices.pentagons, LINE_MODE.PENTAGONS);
+            }
+
+            if (faceVertCount.hexagons > 0)
+            {
+                m_wireframeRender.Load(vectors, indices.hexagons, LINE_MODE.HEXAGONS);
             }
         }
 

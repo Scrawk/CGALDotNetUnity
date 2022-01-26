@@ -51,11 +51,9 @@ namespace CGALDotNetUnity.Polyhedra
 
             m_triangleRenderer = new SegmentRenderer();
             m_triangleRenderer.DefaultColor = lineColor;
-            m_triangleRenderer.LineMode = LINE_MODE.TRIANGLES;
-
+ 
             m_quadRenderer = new SegmentRenderer();
             m_quadRenderer.DefaultColor = lineColor;
-            m_quadRenderer.LineMode = LINE_MODE.QUADS;
 
             m_cube = CreateCube(new Vector3(3, 0.5f, 0));
 
@@ -220,26 +218,26 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void DrawSegments(SurfaceMesh3 poly)
         {
-            var pfaceVertCount = poly.GetFaceVertexCount();
+            var faceVertCount = poly.GetFaceVertexCount();
             var points = new Point3d[poly.VertexCount];
             poly.GetPoints(points, points.Length);
 
             var vectors = points.ToUnityVector3();
 
-            if (pfaceVertCount.triangles > 0)
+            if (faceVertCount.triangles > 0)
             {
-                var triangles = new int[pfaceVertCount.triangles * 3];
+                var triangles = new int[faceVertCount.triangles * 3];
                 poly.GetTriangleIndices(triangles, triangles.Length);
 
-                m_triangleRenderer.Load(vectors, triangles);
+                m_triangleRenderer.Load(vectors, triangles, LINE_MODE.TRIANGLES);
             }
 
-            if (pfaceVertCount.quads > 0)
+            if (faceVertCount.quads > 0)
             {
-                var quads = new int[pfaceVertCount.quads * 4];
+                var quads = new int[faceVertCount.quads * 4];
                 poly.GetQuadIndices(quads, quads.Length);
 
-                m_quadRenderer.Load(vectors, quads);
+                m_quadRenderer.Load(vectors, quads, LINE_MODE.QUADS);
             }
         }
 

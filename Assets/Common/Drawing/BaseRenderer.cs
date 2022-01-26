@@ -130,25 +130,6 @@ namespace Common.Unity.Drawing
             LocalToWorld = Matrix4x4.TRS(new Vector3(x, y, z), Quaternion.identity, Vector3.one);
         }
 
-        public void SetSegmentIndices(int vertexCount, IList<int> indices)
-        {
-            int current = Vertices.Count;
-
-            if (indices == null)
-            {
-                for (int i = 0; i < vertexCount - 1; i++)
-                {
-                    Indices.Add(i + current);
-                    Indices.Add(i + 1 + current);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < indices.Count; i++)
-                        Indices.Add(indices[i] + current);
-            }
-        }
-
         public void SetFaceIndices(int vertexCount, IList<int> indices)
         {
             int current = Vertices.Count;
@@ -196,9 +177,9 @@ namespace Common.Unity.Drawing
             return indices;
         }
 
-        public abstract void Load(IList<Vector2> points);
+        //public abstract void Load(IList<Vector2> points);
 
-        public abstract void Load(IList<Vector3> points);
+        //public abstract void Load(IList<Vector3> points);
 
         public void Draw()
         {

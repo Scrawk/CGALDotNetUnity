@@ -29,7 +29,7 @@ namespace Common.Unity.Drawing
 
         public float Length = 1;
 
-        public override void Load(IList<Vector2> vertices)
+        public void Load(IList<Vector2> vertices)
         {
             foreach (var v in vertices)
             {
@@ -91,7 +91,7 @@ namespace Common.Unity.Drawing
             }
         }
 
-        public override void Load(IList<Vector3> vertices)
+        public void Load(IList<Vector3> vertices)
         {
             foreach (var v in vertices)
             {

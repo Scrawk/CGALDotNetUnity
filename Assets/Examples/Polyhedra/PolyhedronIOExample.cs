@@ -33,7 +33,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         public MESH_TYPE meshType = MESH_TYPE.SURFACE_MESH;
 
-        private CompositeRenderer m_wirefameRender;
+        private SegmentRenderer m_wirefameRender;
 
         private NormalRenderer m_vertNormalRenderer, m_faceNormalRenderer;
 
@@ -121,9 +121,18 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void CreateSegments(IMesh imesh)
         {
-            m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(imesh, vertexNormalColor, 0.01f);
-            m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(imesh, faceNormalColor, 0.01f);
-            m_wirefameRender = RendererBuilder.CreateWireframeRenderer(imesh, lineColor);
+            if (imesh is SurfaceMesh3 m)
+            {
+                m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(m, vertexNormalColor, 0.01f);
+                m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(m, faceNormalColor, 0.01f);
+                m_wirefameRender = RendererBuilder.CreateWireframeRenderer(m, lineColor);
+            }
+            else if (imesh is Polyhedron3 p)
+            {
+                m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(p, vertexNormalColor, 0.01f);
+                m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(p, faceNormalColor, 0.01f);
+                m_wirefameRender = RendererBuilder.CreateWireframeRenderer(p, lineColor);
+            }
         }
     }
 

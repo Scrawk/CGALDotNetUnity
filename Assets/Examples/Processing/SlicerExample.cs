@@ -95,13 +95,12 @@ namespace CGALDotNetUnity.Processing
         private SegmentRenderer CreateLineRenderer(List<Polyline3<EEK>> lines, Color color)
         {
             var renderer = new SegmentRenderer();
-            renderer.LineMode = LINE_MODE.LINES;
             renderer.DefaultColor = color;
 
             foreach(var line in lines)
             {
                 var points = line.ToArray().ToUnityVector3();
-                renderer.Load(points);
+                renderer.Load(points, null, LINE_MODE.LINES);
             }
 
             return renderer;

@@ -16,7 +16,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject m_mesh;
 
-        private CompositeRenderer m_wireframeRender;
+        private SegmentRenderer m_wireframeRender;
 
         private void Start()
         {
@@ -42,8 +42,8 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void OnRenderObject()
         {
-            m_wireframeRender?.SetLocalToWorld(m_mesh.transform.localToWorldMatrix);
-            m_wireframeRender?.Draw();
+            m_wireframeRender.LocalToWorld = m_mesh.transform.localToWorldMatrix;
+            m_wireframeRender.Draw();
         }
 
     }

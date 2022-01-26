@@ -183,10 +183,9 @@ namespace CGALDotNetUnity
             var points = polygon.ToArray();
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), lineIndices);
+            lines.Load(points.ToUnityVector2(), lineIndices, LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -203,10 +202,9 @@ namespace CGALDotNetUnity
             var indices = BaseRenderer.SegmentIndices(edgeCount);
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(segments.ToUnityVector2(), indices);
+            lines.Load(segments.ToUnityVector2(), indices, LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -222,10 +220,9 @@ namespace CGALDotNetUnity
             polygon.GetPoints(points);
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), indices);
+            lines.Load(points.ToUnityVector2(), indices, LINE_MODE.TRIANGLES);
 
             Renderer.Add(lines);
 
@@ -241,10 +238,9 @@ namespace CGALDotNetUnity
             polygon.GetAllPoints(points);
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), indices);
+            lines.Load(points.ToUnityVector2(), indices, LINE_MODE.TRIANGLES);
 
             Renderer.Add(lines);
 
@@ -260,10 +256,9 @@ namespace CGALDotNetUnity
             var indices = BaseRenderer.PolygonIndices(count);
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), indices);
+            lines.Load(points.ToUnityVector2(), indices, LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -279,10 +274,9 @@ namespace CGALDotNetUnity
             tri.GetPoints(points, points.Length);
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), indices);
+            lines.Load(points.ToUnityVector2(), indices, LINE_MODE.TRIANGLES);
 
             Renderer.Add(lines);
 
@@ -298,10 +292,9 @@ namespace CGALDotNetUnity
             tri.GetPoints(points, points.Length);
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.TRIANGLES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), indices);
+            lines.Load(points.ToUnityVector2(), indices, LINE_MODE.TRIANGLES);
 
             Renderer.Add(lines);
 
@@ -316,10 +309,9 @@ namespace CGALDotNetUnity
             };
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2());
+            lines.Load(points.ToUnityVector2(), null, LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -329,10 +321,9 @@ namespace CGALDotNetUnity
         public RendererBuilder Outline(IList<Point2d> points, Color color)
         {
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2());
+            lines.Load(points.ToUnityVector2(), null, LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -345,10 +336,9 @@ namespace CGALDotNetUnity
             curve.GetCartesianPoints(points, samples);
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2());
+            lines.Load(points.ToUnityVector2(), null, LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -404,10 +394,9 @@ namespace CGALDotNetUnity
             var points = new Point2d[] { p1, p2 };
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = lineColor;
-            lines.Load(points.ToUnityVector2());
+            lines.Load(points.ToUnityVector2(), null, LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -422,10 +411,9 @@ namespace CGALDotNetUnity
         public RendererBuilder Outline(IList<Ray2d> rays, Color color)
         {
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(rays.ToUnityVector2(), BaseRenderer.SegmentIndices(rays.Count));
+            lines.Load(rays.ToUnityVector2(), BaseRenderer.SegmentIndices(rays.Count), LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -437,10 +425,9 @@ namespace CGALDotNetUnity
             var points = box.GetCorners();
 
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), BaseRenderer.PolygonIndices(4));
+            lines.Load(points.ToUnityVector2(), BaseRenderer.PolygonIndices(4), LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -455,10 +442,9 @@ namespace CGALDotNetUnity
         public RendererBuilder Outline(IList<Segment2d> segments, Color color)
         {
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
-            lines.Load(segments.ToUnityVector2(), BaseRenderer.SegmentIndices(segments.Count));
+            lines.Load(segments.ToUnityVector2(), BaseRenderer.SegmentIndices(segments.Count), LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -468,9 +454,8 @@ namespace CGALDotNetUnity
         public RendererBuilder Outline(IList<Segment3d> segments, Color color)
         {
             var lines = new SegmentRenderer();
-            lines.LineMode = LINE_MODE.LINES;
             lines.DefaultColor = color;
-            lines.Load(segments.ToUnityVector3(), BaseRenderer.SegmentIndices(segments.Count));
+            lines.Load(segments.ToUnityVector3(), BaseRenderer.SegmentIndices(segments.Count), LINE_MODE.LINES);
 
             Renderer.Add(lines);
 
@@ -776,40 +761,68 @@ namespace CGALDotNetUnity
             return renderer;
         }
 
-        public static CompositeRenderer CreateWireframeRenderer(IMesh imesh, Color col)
+        public static SegmentRenderer CreateWireframeRenderer(SurfaceMesh3 mesh, Color col)
         {
-            var renderer = new CompositeRenderer();
+            var renderer = new SegmentRenderer();
+            renderer.DefaultColor = col;
 
-            var faceVertCount = imesh.GetFaceVertexCount();
-            var points = new Point3d[imesh.VertexCount];
-            imesh.GetPoints(points, points.Length);
+            var faceVertCount = mesh.GetFaceVertexCount();
+            var points = new Point3d[mesh.VertexCount];
+            mesh.GetPoints(points, points.Length);
 
             var vectors = points.ToUnityVector3();
 
             if (faceVertCount.triangles > 0)
             {
                 var triangles = new int[faceVertCount.triangles * 3];
-                imesh.GetTriangleIndices(triangles, triangles.Length);
+                mesh.GetTriangleIndices(triangles, triangles.Length);
 
-                var triangleRenderer = new SegmentRenderer();
-                triangleRenderer.DefaultColor = col;
-                triangleRenderer.LineMode = LINE_MODE.TRIANGLES;
-                triangleRenderer.Load(vectors, triangles);
-
-                renderer.Add(triangleRenderer);
+                renderer.Load(vectors, triangles, LINE_MODE.TRIANGLES);
             }
 
             if (faceVertCount.quads > 0)
             {
                 var quads = new int[faceVertCount.quads * 4];
-                imesh.GetQuadIndices(quads, quads.Length);
+                mesh.GetQuadIndices(quads, quads.Length);
 
-                var quadRenderer = new SegmentRenderer();
-                quadRenderer.DefaultColor = col;
-                quadRenderer.LineMode = LINE_MODE.QUADS;
-                quadRenderer.Load(vectors, quads);
+                renderer.Load(vectors, quads, LINE_MODE.QUADS);
+            }
 
-                renderer.Add(quadRenderer);
+            return renderer;
+        }
+
+        public static SegmentRenderer CreateWireframeRenderer(Polyhedron3 poly, Color col)
+        {
+            var renderer = new SegmentRenderer();
+            renderer.DefaultColor = col;
+
+            var faceVertCount = poly.GetFaceVertexCount();
+            var points = new Point3d[poly.VertexCount];
+            poly.GetPoints(points, points.Length);
+
+            var vectors = points.ToUnityVector3();
+
+            var indices = faceVertCount.Indices();
+            poly.GetPolygonalIndices(ref indices);
+
+            if (faceVertCount.triangles > 0)
+            {
+                renderer.Load(vectors, indices.triangles, LINE_MODE.TRIANGLES);
+            }
+
+            if (faceVertCount.quads > 0)
+            {
+                renderer.Load(vectors, indices.quads, LINE_MODE.QUADS);
+            }
+
+            if (faceVertCount.pentagons > 0)
+            {
+                renderer.Load(vectors, indices.pentagons, LINE_MODE.PENTAGONS);
+            }
+
+            if (faceVertCount.hexagons > 0)
+            {
+                renderer.Load(vectors, indices.hexagons, LINE_MODE.HEXAGONS);
             }
 
             return renderer;

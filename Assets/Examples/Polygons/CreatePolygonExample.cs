@@ -25,7 +25,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Point2d? Point;
 
-        private Polygon2<EIK> Polygon;
+        private Polygon2<EEK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
@@ -38,7 +38,7 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void OnInputComplete(List<Point2d> points)
         {
-            Polygon = new Polygon2<EIK>(points.ToArray());
+            Polygon = new Polygon2<EEK>(points.ToArray());
 
             if (Polygon.IsSimple)
             {
@@ -58,7 +58,7 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
-        private void Refine(Polygon2<EIK> polygon)
+        private void Refine(Polygon2<EEK> polygon)
         {
             var tri = polygon.Refine(2);
             CreateRenderer("Refined", tri);

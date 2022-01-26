@@ -46,7 +46,7 @@ namespace Common.Unity.Drawing
             Colors.Add(color);
         }
 
-        public override void Load(IList<Vector2> vertices)
+        public void Load(IList<Vector2> vertices)
         {
             for(int i = 0; i < vertices.Count; i++)
             {
@@ -103,7 +103,7 @@ namespace Common.Unity.Drawing
             Colors.Add(color);
         }
 
-        public override void Load(IList<Vector3> vertices)
+        public void Load(IList<Vector3> vertices)
         {
             for (int i = 0; i < vertices.Count; i++)
             {
