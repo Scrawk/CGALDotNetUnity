@@ -44,16 +44,14 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject m_cone;
 
-        private SegmentRenderer m_triangleRenderer, m_quadRenderer;
+        private GameObject m_dual;
+
+        private SegmentRenderer m_wireframeRender;
 
         private void Start()
         {
-
-            m_triangleRenderer = new SegmentRenderer();
-            m_triangleRenderer.DefaultColor = lineColor;
- 
-            m_quadRenderer = new SegmentRenderer();
-            m_quadRenderer.DefaultColor = lineColor;
+            m_wireframeRender = new SegmentRenderer();
+            m_wireframeRender.DefaultColor = lineColor;
 
             m_cube = CreateCube(new Vector3(3, 0.5f, 0));
 
@@ -77,14 +75,16 @@ namespace CGALDotNetUnity.Polyhedra
 
             m_cone = CreateCone(new Vector3(-1, 0, 6));
 
+            m_dual = CreateDual(new Vector3(-3, 0, 6));
+
         }
 
         private void OnRenderObject()
         {
             if (drawSegments)
             {
-                m_triangleRenderer.Draw();
-                m_quadRenderer.Draw();
+                m_wireframeRender.SetColor(lineColor);
+                m_wireframeRender.Draw();
             }
         }
 
@@ -216,29 +216,23 @@ namespace CGALDotNetUnity.Polyhedra
             return poly.ToUnityMesh("Cone", material, true);
         }
 
+        private GameObject CreateDual(Vector3 translation)
+        {
+            var poly = SurfaceMeshFactory<EEK>.CreateIcosahedron();
+            poly.Translate(translation.ToCGALPoint3d());
+            poly.Subdivide(2);
+
+            var dual = poly.CreateDualMesh();
+
+            if (drawSegments)
+                DrawSegments(dual);
+
+            return dual.ToUnityMesh("Dual", material, true);
+        }
+
         private void DrawSegments(SurfaceMesh3 poly)
         {
-            var faceVertCount = poly.GetFaceVertexCount();
-            var points = new Point3d[poly.VertexCount];
-            poly.GetPoints(points, points.Length);
-
-            var vectors = points.ToUnityVector3();
-
-            if (faceVertCount.triangles > 0)
-            {
-                var triangles = new int[faceVertCount.triangles * 3];
-                poly.GetTriangleIndices(triangles, triangles.Length);
-
-                m_triangleRenderer.Load(vectors, triangles, LINE_MODE.TRIANGLES);
-            }
-
-            if (faceVertCount.quads > 0)
-            {
-                var quads = new int[faceVertCount.quads * 4];
-                poly.GetQuadIndices(quads, quads.Length);
-
-                m_quadRenderer.Load(vectors, quads, LINE_MODE.QUADS);
-            }
+            m_wireframeRender = RendererBuilder.CreateWireframeRenderer(poly, lineColor, m_wireframeRender);
         }
 
     }

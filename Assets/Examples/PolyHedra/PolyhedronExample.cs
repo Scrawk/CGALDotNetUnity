@@ -83,6 +83,7 @@ namespace CGALDotNetUnity.Polyhedra
         {
             if (drawSegments)
             {
+                m_wireframeRender.SetColor(lineColor);
                 m_wireframeRender.Draw();
             }
         }
@@ -157,7 +158,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateDodecahedron(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateDodecahedron();
+            var poly = PolyhedronFactory<EEK>.CreateDodecahedron(1, true);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -231,34 +232,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void DrawSegments(Polyhedron3 poly)
         {
-            var faceVertCount = poly.GetFaceVertexCount();
-            var points = new Point3d[poly.VertexCount];
-            poly.GetPoints(points, points.Length);
-
-            var vectors = points.ToUnityVector3();
-
-            var indices = faceVertCount.Indices();
-            poly.GetPolygonalIndices(ref indices);
-
-            if (faceVertCount.triangles > 0)
-            {
-                m_wireframeRender.Load(vectors, indices.triangles, LINE_MODE.TRIANGLES);
-            }
-
-            if (faceVertCount.quads > 0)
-            {
-                m_wireframeRender.Load(vectors, indices.quads, LINE_MODE.QUADS);
-            }
-
-            if (faceVertCount.pentagons > 0)
-            {
-                m_wireframeRender.Load(vectors, indices.pentagons, LINE_MODE.PENTAGONS);
-            }
-
-            if (faceVertCount.hexagons > 0)
-            {
-                m_wireframeRender.Load(vectors, indices.hexagons, LINE_MODE.HEXAGONS);
-            }
+            m_wireframeRender = RendererBuilder.CreateWireframeRenderer(poly, lineColor, m_wireframeRender);
         }
 
     }

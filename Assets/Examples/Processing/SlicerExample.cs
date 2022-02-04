@@ -79,7 +79,7 @@ namespace CGALDotNetUnity.Processing
             var end = (center - half).ToCGALPoint3d();
             var increment = (end - start).Magnitude / count;
 
-            var slicer = PolygonMeshProcessingSlicer<EEK>.Instance;
+            var slicer = MeshProcessingSlicer<EEK>.Instance;
 
             var lines = new List<Polyline3<EEK>>();
             slicer.Slice(poly, start, end, increment, lines);

@@ -28,7 +28,7 @@ namespace CGALDotNetUnity.Polyhedra
 
             var box2 = PolyhedronFactory<EEK>.CreateCube();
 
-            var boolean = PolygonMeshProcessingBoolean<EEK>.Instance;
+            var boolean = MeshProcessingBoolean<EEK>.Instance;
             var op = POLYHEDRA_BOOLEAN.UNION;
 
             if (boolean.Op(op, box1, box2, out Polyhedron3<EEK> poly))

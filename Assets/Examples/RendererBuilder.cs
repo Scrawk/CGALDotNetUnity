@@ -761,69 +761,33 @@ namespace CGALDotNetUnity
             return renderer;
         }
 
-        public static SegmentRenderer CreateWireframeRenderer(SurfaceMesh3 mesh, Color col)
+        public static SegmentRenderer CreateWireframeRenderer(IMesh poly, Color col, SegmentRenderer renderer = null)
         {
-            var renderer = new SegmentRenderer();
-            renderer.DefaultColor = col;
 
-            var faceVertCount = mesh.GetFaceVertexCount();
-            var points = new Point3d[mesh.VertexCount];
-            mesh.GetPoints(points, points.Length);
-
-            var vectors = points.ToUnityVector3();
-
-            if (faceVertCount.triangles > 0)
+            if (renderer == null)
             {
-                var triangles = new int[faceVertCount.triangles * 3];
-                mesh.GetTriangleIndices(triangles, triangles.Length);
-
-                renderer.Load(vectors, triangles, LINE_MODE.TRIANGLES);
+                renderer = new SegmentRenderer();
+                renderer.DefaultColor = col;
             }
 
-            if (faceVertCount.quads > 0)
-            {
-                var quads = new int[faceVertCount.quads * 4];
-                mesh.GetQuadIndices(quads, quads.Length);
-
-                renderer.Load(vectors, quads, LINE_MODE.QUADS);
-            }
-
-            return renderer;
-        }
-
-        public static SegmentRenderer CreateWireframeRenderer(Polyhedron3 poly, Color col)
-        {
-            var renderer = new SegmentRenderer();
-            renderer.DefaultColor = col;
-
-            var faceVertCount = poly.GetFaceVertexCount();
+            var polyCount = poly.GetPolygonalCount();
             var points = new Point3d[poly.VertexCount];
             poly.GetPoints(points, points.Length);
 
             var vectors = points.ToUnityVector3();
+            var indices = poly.GetPolygonalIndices();
 
-            var indices = faceVertCount.Indices();
-            poly.GetPolygonalIndices(ref indices);
-
-            if (faceVertCount.triangles > 0)
-            {
+            if (polyCount.triangles > 0)
                 renderer.Load(vectors, indices.triangles, LINE_MODE.TRIANGLES);
-            }
-
-            if (faceVertCount.quads > 0)
-            {
+            
+            if (polyCount.quads > 0)
                 renderer.Load(vectors, indices.quads, LINE_MODE.QUADS);
-            }
 
-            if (faceVertCount.pentagons > 0)
-            {
+            if (polyCount.pentagons > 0)
                 renderer.Load(vectors, indices.pentagons, LINE_MODE.PENTAGONS);
-            }
 
-            if (faceVertCount.hexagons > 0)
-            {
+            if (polyCount.hexagons > 0)
                 renderer.Load(vectors, indices.hexagons, LINE_MODE.HEXAGONS);
-            }
 
             return renderer;
         }

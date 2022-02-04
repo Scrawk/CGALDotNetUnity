@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet.Geometry;
+using CGALDotNet.Extensions;
 
 namespace CGALDotNet.Polyhedra
 {
@@ -30,6 +31,8 @@ namespace CGALDotNet.Polyhedra
             var indices = new int[poly.FaceCount * 3];
             poly.GetPoints(points, points.Length);
             poly.GetTriangleIndices(indices, indices.Length);
+
+            indices = indices.RemoveNullTriangles();
 
             Mesh mesh;
 
