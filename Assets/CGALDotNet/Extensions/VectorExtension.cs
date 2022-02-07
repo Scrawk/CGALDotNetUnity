@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CGALDotNet.Geometry
+namespace CGALDotNetGeometry.Numerics
 {
 
     public static class VectorExtension

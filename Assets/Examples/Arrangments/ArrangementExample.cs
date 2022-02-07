@@ -4,9 +4,9 @@ using System.Text;
 using UnityEngine;
 
 using Common.Unity.Drawing;
-using Common.Unity.Utility;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet;
-using CGALDotNet.Geometry;
 using CGALDotNet.Polygons;
 using CGALDotNet.Arrangements;
 

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using CGALDotNet.Circular;
+using CGALDotNetGeometry.Numerics;
 
-namespace CGALDotNet.Geometry
+namespace CGALDotNetGeometry.Shapes
 {
 
     public static class GeometryExtension
@@ -47,7 +47,7 @@ namespace CGALDotNet.Geometry
             for (int i = 0; i < rays.Count; i++)
             {
                 var a = rays[i].Position;
-                var b = a + (Point2d)rays[i].Direction;
+                var b = a + rays[i].Direction;
                 array[i * 2 + 0] = new Vector2((float)a.x, (float)a.y);
                 array[i * 2 + 1] = new Vector2((float)b.x, (float)b.y);
             }

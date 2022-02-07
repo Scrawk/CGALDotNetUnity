@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet.Polyhedra;
-using CGALDotNet.Processing;
 using CGALDotNet.Meshing;
-using Common.Unity.Drawing;
 
 namespace CGALDotNetUnity.Meshing
 {

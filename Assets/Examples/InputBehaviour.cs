@@ -5,12 +5,8 @@ using UnityEngine.Rendering;
 using System.Linq;
 
 using Common.Unity.Drawing;
-using CGALDotNet;
-using CGALDotNet.Polygons;
-using CGALDotNet.Geometry;
-using CGALDotNet.Circular;
-using CGALDotNet.Triangulations;
-using CGALDotNet.Arrangements;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 
 namespace CGALDotNetUnity
 {

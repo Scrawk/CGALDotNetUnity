@@ -5,7 +5,7 @@ using UnityEngine;
 using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNet.Polygons;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
 
 namespace CGALDotNetUnity.Polygons
 {

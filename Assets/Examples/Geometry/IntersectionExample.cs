@@ -6,6 +6,8 @@ using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 
 namespace CGALDotNetUnity.Geometry
 {
@@ -20,15 +22,12 @@ namespace CGALDotNetUnity.Geometry
 
         private Color lineColor = new Color32(0, 0, 0, 255);
 
-        private List<IGeometry2d> Geometry;
-
         private Dictionary<string, CompositeRenderer> Renderers;
 
         protected override void Start()
         {
             base.Start();
             Renderers = new Dictionary<string, CompositeRenderer>();
-            Geometry = new List<IGeometry2d>();
 
             //var point = new Point2d();
             //var line = new Line2d(new Point2d(0, 0), new Point2d(1,1));
@@ -37,45 +36,30 @@ namespace CGALDotNetUnity.Geometry
             var triangle = new Triangle2d(new Point2d(1, 1), new Point2d(9, 1), new Point2d(1, 9));
             //var ray = new Ray2d(new Point2d(0,0), new Vector2d(0, 1));
 
-            //Geometry.Add(point);
-            Geometry.Add(box);
-            //Geometry.Add(line);
-            //Geometry.Add(segment);
-            Geometry.Add(triangle);
-            //Geometry.Add(ray);
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box);
 
-            foreach(var geometry in Geometry)
+            Renderers["Box"] = Draw().
+            Faces(boxPoly, faceColor).
+            Outline(boxPoly, lineColor).
+            PopRenderer();
+
+            var triPoly = PolygonFactory<EEK>.CreateTriangle(triangle);
+
+            Renderers["Triangle"] = Draw().
+            Faces(triPoly, faceColor).
+            Outline(triPoly, lineColor).
+            PopRenderer();
+
+            var result = CGALIntersections.Intersection(box, triangle);
+            if (result.Hit)
             {
-                CreateRenderer(geometry);
+                CreateRenderer(result, intersectionColor);
             }
 
-            var set = new HashSet<ValueTuple<IGeometry2d, IGeometry2d>>();
 
-            foreach (var geo1 in Geometry)
-            {
-                foreach(var geo2 in Geometry)
-                {
-                    if (geo1 == geo2) continue;
-
-                    var ab = (geo1, geo2);
-                    var ba = (geo2, geo1);
-
-                    if (set.Contains(ab)) continue;
-
-                    set.Add(ab);
-                    set.Add(ba);
-
-                    var result = CGALIntersections.Intersection(geo1, geo2);
-                   if(result.Hit)
-                    {
-                        CreateRenderer(result, intersectionColor);
-                    }
-        
-                }
-            }
         }
 
-        private void CreateRenderer( IntersectionResult2d result, Color col)
+        private void CreateRenderer(IntersectionResult2d result, Color col)
         {
             int count = Renderers.Count;
 
@@ -83,7 +67,7 @@ namespace CGALDotNetUnity.Geometry
             {
                 var polygon = result.Polygon<EEK>();
 
-                Renderers["Geometry" + count] = Draw().
+                Renderers["Intersection" + count] = Draw().
                 Faces(polygon, col).
                 Outline(polygon, col).
                 PopRenderer();
@@ -92,55 +76,50 @@ namespace CGALDotNetUnity.Geometry
             {
                 var point = result.Point;
 
-                Renderers["Geometry" + count] = Draw().
+                Renderers["Intersection" + count] = Draw().
                     Points(point, col, col).
                     PopRenderer();
             }
-            else 
+            else if (result.Type == INTERSECTION_RESULT_2D.LINE2)
             {
-                var geo = result.Geometry;
-                Renderers["Geometry" + count] = Draw().
+                var geo = result.Line;
+                Renderers["Intersection" + count] = Draw().
                     Outline(geo, col).
                     PopRenderer();
             }
-        }
-
-        private void CreateRenderer(IGeometry2d geometry)
-        {
-            int count = Renderers.Count;
-
-            if (geometry is Box2d box)
+            else if (result.Type == INTERSECTION_RESULT_2D.RAY2)
             {
-                var polygon = PolygonFactory<EEK>.CreateBox(box);
-
-                Renderers["Geometry" + count] = Draw().
-                Faces(polygon, faceColor).
-                Outline(polygon, lineColor).
-                PopRenderer();
-            }
-            else if (geometry is Triangle2d tri)
-            {
-                var polygon = PolygonFactory<EEK>.CreateTriangle(tri);
-
-                Renderers["Geometry" + count] = Draw().
-                Faces(polygon, faceColor).
-                Outline(polygon, lineColor).
-                PopRenderer();
-            }
-            else if (geometry is Point2d point)
-            {
-                Renderers["Geometry" + count] = Draw().
-                    Points(point, lineColor, pointColor).
+                var geo = result.Ray;
+                Renderers["Intersection" + count] = Draw().
+                    Outline(geo, col).
                     PopRenderer();
             }
-            else
+            else if (result.Type == INTERSECTION_RESULT_2D.SEGMENT2)
             {
-                Renderers["Geometry" + count] = Draw().
-                    Outline(geometry, lineColor).
+                var geo = result.Segment;
+                Renderers["Intersection" + count] = Draw().
+                    Outline(geo, col).
                     PopRenderer();
             }
-        }
+            else if (result.Type == INTERSECTION_RESULT_2D.BOX2)
+            {
+                var polygon = PolygonFactory<EEK>.CreateBox(result.Box);
 
+                Renderers["Intersection" + count] = Draw().
+                Faces(polygon, col).
+                Outline(polygon, col).
+                PopRenderer();
+            }
+            else if (result.Type == INTERSECTION_RESULT_2D.TRIANGLE2)
+            {
+                var polygon = PolygonFactory<EEK>.CreateTriangle(result.Triangle);
+
+                Renderers["Intersection" + count] = Draw().
+                Faces(polygon, col).
+                Outline(polygon, col).
+                PopRenderer();
+            }
+        }
 
         private void OnPostRender()
         {

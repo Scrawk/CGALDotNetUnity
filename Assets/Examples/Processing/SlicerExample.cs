@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
 using CGALDotNet.Polyhedra;
 using CGALDotNet.Processing;
 using CGALDotNet.Polylines;

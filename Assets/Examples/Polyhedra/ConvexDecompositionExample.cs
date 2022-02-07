@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
 using CGALDotNet.Polyhedra;
 
 namespace CGALDotNetUnity.Polyhedra

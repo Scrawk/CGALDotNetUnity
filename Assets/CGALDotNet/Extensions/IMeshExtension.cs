@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using CGALDotNet.Geometry;
-using CGALDotNet.Extensions;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Extensions;
 
 namespace CGALDotNet.Polyhedra
 {

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
-using CGALDotNet.Polygons;
+using CGALDotNetGeometry.Numerics;
 using CGALDotNet.Polyhedra;
 
 public static class CGALMeshExtensions

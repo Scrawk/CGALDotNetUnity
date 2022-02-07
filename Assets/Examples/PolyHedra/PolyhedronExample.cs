@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
 using CGALDotNet.Polyhedra;
-using CGALDotNet.Processing;
 
 using Common.Unity.Drawing;
 
@@ -44,6 +43,8 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject m_cone;
 
+        private GameObject m_capsule;
+
         private GameObject m_dual;
 
         private SegmentRenderer m_wireframeRender;
@@ -76,7 +77,7 @@ namespace CGALDotNetUnity.Polyhedra
             m_cone = CreateCone(new Vector3(-1, 0, 6));
 
             m_dual = CreateDual(new Vector3(-3, 0, 6));
-            
+
         }
 
         private void OnRenderObject()
@@ -205,9 +206,8 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateCone(Vector3 translation)
         {
-            var param = CylinderParams.Default;
-            param.radiusTop = 0;
-            var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
+            var param = ConeParams.Default;
+            var poly = PolyhedronFactory<EEK>.CreateCone(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)

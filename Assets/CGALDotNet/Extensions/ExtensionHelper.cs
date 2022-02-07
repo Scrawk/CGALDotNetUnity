@@ -4,7 +4,8 @@ using System.Text;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet.Polyhedra;
 
 public static class ExtensionHelper

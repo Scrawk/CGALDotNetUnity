@@ -4,7 +4,8 @@ using UnityEngine;
 
 using CGALDotNet;
 using CGALDotNet.Triangulations;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet.Polyhedra;
 
 using Common.Unity.Drawing;

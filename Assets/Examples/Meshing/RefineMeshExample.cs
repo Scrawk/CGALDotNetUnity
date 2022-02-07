@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Unity.Drawing;
-using Common.Unity.Utility;
+using CGALDotNetGeometry.Numerics;
 using CGALDotNet;
 using CGALDotNet.Polygons;
-using CGALDotNet.Geometry;
 using CGALDotNet.Meshing;
 
 namespace CGALDotNetUnity.Meshing

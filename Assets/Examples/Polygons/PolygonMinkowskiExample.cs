@@ -4,9 +4,10 @@ using UnityEngine;
 
 using Common.Unity.Drawing;
 using Common.Unity.Utility;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet;
 using CGALDotNet.Polygons;
-using CGALDotNet.Geometry;
 
 namespace CGALDotNetUnity.Polygons
 {

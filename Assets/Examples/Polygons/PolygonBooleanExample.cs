@@ -7,7 +7,8 @@ using Common.Unity.Utility;
 
 using CGALDotNet;
 using CGALDotNet.Polygons;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 
 namespace CGALDotNetUnity.Polygons
 {

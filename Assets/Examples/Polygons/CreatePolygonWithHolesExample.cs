@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Unity.Drawing;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet;
 using CGALDotNet.Polygons;
-using CGALDotNet.Geometry;
 
 namespace CGALDotNetUnity.Polygons
 {

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNet;
-using CGALDotNet.Geometry;
+using CGALDotNetGeometry.Numerics;
 using CGALDotNet.Polyhedra;
-using CGALDotNet.Processing;
 
 using Common.Unity.Drawing;
 
@@ -74,8 +73,6 @@ namespace CGALDotNetUnity.Polyhedra
             m_cylinder = CreateCylinder(new Vector3(1, 0, 6));
 
             m_cone = CreateCone(new Vector3(-1, 0, 6));
-
-            m_dual = CreateDual(new Vector3(-3, 0, 6));
 
         }
 
@@ -205,29 +202,14 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateCone(Vector3 translation)
         {
-            var param = CylinderParams.Default;
-            param.radiusTop = 0;
-            var poly = SurfaceMeshFactory<EEK>.CreateCylinder(param, allowQuads);
+            var param = ConeParams.Default;
+            var poly = SurfaceMeshFactory<EEK>.CreateCone(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
 
             return poly.ToUnityMesh("Cone", material, true);
-        }
-
-        private GameObject CreateDual(Vector3 translation)
-        {
-            var poly = SurfaceMeshFactory<EEK>.CreateIcosahedron();
-            poly.Translate(translation.ToCGALPoint3d());
-            poly.Subdivide(2);
-
-            var dual = poly.CreateDualMesh();
-
-            if (drawSegments)
-                DrawSegments(dual);
-
-            return dual.ToUnityMesh("Dual", material, true);
         }
 
         private void DrawSegments(SurfaceMesh3 poly)

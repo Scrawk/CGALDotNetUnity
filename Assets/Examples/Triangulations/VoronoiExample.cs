@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Unity.Drawing;
-using Common.Unity.Utility;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet;
-using CGALDotNet.Geometry;
 using CGALDotNet.Triangulations;
 
 namespace CGALDotNetUnity.Triangulations

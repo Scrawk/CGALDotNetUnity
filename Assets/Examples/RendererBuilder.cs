@@ -5,10 +5,12 @@ using UnityEngine.Rendering;
 using System.Linq;
 
 using Common.Unity.Drawing;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
+
 using CGALDotNet;
 using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
-using CGALDotNet.Circular;
 using CGALDotNet.Triangulations;
 using CGALDotNet.Arrangements;
 using CGALDotNet.Nurbs;
@@ -341,28 +343,6 @@ namespace CGALDotNetUnity
             lines.Load(points.ToUnityVector2(), null, LINE_MODE.LINES);
 
             Renderer.Add(lines);
-
-            return Instance;
-        }
-
-        public RendererBuilder Outline(IGeometry2d geometry, Color color)
-        {
-
-            switch (geometry)
-            {
-                case Line2d line:
-                    return Outline(line, color);
-
-                case Ray2d ray:
-                    return Outline(ray, color);
-
-                case Segment2d seg:
-                    return Outline(seg ,color);
-
-                case Box2d box:
-                    return Outline(box, color);
-
-            }
 
             return Instance;
         }

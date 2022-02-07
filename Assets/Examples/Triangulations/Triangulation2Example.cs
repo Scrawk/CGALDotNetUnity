@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Unity.Drawing;
-using Common.Unity.Utility;
 using CGALDotNet;
-using CGALDotNet.Geometry;
-using CGALDotNet.Circular;
+using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNet.Triangulations;
 
 namespace CGALDotNetUnity.Triangulations
@@ -214,7 +213,7 @@ namespace CGALDotNetUnity.Triangulations
 
             var circles = new Circle2d[count];
             for (int i = 0; i < count; i++)
-                circles[i] = triangles[i].CircumCircle();
+                circles[i] = triangles[i].CircumCircle;
 
             Renderers["Circles"] = Draw().
                 Circles(circles, redColor, redColor, false, 64).
