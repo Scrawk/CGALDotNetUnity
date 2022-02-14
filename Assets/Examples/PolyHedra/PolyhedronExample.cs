@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 using CGALDotNet;
@@ -49,6 +50,15 @@ namespace CGALDotNetUnity.Polyhedra
 
         private SegmentRenderer m_wireframeRender;
 
+        private Color[] m_colorTable = new Color[]
+        {
+            new Color(1, 0, 0, 1),
+            new Color(1, 0, 0, 1),
+            new Color(1, 0, 0, 1),
+            new Color(1, 0, 0, 1),
+            new Color(1, 0, 0, 1)
+        };
+
         private void Start()
         {
             m_wireframeRender = new SegmentRenderer();
@@ -76,7 +86,9 @@ namespace CGALDotNetUnity.Polyhedra
 
             m_cone = CreateCone(new Vector3(-1, 0, 6));
 
-            m_dual = CreateDual(new Vector3(-3, 0, 6));
+            m_capsule = CreateCapsule(new Vector3(-3, 0, 6));
+
+            //m_dual = CreateDual(new Vector3(-3, 0, 6));
 
         }
 
@@ -91,7 +103,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateCube(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateCube(1, allowQuads);
+            var poly = PolyhedronFactory<EIK>.CreateCube(1, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -103,7 +115,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateUVSphere(Vector3 translation)
         {
             var param = UVSphereParams.Default;
-            var poly = PolyhedronFactory<EEK>.CreateUVSphere(param, allowQuads);
+            var poly = PolyhedronFactory<EIK>.CreateUVSphere(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -115,7 +127,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateNormalizedCube(Vector3 translation)
         {
             var param = NormalizedCubeParams.Default;
-            var poly = PolyhedronFactory<EEK>.CreateNormalizedCube(param, allowQuads);
+            var poly = PolyhedronFactory<EIK>.CreateNormalizedCube(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -126,18 +138,18 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateTetrahedron(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateTetrahedron();
+            var poly = PolyhedronFactory<EIK>.CreateTetrahedron();
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Tetrahedron",  material, true);
+            return poly.ToUnityMesh("Tetrahedron", material, true);
         }
 
         private GameObject CreateIcosahedron(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateIcosahedron();
+            var poly = PolyhedronFactory<EIK>.CreateIcosahedron();
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -148,7 +160,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateOctohedron(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateOctahedron();
+            var poly = PolyhedronFactory<EIK>.CreateOctahedron();
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -159,7 +171,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private GameObject CreateDodecahedron(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateDodecahedron(1, true);
+            var poly = PolyhedronFactory<EIK>.CreateDodecahedron(1, true);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -171,7 +183,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreatePlane(Vector3 translation)
         {
             var param = PlaneParams.Default;
-            var poly = PolyhedronFactory<EEK>.CreatePlane(param, allowQuads);
+            var poly = PolyhedronFactory<EIK>.CreatePlane(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -183,7 +195,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateTorus(Vector3 translation)
         {
             var param = TorusParams.Default;
-            var poly = PolyhedronFactory<EEK>.CreateTorus(param, allowQuads);
+            var poly = PolyhedronFactory<EIK>.CreateTorus(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -195,7 +207,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateCylinder(Vector3 translation)
         {
             var param = CylinderParams.Default;
-            var poly = PolyhedronFactory<EEK>.CreateCylinder(param, allowQuads);
+            var poly = PolyhedronFactory<EIK>.CreateCylinder(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -207,7 +219,7 @@ namespace CGALDotNetUnity.Polyhedra
         private GameObject CreateCone(Vector3 translation)
         {
             var param = ConeParams.Default;
-            var poly = PolyhedronFactory<EEK>.CreateCone(param, allowQuads);
+            var poly = PolyhedronFactory<EIK>.CreateCone(param, allowQuads);
             poly.Translate(translation.ToCGALPoint3d());
 
             if (drawSegments)
@@ -216,9 +228,21 @@ namespace CGALDotNetUnity.Polyhedra
             return poly.ToUnityMesh("Cone", material, true);
         }
 
+        private GameObject CreateCapsule(Vector3 translation)
+        {
+            var param = CapsuleParams.Default;
+            var poly = PolyhedronFactory<EIK>.CreateCapsule(param, allowQuads);
+            poly.Translate(translation.ToCGALPoint3d());
+
+            if (drawSegments)
+                DrawSegments(poly);
+
+            return poly.ToUnityMesh("Capsule", material, true);
+        }
+
         private GameObject CreateDual(Vector3 translation)
         {
-            var poly = PolyhedronFactory<EEK>.CreateIcosahedron();
+            var poly = PolyhedronFactory<EIK>.CreateIcosahedron();
             poly.Translate(translation.ToCGALPoint3d());
             poly.Subdivide(2);
 

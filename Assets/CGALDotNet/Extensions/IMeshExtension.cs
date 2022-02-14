@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNetGeometry.Numerics;
+using CGALDotNetGeometry.Shapes;
 using CGALDotNetGeometry.Extensions;
 
 namespace CGALDotNet.Polyhedra
 {
     public static class IMeshExtension
     {
+
         public static GameObject ToUnityMesh(this IMesh poly, string name, Material material, bool splitFaces = true)
         {
             if (!poly.IsValid)

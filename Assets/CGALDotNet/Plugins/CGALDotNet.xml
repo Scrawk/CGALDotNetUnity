@@ -191,14 +191,14 @@
             <param name="vertex">The vertex.</param>
             <returns>True if the vertex was found.</returns>
         </member>
-        <member name="M:CGALDotNet.Arrangements.Arrangement2.GetHalfEdges(CGALDotNet.Arrangements.ArrHalfEdge2[],System.Int32)">
+        <member name="M:CGALDotNet.Arrangements.Arrangement2.GetHalfEdges(CGALDotNet.Arrangements.ArrHalfedge2[],System.Int32)">
             <summary>
             Get a copy of all the half edges in the arrangement.
             </summary>
             <param name="edges">A half edge array that is the length of the half edge count.</param>
             <param name="count">The ararys length.</param>
         </member>
-        <member name="M:CGALDotNet.Arrangements.Arrangement2.GetHalfEdge(System.Int32,CGALDotNet.Arrangements.ArrHalfEdge2@)">
+        <member name="M:CGALDotNet.Arrangements.Arrangement2.GetHalfEdge(System.Int32,CGALDotNet.Arrangements.ArrHalfedge2@)">
             <summary>
             Get the half edge from the arrangement.
             </summary>
@@ -271,10 +271,11 @@
             Locate the closest vertex in the hit face
             </summary>
             <param name="point">The point</param>
+            <param name="radius">The radius te closest vertex has to be within.</param>
             <param name="vertex">The closest vertex.</param>
             <returns>True if point hit a face and found a vertex.</returns>
         </member>
-        <member name="M:CGALDotNet.Arrangements.Arrangement2.LocateEdge(CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.Arrangements.ArrHalfEdge2@)">
+        <member name="M:CGALDotNet.Arrangements.Arrangement2.LocateEdge(CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.Arrangements.ArrHalfedge2@)">
             <summary>
             Locate the edge at this point.
             </summary>
@@ -282,12 +283,13 @@
             <param name="edge">The edge.</param>
             <returns>True if a edge was located.</returns>
         </member>
-        <member name="M:CGALDotNet.Arrangements.Arrangement2.LocateEdge(CGALDotNetGeometry.Numerics.Point2d,System.Double,CGALDotNet.Arrangements.ArrHalfEdge2@)">
+        <member name="M:CGALDotNet.Arrangements.Arrangement2.LocateEdge(CGALDotNetGeometry.Numerics.Point2d,System.Double,CGALDotNet.Arrangements.ArrHalfedge2@)">
             <summary>
             Locate the closest edge in the hit face.
             </summary>
             <param name="point">The point</param>
             <param name="edge">The closest edge.</param>
+            <param name="radius">The radius from the point a edge counts as being clicked on.</param>
             <returns>True if the point hit a face and found a edge.</returns>
         </member>
         <member name="M:CGALDotNet.Arrangements.Arrangement2.LocateFace(CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.Arrangements.ArrFace2@)">
@@ -326,10 +328,9 @@
         </member>
         <member name="M:CGALDotNet.Arrangements.Arrangement2.InsertSegment(CGALDotNetGeometry.Shapes.Segment2d,System.Boolean)">
             <summary>
-            
+            Insert a segment into the arrangement.
             </summary>
             <param name="segment"></param>
-            <param name="b">The segments end point.</param>
             <param name="nonIntersecting">True if the segment is know not to 
             hit anything currently in the arrangement.</param>
         </member>
@@ -337,8 +338,8 @@
             <summary>
             Insert a array of segments into the arrangement.
             </summary>
-            <param name="segments"></param>
-            <param name="b">The segments end point.</param>
+            <param name="segments">The segment array</param>
+            <param name="count">The segment arrays length.</param>
             <param name="nonIntersecting">True if the segments are known not to 
             hit anything currently in the arrangement.</param>
         </member>
@@ -559,6 +560,11 @@
         <member name="P:CGALDotNet.CGALGlobal.Version">
             <summary>
             Get the version of CGAL in use.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.CGALGlobal.EigenVersion">
+            <summary>
+            Get the version of eigen being used.
             </summary>
         </member>
         <member name="M:CGALDotNet.CGALGlobal.Angle(CGALDotNetGeometry.Numerics.Vector2d,CGALDotNetGeometry.Numerics.Vector2d)">
@@ -800,6 +806,17 @@
             <param name="w"></param>
             <returns></returns>
         </member>
+        <member name="M:CGALDotNet.CGALGlobal.Orientation(CGALDotNetGeometry.Numerics.Point3d,CGALDotNetGeometry.Numerics.Point3d,CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            returns CGAL::NEGATIVE if u, v and w are negatively oriented, 
+            CGAL::POSITIVE if u, v and w are positively oriented,
+            and CGAL::COPLANAR if u, v and w are coplanar.
+            </summary>
+            <param name="u"></param>
+            <param name="v"></param>
+            <param name="w"></param>
+            <returns></returns>
+        </member>
         <member name="M:CGALDotNet.CGALGlobal.OrthogonalVector(CGALDotNetGeometry.Numerics.Point3d,CGALDotNetGeometry.Numerics.Point3d,CGALDotNetGeometry.Numerics.Point3d)">
             <summary>
             computes an orthogonal vector of the plane defined by p, q
@@ -922,6 +939,351 @@
             Check if the object is still valid.
             </summary>
         </member>
+        <member name="T:CGALDotNet.Collections.NativeList`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.#ctor(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="count"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.#ctor(System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="ptr"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.GetEnumerator">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:CGALDotNet.Collections.NativeList`1.Item(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Add(`0)">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            
+            </summary>
+            <param name="items"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Copy">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="array"></param>
+            <param name="startIndex"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Contains(`0)">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.IndexOf(`0)">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Insert(System.Int32,`0)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <param name="item"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Remove(`0)">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Get(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Set(System.Int32,`0)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <param name="item"></param>
+        </member>
+        <member name="T:CGALDotNet.Collections.NativeList">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.#ctor(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="count"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.#ctor(System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="ptr"></param>
+        </member>
+        <member name="P:CGALDotNet.Collections.NativeList.Capacity">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Collections.NativeList.Count">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Collections.NativeList.IsReadOnly">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.Clear">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.RemoveAt(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.Reverse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.TrimExcess">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList.ReleasePtr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CGALDotNet.Geometry.CGALIntersections">
+            <summary>
+            The static intersection class.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Point DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Line DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Box DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Point Intersection functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Line Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Box Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Point DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Linet DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Box DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Point Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Line Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Box Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
         <member name="T:CGALDotNet.Geometry.INTERSECTION_RESULT_2D">
             <summary>
             Enum for the type of intersection geomerty.
@@ -1016,179 +1378,6 @@
             <typeparam name="K">The polygons kernel.</typeparam>
             <returns>The polygon.</returns>
         </member>
-        <member name="T:CGALDotNet.Geometry.CGALIntersections">
-            <summary>
-            The static intersection class.
-            </summary>
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Point DoIntersect functions
-            
-            </summary>--------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Line DoIntersect functions
-            
-            </summary>--------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Ray DoIntersect functions
-            
-            </summary>--------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Segment DoIntersect functions
-            
-            </summary>--------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Triangle DoIntersect functions
-            
-            </summary>--------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Box DoIntersect functions
-            
-            </summary>--------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Point Intersection functions
-            
-            </summary>--------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Line Intersection functions
-            
-            </summary>-----------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Ray Intersection functions
-            
-            </summary>-----------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Segment Intersection functions
-            
-            </summary>-----------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Triangle Intersection functions
-            
-            </summary>-----------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Box Intersection functions
-            
-            </summary>-----------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_DoIntersect_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Point DoIntersect extern functions
-            
-            </summary>------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_DoIntersect_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Linet DoIntersect extern functions
-            
-            </summary>------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_DoIntersect_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Ray DoIntersect extern functions
-            
-            </summary>------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_DoIntersect_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Segment DoIntersect extern functions
-            
-            </summary>------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_DoIntersect_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Triangle DoIntersect extern functions
-            
-            </summary>------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_DoIntersect_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Box DoIntersect extern functions
-            
-            </summary>------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_Intersection_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Point Intersection extern functions
-            
-            </summary>-------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_Intersection_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Line Intersection extern functions
-            
-            </summary>-------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_Intersection_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Ray Intersection extern functions
-            
-            </summary>-------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_Intersection_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Segment Intersection extern functions
-            
-            </summary>-------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_Intersection_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Triangle Intersection extern functions
-            
-            </summary>-------------------------------------------------------
-        </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EEK_Intersection_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>--------------------------------------------------------
-            
-                            The Box Intersection extern functions
-            
-            </summary>-------------------------------------------------------
-        </member>
         <member name="T:CGALDotNet.Geometry.IsoRectangle2`1">
             <summary>
             The generic IsoRectangle wrapper for a CGAL object.
@@ -1224,9 +1413,11 @@
         </member>
         <member name="M:CGALDotNet.Geometry.IsoRectangle2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.CGALKernel)">
             <summary>
-            Construct with a new kernel.
+            
             </summary>
-            <param name="kernel">The geometry kernel.</param>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="kernel"></param>
         </member>
         <member name="M:CGALDotNet.Geometry.IsoRectangle2.#ctor(CGALDotNet.CGALKernel,System.IntPtr)">
             <summary>
@@ -1448,7 +1639,7 @@
             <summary>
             Check if the points in the mesh are convex.
             </summary>
-            <param name="poly">The mesh.</param>
+            <param name="mesh">The mesh.</param>
             <returns>True if the mesh is convex.</returns>
         </member>
         <member name="M:CGALDotNet.Hulls.ConvexHull3.CheckCount(System.Int32)">
@@ -2102,6 +2293,7 @@
             Compute all non-zero B-spline basis functions
             </summary>
             <param name="deg">Degree of the basis function.</param>
+            <param name="span"></param>
             <param name="knots">Knot vector corresponding to the basis functions.</param>
             <param name="u">Parameter to evaluate the basis functions at.</param>
             <returns>N Values of (deg+1) non-zero basis functions.</returns>
@@ -2250,9 +2442,16 @@
             </summary>
             <returns>Whether closed along v-direction</returns>
         </member>
+        <member name="T:CGALDotNet.Nurbs.NurbsCurveParams2d">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:CGALDotNet.Nurbs.BaseNurbsCurve2d">
             <summary>
             Class for holding a polynomial B-spline curve
+            Not part of CGAL.
+            Implementation found https://github.com/pboyer/verb and https://github.com/pradeep-pyro/tinynurbs
             </summary>
         </member>
         <member name="M:CGALDotNet.Nurbs.BaseNurbsCurve2d.#ctor">
@@ -2376,14 +2575,16 @@
             Get the tangent at parameter u.
             </summary>
             <param name="u">The parameter.</param>
-            <returns>The tangent at u.</returns>
+            <param name="ccw">The normal direction.</param>
+            <returns>The normal at u.</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.BaseNurbsCurve2d.GetNormals(System.Collections.Generic.List{CGALDotNetGeometry.Numerics.Vector2d},System.Int32,System.Boolean)">
             <summary>
-            Sample a curves tangents in a range of equally spaced parametric intervals.
+            Sample a curves normals in a range of equally spaced parametric intervals.
             </summary>
             <param name="samples">The numbers times to sample the curve.</param>
             <param name="normals">The list of sampled points.</param>
+            <param name="ccw">The normals direction.</param>
         </member>
         <member name="M:CGALDotNet.Nurbs.BaseNurbsCurve2d.NormalizeKnots">
             <summary>
@@ -2494,6 +2695,8 @@
             </summary>
             <param name="crv">The curve to split.</param>
             <param name="u">The parameter to split the curve at</param>
+            <param name="left">The left side of the split curve.</param>
+            <param name="right">The right side of the split curve.</param>
             <returns>The two new curves.</returns>
         </member>
         <member name="T:CGALDotNet.Nurbs.RationalNurbsCurve2d">
@@ -2513,6 +2716,7 @@
             <param name="degree">The curves degree.</param>
             <param name="knots">The curves knots.</param>
             <param name="control_points">The curves control points.</param>
+            <param name="weights">The curves weights.</param>
         </member>
         <member name="M:CGALDotNet.Nurbs.RationalNurbsCurve2d.#ctor(System.Int32,System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{CGALDotNetGeometry.Numerics.HPoint2d})">
             <summary>
@@ -2598,7 +2802,9 @@
             Split the curve a the parameter and return the two new curves.
             </summary>
             <param name="crv">The curve to split.</param>
-            <param name="u">The parameter to split the curve at</param>
+            <param name="u">The parameter to split the curve at.</param>
+            <param name="left">The left side of split curve.</param>
+            <param name="right">The right side of the split curve.</param>
             <returns>The two new curves.</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsEval.CartesianCurvePoint(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double)">
@@ -2609,12 +2815,20 @@
             <param name="u">Parameter to evaluate the curve at.</param>
             <returns>Resulting point on the curve at parameter u.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CGALDotNet.Nurbs.NurbsEval.HomogeneousCurvePoint(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double)" -->
+        <member name="M:CGALDotNet.Nurbs.NurbsEval.HomogeneousCurvePoint(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double)">
+            <summary>
+            Evaluate point on a nonrational NURBS curve
+            </summary>
+            <param name="crv">The nurbs curve.</param>
+            <param name="u">Parameter to evaluate the curve at.</param>
+            <returns>Resulting point on the curve at parameter u.</returns>
+        </member>
         <member name="M:CGALDotNet.Nurbs.NurbsEval.CurveTangent(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double)">
             <summary>
             Evaluate the tangent of a B-spline curve
             </summary>
             <param name="crv">Curve object</param>
+            <param name="u"></param>
             <returns>Unit tangent of the curve at u.</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsEval.CurveNormal(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double,System.Boolean)">
@@ -2622,6 +2836,7 @@
             Evaluate the tangent of a B-spline curve
             </summary>
             <param name="crv">Curve object</param>
+            <param name="u"></param>
             <param name="ccw">Shouuld the normal be counter clock-wise to the tangent or clock-wise</param>
             <returns>Unit tangent of the curve at u.</returns>
         </member>
@@ -2641,6 +2856,7 @@
             </summary>
             <param name="num_ders">Number of times to derivate.</param>
             <param name="u">Parameter to evaluate the derivatives at.</param>
+            <param name="crv"></param>
             <returns>Derivatives of the curve at u.</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsEval.CartesianSurfacePoint(CGALDotNet.Nurbs.BaseNurbsSurface3d,System.Double,System.Double)">
@@ -2658,6 +2874,7 @@
             </summary>
             <param name="u">Parameter to evaluate the surface at.</param>
             <param name="v">Parameter to evaluate the surface at.</param>
+            <param name="srf">The surface.</param>
             <returns>Resulting point on the surface at (u, v).</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsEval.SurfaceTangent(CGALDotNet.Nurbs.BaseNurbsSurface3d,System.Double,System.Double,CGALDotNetGeometry.Numerics.Vector3d@,CGALDotNetGeometry.Numerics.Vector3d@)">
@@ -2667,6 +2884,8 @@
             <param name="srf">Surface object</param>
             <param name="u">Parameter in the u-direction</param>
             <param name="v">Parameter in the v-direction</param>
+            <param name="du"></param>
+            <param name="dv"></param>
             <returns>Tuple with unit tangents along u- and v-directions</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsEval.SurfaceNormal(CGALDotNet.Nurbs.BaseNurbsSurface3d,System.Double,System.Double)">
@@ -2692,6 +2911,7 @@
             <summary>
             Evaluate derivatives on a non-rational NURBS surface
             </summary>
+            <param name="srf">The surface.</param>
             <param name="num_ders">Number of times to differentiate.</param>
             <param name="u">Parameter to evaluate the surface at.</param>
             <param name="v">Parameter to evaluate the surface at.</param>
@@ -2779,6 +2999,7 @@
             <param name="a">direction of ray 1, assumed normalized</param>
             <param name="b0">origin for ray 2</param>
             <param name="b">direction of ray 2, assumed normalized</param>
+            <param name="result">The intersection result.</param>
             <returns></returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsModify.CurveKnotInsert(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double,System.Int32)">
@@ -2796,6 +3017,8 @@
             </summary>
             <param name="crv">Curve object</param>
             <param name="u">Parameter to split at</param>
+            <param name="leftParam"></param>
+            <param name="rightParam"></param>
             <returns>Tuple with first half and second half of the curve</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsModify.CurveKnotInsert(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double,System.Int32,System.Collections.Generic.List{System.Double}@,System.Collections.Generic.List{CGALDotNetGeometry.Numerics.HPoint2d}@)">
@@ -2843,6 +3066,8 @@
             </summary>
             <param name="srf">Surface object</param>
             <param name="u">Parameter along u-direction to split the surface</param>
+            <param name="leftParam"></param>
+            <param name="rightParam"></param>
             <returns>Tuple with first and second half of the surfaces</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsModify.SurfaceSplitV(CGALDotNet.Nurbs.BaseNurbsSurface3d,System.Double,CGALDotNet.Nurbs.NurbsSurfaceParams3d@,CGALDotNet.Nurbs.NurbsSurfaceParams3d@)">
@@ -2851,23 +3076,27 @@
             </summary>
             <param name="srf">Surface object</param>
             <param name="v">Parameter along v-direction to split the surface</param>
+            <param name="leftParam"></param>
+            <param name="rightParam"></param>
             <returns>Tuple with first and second half of the surfaces</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsModify.SurfaceKnotInsert(CGALDotNet.Nurbs.BaseNurbsSurface3d,System.Double,System.Int32,System.Boolean,System.Collections.Generic.List{System.Double}@,CGALDotNetGeometry.Numerics.HPoint3d[0:,0:]@)">
             <summary>
-            Insert knots in the surface along one direction
+            Insert knots in the surface along one direction.
             </summary>
-            <param name="knot">Knot value to insert</param>
-            <param name="r">Number of times to insert</param>
-            <param name="along_u">Whether inserting along u-direction</param>
-            <param name="new_knots">Updated knot vector</param>
-            <param name="new_cp">Updated control points</param>
-            <returns></returns>
+            <param name="srf"></param>
+            <param name="knot"></param>
+            <param name="r"></param>
+            <param name="along_u"></param>
+            <param name="new_knots"></param>
+            <param name="new_cp"></param>
+            <exception cref="T:System.Exception"></exception>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsModify.SurfaceSplit(CGALDotNet.Nurbs.BaseNurbsSurface3d,System.Double,System.Boolean,System.Collections.Generic.List{System.Double}@,CGALDotNetGeometry.Numerics.HPoint3d[0:,0:]@,System.Collections.Generic.List{System.Double}@,CGALDotNetGeometry.Numerics.HPoint3d[0:,0:]@)">
             <summary>
             
             </summary>
+            <param name="srf">The surface.</param>
             <param name="u">Parameter to split curve</param>
             <param name="along_u">Whether the direction to split along is the u-direction</param>
             <param name="left_knots">Knots of the left part of the curve</param>
@@ -2939,7 +3168,8 @@
             <summary>
             Get the point at parameter u,v.
             </summary>
-            <param name="u">The parameter.</param>
+            <param name="u">The u parameter.</param>
+            <param name="v">The v parameter.</param>
             <returns>The point at u,v.</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.BaseNurbsSurface3d.GetCartesianPoints(System.Int32,CGALDotNetGeometry.Numerics.Point3d[0:,0:])">
@@ -2954,14 +3184,18 @@
             <summary>
             Get the tangent at parameter u,v.
             </summary>
-            <param name="u">The parameter.</param>
+            <param name="u">The v parameter.</param>
+            <param name="v">The v parameter.</param>
+            <param name="tu">The u parameters tangent.</param>
+            <param name="tv">The v parameters tangent.</param>
             <returns>The tanget at u,v.</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.BaseNurbsSurface3d.Normal(System.Double,System.Double)">
             <summary>
             Get the normal at parameter u,v.
             </summary>
-            <param name="u">The parameter.</param>
+            <param name="u">The u parameter.</param>
+            <param name="v">The v parameter.</param>
             <returns>The normal at u,v.</returns>
         </member>
         <member name="M:CGALDotNet.Nurbs.BaseNurbsSurface3d.GetNormals(System.Int32,CGALDotNetGeometry.Numerics.Vector3d[0:,0:])">
@@ -3112,17 +3346,21 @@
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsSurface3d.SplitU(CGALDotNet.Nurbs.NurbsSurface3d,System.Double,CGALDotNet.Nurbs.NurbsSurface3d@,CGALDotNet.Nurbs.NurbsSurface3d@)">
             <summary>
-            Split the surface a the parameter and return the two new surfaces.
+            
             </summary>
-            <param name="srf">The surface to split.</param>
-            <param name="u">The parameter to split the surface at</param>
+            <param name="srf"></param>
+            <param name="u"></param>
+            <param name="left"></param>
+            <param name="right"></param>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsSurface3d.SplitV(CGALDotNet.Nurbs.NurbsSurface3d,System.Double,CGALDotNet.Nurbs.NurbsSurface3d@,CGALDotNet.Nurbs.NurbsSurface3d@)">
             <summary>
-            Split the surface a the parameter and return the two new surfaces.
+            
             </summary>
-            <param name="srf">The surface to split.</param>
-            <param name="v">The parameter to split the surface at</param>
+            <param name="srf"></param>
+            <param name="v"></param>
+            <param name="left"></param>
+            <param name="right"></param>
         </member>
         <member name="T:CGALDotNet.Nurbs.RationalNurbsSurface3d">
             <summary>
@@ -3146,13 +3384,14 @@
         </member>
         <member name="M:CGALDotNet.Nurbs.RationalNurbsSurface3d.#ctor(System.Int32,System.Int32,System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},CGALDotNetGeometry.Numerics.Point3d[0:,0:],System.Double[0:,0:])">
             <summary>
-            Create a new surface.
+            
             </summary>
-            <param name="degree_u">The degree on the first dimension.</param>
-            <param name="degree_v">The degree on the second dimension.</param>
-            <param name="knots_u">The knots on the first dimension.</param>
-            <param name="knots_v">The knots on the second dimension.</param>
-            <param name="control_points">The control points in cartesion coordinates.</param>
+            <param name="degree_u"></param>
+            <param name="degree_v"></param>
+            <param name="knots_u"></param>
+            <param name="knots_v"></param>
+            <param name="control_points"></param>
+            <param name="weights"></param>
         </member>
         <member name="M:CGALDotNet.Nurbs.RationalNurbsSurface3d.#ctor(System.Int32,System.Int32,System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},CGALDotNetGeometry.Numerics.HPoint3d[0:,0:])">
             <summary>
@@ -3219,17 +3458,21 @@
         </member>
         <member name="M:CGALDotNet.Nurbs.RationalNurbsSurface3d.SplitU(CGALDotNet.Nurbs.RationalNurbsSurface3d,System.Double,CGALDotNet.Nurbs.RationalNurbsSurface3d@,CGALDotNet.Nurbs.RationalNurbsSurface3d@)">
             <summary>
-            Split the surface a the parameter and return the two new surfaces.
+            
             </summary>
-            <param name="srf">The surface to split.</param>
-            <param name="u">The parameter to split the surface at</param>
+            <param name="srf"></param>
+            <param name="u"></param>
+            <param name="left"></param>
+            <param name="right"></param>
         </member>
         <member name="M:CGALDotNet.Nurbs.RationalNurbsSurface3d.SplitV(CGALDotNet.Nurbs.RationalNurbsSurface3d,System.Double,CGALDotNet.Nurbs.RationalNurbsSurface3d@,CGALDotNet.Nurbs.RationalNurbsSurface3d@)">
             <summary>
-            Split the surface a the parameter and return the two new surfaces.
+            
             </summary>
-            <param name="srf">The surface to split.</param>
-            <param name="v">The parameter to split the surface at</param>
+            <param name="srf"></param>
+            <param name="v"></param>
+            <param name="left"></param>
+            <param name="right"></param>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsTess.GetCartesianPoints(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Collections.Generic.List{CGALDotNetGeometry.Numerics.Point2d},System.Double,System.Double,System.Int32)">
             <summary>
@@ -3260,6 +3503,7 @@
             <param name="end">end parameter for sampling</param>
             <param name="numSamples">integer number of samples</param>
             <param name="normals">The list of sampled points.</param>
+            <param name="ccw"></param>
         </member>
         <member name="M:CGALDotNet.Nurbs.NurbsTess.EstimateLength(CGALDotNet.Nurbs.BaseNurbsCurve2d,System.Double,System.Double,System.Int32)">
             <summary>
@@ -3531,7 +3775,12 @@
             The orientation expressed as the clock direction.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Polygons.Polygon2.IsDegenerate" -->
+        <member name="P:CGALDotNet.Polygons.Polygon2.IsDegenerate">
+            <summary>
+            Is the polygon degenerate.
+            Polygons with less than 3 points are degenerate.
+            </summary>
+        </member>
         <member name="P:CGALDotNet.Polygons.Polygon2.IsClockWise">
             <summary>
             Is the polygon cw orientated.
@@ -3613,14 +3862,15 @@
             Remove the point at the index from the array.
             </summary>
             <param name="index">The points index.</param>
-            <param name="pointx">The point to insert.</param>
+            <param name="point">The point to insert.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.Polygon2.Insert(System.Int32,System.Int32,CGALDotNetGeometry.Numerics.Point2d[])">
+        <member name="M:CGALDotNet.Polygons.Polygon2.Insert(System.Int32,CGALDotNetGeometry.Numerics.Point2d[],System.Int32)">
             <summary>
             Remove a range of points from the array.
             </summary>
             <param name="start">The starting index</param>
-            <param name="count">The number of points to remove.</param>
+            <param name="points">The points to insert.</param>
+            <param name="count">The number of points to insert.</param>
         </member>
         <member name="M:CGALDotNet.Polygons.Polygon2.ShrinkCapacityToFitCount">
             <summary>
@@ -4241,6 +4491,7 @@
             <summary>
             https://rosettacode.org/wiki/Koch_curve#C.2B.2B
             </summary>
+            <param name="center">The stars center.</param>
             <param name="size">The size of the polygon.</param>
             <param name="iterations">The number of times to sub divide.</param>
             <param name="ccw">True for a counter clock wise polygon, false for a clock wise polygon</param>
@@ -4446,7 +4697,7 @@
             <param name="offset">The offset type</param>
             <param name="polygon">The polygon to offset.</param>
             <param name="amount">The offset amount</param>
-            <param name="result">The offset polygon</param>
+            <param name="results">The offset polygon</param>
         </member>
         <member name="M:CGALDotNet.Polygons.PolygonOffset2`1.CreateOffset(CGALDotNet.Polygons.OFFSET,CGALDotNet.Polygons.PolygonWithHoles2{`0},System.Double,System.Collections.Generic.List{CGALDotNet.Polygons.Polygon2{`0}})">
             <summary>
@@ -4455,7 +4706,7 @@
             <param name="offset">The offset type</param>
             <param name="polygon">The polygon to offset.</param>
             <param name="amount">The offset amount</param>
-            <param name="result">The offset polygon</param>
+            <param name="results">The offset polygon</param>
         </member>
         <member name="M:CGALDotNet.Polygons.PolygonOffset2`1.CreateInteriorOffset(CGALDotNet.Polygons.Polygon2{`0},System.Double,System.Collections.Generic.List{CGALDotNet.Polygons.Polygon2{`0}})">
             <summary>
@@ -4463,7 +4714,7 @@
             </summary>
             <param name="polygon">The polygon to offset.</param>
             <param name="offset">The offset amount</param>
-            <param name="result">The offset polygon</param>
+            <param name="results">The offset polygon</param>
         </member>
         <member name="M:CGALDotNet.Polygons.PolygonOffset2`1.CreateInteriorOffset(CGALDotNet.Polygons.PolygonWithHoles2{`0},System.Double,System.Collections.Generic.List{CGALDotNet.Polygons.Polygon2{`0}})">
             <summary>
@@ -4479,7 +4730,7 @@
             </summary>
             <param name="polygon">The polygon to offset.</param>
             <param name="offset">The offset amount</param>
-            <param name="result">The offset polygon</param>
+            <param name="results">The offset polygon</param>
         </member>
         <member name="M:CGALDotNet.Polygons.PolygonOffset2`1.CreateExteriorOffset(CGALDotNet.Polygons.PolygonWithHoles2{`0},System.Double,System.Collections.Generic.List{CGALDotNet.Polygons.Polygon2{`0}})">
             <summary>
@@ -4724,6 +4975,7 @@
             and the clear the buffer.
             </summary>
             <param name="count">The number of polygons in buffer.</param>
+            <param name="results">The resulting polygons.</param>
         </member>
         <member name="T:CGALDotNet.Polygons.PolygonPartition2">
             <summary>
@@ -5193,7 +5445,12 @@
             The orientation expressed as the clock direction.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Polygons.PolygonWithHoles2.IsDegenerate" -->
+        <member name="P:CGALDotNet.Polygons.PolygonWithHoles2.IsDegenerate">
+            <summary>
+            Is the polygon degenerate.
+            Polygons with less than 3 points are degenerate.
+            </summary>
+        </member>
         <member name="P:CGALDotNet.Polygons.PolygonWithHoles2.IsClockWise">
             <summary>
             Is the polygon cw orientated.
@@ -5372,7 +5629,15 @@
             <param name="index">If element type is a hole this is the holes index.</param>
             <returns>The orientated side of point compared to the polygon.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CGALDotNet.Polygons.PolygonWithHoles2.FindSignedArea(CGALDotNet.Polygons.POLYGON_ELEMENT,System.Int32)" -->
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.FindSignedArea(CGALDotNet.Polygons.POLYGON_ELEMENT,System.Int32)">
+            <summary>
+            The signed area of the polygon.
+            </summary>
+            <param name="element">The element type.</param>
+            <param name="index">If element type is a hole this is the holes index.</param>
+            <returns>The signed area is positive if polygon is ccw 
+            and negation if cw.</returns>
+        </member>
         <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.FindArea(CGALDotNet.Polygons.POLYGON_ELEMENT,System.Int32)">
             <summary>
             The area of the polygon.
@@ -5484,6 +5749,11 @@
             Number of faces.
             </summary>
         </member>
+        <member name="P:CGALDotNet.Polyhedra.IMesh.HalfedgeCount">
+            <summary>
+            Number of halfedges.
+            </summary>
+        </member>
         <member name="P:CGALDotNet.Polyhedra.IMesh.BorderEdgeCount">
             <summary>
             Number of border edges.
@@ -5537,7 +5807,13 @@
             Clear the mesh.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CGALDotNet.Polyhedra.IMesh.ClearNormalMaps(System.Boolean,System.Boolean)" -->
+        <member name="M:CGALDotNet.Polyhedra.IMesh.ClearNormalMaps(System.Boolean,System.Boolean)">
+            <summary>
+            Clear the normal maps.
+            </summary>
+            <param name="vertices">True to clear the vertex normal map.</param>
+            <param name="faces">True to clear the face normal map. </param>
+        </member>
         <member name="M:CGALDotNet.Polyhedra.IMesh.CreateMesh(CGALDotNetGeometry.Numerics.Point3d[],System.Int32[],System.Int32[])">
             <summary>
             Create a mesh from the points and indices.
@@ -5588,6 +5864,7 @@
             Create a mesh consisting of one polygon face.
             </summary>
             <param name="points">The faces points</param>
+            <param name="count">The length of the point array.</param>
             <param name="xz">Should the y coord of the points be used for the z coord.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.IMesh.GetIndices(System.Int32[],System.Int32[])">
@@ -5663,6 +5940,83 @@
             </summary>
             <param name="points">The point array.</param>
             <param name="count">The point arrays length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetSegment(System.Int32,CGALDotNetGeometry.Shapes.Segment3d@)">
+            <summary>
+            Get a halfedges segment.
+            </summary>
+            <param name="index">The halfedges index.</param>
+            <param name="segment">The segment.</param>
+            <returns>True if halfedge found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetSegments(CGALDotNetGeometry.Shapes.Segment3d[],System.Int32)">
+            <summary>
+            Get a segment for  each halfedge in the mesh.
+            </summary>
+            <param name="segments">The segment array.</param>
+            <param name="count">The segment array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetTriangle(System.Int32,CGALDotNetGeometry.Shapes.Triangle3d@)">
+            <summary>
+            Get the faces triangle. 
+            Presumes face is a triangle with no checks.
+            </summary>
+            <param name="index">The faces index.</param>
+            <param name="triangle">The faces triangle</param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetTriangles(CGALDotNetGeometry.Shapes.Triangle3d[],System.Int32)">
+            <summary>
+            Get a triangle for each face in the mesh.
+            Presumes all faces are triangles with no checks.
+            </summary>
+            <param name="triangles">The trainagle array.</param>
+            <param name="count">The traingle  arrays length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetVertex(System.Int32,CGALDotNet.Polyhedra.MeshVertex3@)">
+            <summary>
+            Get the mesh vertex.
+            </summary>
+            <param name="index">The vertices index.</param>
+            <param name="vertex">The vertex.</param>
+            <returns>True if the vertex was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetVertices(CGALDotNet.Polyhedra.MeshVertex3[],System.Int32)">
+            <summary>
+            Get the vertices in the mesh.
+            </summary>
+            <param name="vertices">The vertex array.</param>
+            <param name="count">The vertex array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetFace(System.Int32,CGALDotNet.Polyhedra.MeshFace3@)">
+            <summary>
+            Get the mesh face.
+            </summary>
+            <param name="index">The faces index.</param>
+            <param name="face">The face.</param>
+            <returns>True if the face was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetFaces(CGALDotNet.Polyhedra.MeshFace3[],System.Int32)">
+            <summary>
+            Get the faces in the mesh.
+            </summary>
+            <param name="faces">The face array.</param>
+            <param name="count">The face array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetHalfedge(System.Int32,CGALDotNet.Polyhedra.MeshHalfedge3@)">
+            <summary>
+            Get the mesh halfedge.
+            </summary>
+            <param name="index">The halfedges index.</param>
+            <param name="halfedge">The halfedge.</param>
+            <returns>True if the halfedge was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.GetHalfedges(CGALDotNet.Polyhedra.MeshHalfedge3[],System.Int32)">
+            <summary>
+            Get the halfedges in the mesh.
+            </summary>
+            <param name="halfedges">The halfedge array.</param>
+            <param name="count">The halfedge array length.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.IMesh.GetPolygonalCount">
             <summary>
@@ -5762,11 +6116,67 @@
             Reverses the orientation of the vertices in each face.
             </summary>
         </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.BoundedSide(CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find what side of the mesh the lies in.
+            </summary>
+            <param name="point">The point to check.</param>
+            <returns>ON_BOUNDED_SIDE if point inside mesh, 
+            ON_UNBOUNDED_SIDE if point not inside, 
+            ON_BOUNDARY if point is on the surface.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.ContainsPoint(CGALDotNetGeometry.Numerics.Point3d,System.Boolean)">
+            <summary>
+            Does the mesh contain the point.
+            </summary>
+            <param name="point">The point.</param>
+            <param name="includeBoundary">If point is on the boundary does it count a being contained.</param>
+            <returns>True if the poly contains the point</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.LocateFace(CGALDotNetGeometry.Shapes.Ray3d)">
+            <summary>
+            Locate the face the rays hits.
+            </summary>
+            <param name="ray">The ray.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.ClosestFace(CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find the face closest to the point.
+            </summary>
+            <param name="point">The point.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.LocateFace(CGALDotNetGeometry.Shapes.Ray3d,CGALDotNet.Polyhedra.MeshFace3@)">
+            <summary>
+            Locate the face hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="face">The hit face.</param>
+            <returns>True if the ray hit a face.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.LocateVertex(CGALDotNetGeometry.Shapes.Ray3d,System.Double,CGALDotNet.Polyhedra.MeshVertex3@)">
+            <summary>
+            Locate the vertex hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="radius">The distance the vertex has to be within hit point.</param>
+            <param name="vertex">The hit vertex.</param>
+            <returns>True if the ray hit a vertex.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.IMesh.LocateHalfedge(CGALDotNetGeometry.Shapes.Ray3d,System.Double,CGALDotNet.Polyhedra.MeshHalfedge3@)">
+            <summary>
+            Locate the edge hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="radius">The distance the edge has to be within hit point.</param>
+            <param name="edge">The hit edge.</param>
+            <returns>True if the ray hit a edge.</returns>
+        </member>
         <member name="T:CGALDotNet.Polyhedra.MeshFactory">
             <summary>
             https://github.com/caosdoar/spheres/blob/master/src/spheres.cpp
             https://github.com/mrdoob/three.js/tree/dev/src/geometries
-            https://github.com/vorg/primitive-capsule/blob/master/index.js
             </summary>
         </member>
         <member name="T:CGALDotNet.Polyhedra.NefPolyhedron3`1">
@@ -6044,51 +6454,58 @@
             <summary>
             Check if the mesh is valid.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The mesh to check.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.PolyhedraAlgorithm.CheckIsValid(CGALDotNet.Polyhedra.IMesh)">
             <summary>
             Check if the mesh is valid.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The mesh to check.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.PolyhedraAlgorithm.CheckIsValidTriangleException(CGALDotNet.Polyhedra.IMesh)">
             <summary>
             Check if the mesh is a valid triangle mesh.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The mesh to check.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.PolyhedraAlgorithm.CheckIsValidTriangle(CGALDotNet.Polyhedra.IMesh)">
             <summary>
             Check if the mesh is a valid triangle mesh.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The mesh to check.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.PolyhedraAlgorithm.CheckIsValidClosedException(CGALDotNet.Polyhedra.IMesh)">
             <summary>
             Check if the mesh is a valid closed mesh.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The mesh to check.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.PolyhedraAlgorithm.CheckIsValidClosed(CGALDotNet.Polyhedra.IMesh)">
             <summary>
             Check if the mesh is a valid closed mesh.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The polygon to check.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.PolyhedraAlgorithm.CheckIsValidClosedTriangleException(CGALDotNet.Polyhedra.IMesh)">
             <summary>
             Check if the mesh is a valid triangle mesh.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The mesh to check.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.PolyhedraAlgorithm.CheckIsValidClosedTriangle(CGALDotNet.Polyhedra.IMesh)">
             <summary>
             Check if the mesh is a valid triangle mesh.
             </summary>
-            <param name="polygon">The polygon to check.</param>
+            <param name="mesh">The mesh to check.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:CGALDotNet.Polyhedra.Polyhedron3`1" -->
+        <member name="T:CGALDotNet.Polyhedra.Polyhedron3`1">
+            <summary>
+            A polyhedral surface consists of vertices, edges, 
+            facets and an incidence relation on them.
+             Each edge is represented by two halfedges with opposite orientations.
+            </summary>
+            <typeparam name="K">The kernel type.</typeparam>
+        </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3`1.#ctor">
             <summary>
             Default constructor.
@@ -6137,18 +6554,6 @@
             <param name="density_control_factor">a factor to control density of the output mesh, 
             where larger values lead to denser refinements. Defalus to sqrt of 2.</param>
             <returns>The number of new vertices.</returns>
-        </member>
-        <member name="M:CGALDotNet.Polyhedra.Polyhedron3`1.IsotropicRemeshing(System.Double,System.Int32)">
-            <summary>
-            Remeshes a triangulated region of a polygon mesh.
-            This operation sequentially performs edge splits, edge collapses, edge flips, 
-            tangential relaxation and projection to the initial surface to generate 
-            a smooth mesh with a prescribed edge length.
-            </summary>
-            <param name="iterations">The number of times to perform the remeshing.</param>
-            <param name="target_edge_length">the edge length that is targeted in the remeshed patch. 
-            If 0 is passed then only the edge-flip, tangential relaxation, and projection steps will be done.</param>
-            <returns>The number of new vertices added.</returns>
         </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3`1.Orient(CGALDotNet.Processing.ORIENTATE)">
             <summary>
@@ -6209,6 +6614,20 @@
             Find the min, max and average face areas in the mesh
             </summary>
             <returns>The min, max and average face areas in the mesh.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3`1.LocateFace(CGALDotNetGeometry.Shapes.Ray3d)">
+            <summary>
+            Locate the face the rays hits.
+            </summary>
+            <param name="ray">The ray.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3`1.ClosestFace(CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find the face closest to the point.
+            </summary>
+            <param name="point">The point.</param>
+            <returns>The hit result.</returns>
         </member>
         <member name="T:CGALDotNet.Polyhedra.Polyhedron3">
             <summary>
@@ -6338,7 +6757,13 @@
             <param name="faces">True to clear the face index map.</param>
             <param name="edges">True to clear the edges index map.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CGALDotNet.Polyhedra.Polyhedron3.ClearNormalMaps(System.Boolean,System.Boolean)" -->
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.ClearNormalMaps(System.Boolean,System.Boolean)">
+            <summary>
+            Clear the normal maps.
+            </summary>
+            <param name="vertices">True to clear the vertex normal map.</param>
+            <param name="faces">True to clear the face normal map</param>
+        </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.BuildIndices(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Builds the vertex and/or face index maps if needed.
@@ -6410,6 +6835,7 @@
             Create a mesh consisting of one polygon face.
             </summary>
             <param name="points">The faces points</param>
+            <param name="count">The point array length.</param>
             <param name="xz">Should the y coord of the points be used for the z coord.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetIndices(System.Int32[],System.Int32[])">
@@ -6492,6 +6918,83 @@
             </summary>
             <param name="points">The point array.</param>
             <param name="count">The point arrays length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetSegment(System.Int32,CGALDotNetGeometry.Shapes.Segment3d@)">
+            <summary>
+            Get a halfedges segment.
+            </summary>
+            <param name="index">The halfedges index.</param>
+            <param name="segment">The segment.</param>
+            <returns>True if halfedge found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetSegments(CGALDotNetGeometry.Shapes.Segment3d[],System.Int32)">
+            <summary>
+            Get a segment for  each halfedge in the mesh.
+            </summary>
+            <param name="segments">The segment array.</param>
+            <param name="count">The segment array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetTriangle(System.Int32,CGALDotNetGeometry.Shapes.Triangle3d@)">
+            <summary>
+            Get the faces triangle. 
+            Presumes face is a triangle with no checks.
+            </summary>
+            <param name="index">The faces index.</param>
+            <param name="triangle">The faces triangle</param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetTriangles(CGALDotNetGeometry.Shapes.Triangle3d[],System.Int32)">
+            <summary>
+            Get a triangle for each face in the mesh.
+            Presumes all faces are triangles with no checks.
+            </summary>
+            <param name="triangles">The trainagle array.</param>
+            <param name="count">The traingle  arrays length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetVertex(System.Int32,CGALDotNet.Polyhedra.MeshVertex3@)">
+            <summary>
+            Get the mesh vertex.
+            </summary>
+            <param name="index">The vertices index.</param>
+            <param name="vertex">The vertex.</param>
+            <returns>True if the vertex was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetVertices(CGALDotNet.Polyhedra.MeshVertex3[],System.Int32)">
+            <summary>
+            Get the vertices in the mesh.
+            </summary>
+            <param name="vertices">The vertex array.</param>
+            <param name="count">The vertex array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetFace(System.Int32,CGALDotNet.Polyhedra.MeshFace3@)">
+            <summary>
+            Get the mesh face.
+            </summary>
+            <param name="index">The faces index.</param>
+            <param name="face">The face.</param>
+            <returns>True if the face was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetFaces(CGALDotNet.Polyhedra.MeshFace3[],System.Int32)">
+            <summary>
+            Get the faces in the mesh.
+            </summary>
+            <param name="faces">The face array.</param>
+            <param name="count">The face array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetHalfedge(System.Int32,CGALDotNet.Polyhedra.MeshHalfedge3@)">
+            <summary>
+            Get the mesh halfedge.
+            </summary>
+            <param name="index">The halfedges index.</param>
+            <param name="halfedge">The halfedge.</param>
+            <returns>True if the halfedge was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetHalfedges(CGALDotNet.Polyhedra.MeshHalfedge3[],System.Int32)">
+            <summary>
+            Get the halfedges in the mesh.
+            </summary>
+            <param name="halfedges">The halfedge array.</param>
+            <param name="count">The halfedge array length.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.GetPolygonalCount">
             <summary>
@@ -6601,6 +7104,46 @@
             <param name="includeBoundary">If point is on the boundary does it count a being contained.</param>
             <returns>True if the poly contains the point</returns>
         </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.LocateFace(CGALDotNetGeometry.Shapes.Ray3d)">
+            <summary>
+            Locate the face the rays hits.
+            </summary>
+            <param name="ray">The ray.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.ClosestFace(CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find the face closest to the point.
+            </summary>
+            <param name="point">The point.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.LocateFace(CGALDotNetGeometry.Shapes.Ray3d,CGALDotNet.Polyhedra.MeshFace3@)">
+            <summary>
+            Locate the face hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="face">The hit face.</param>
+            <returns>True if the ray hit a face.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.LocateVertex(CGALDotNetGeometry.Shapes.Ray3d,System.Double,CGALDotNet.Polyhedra.MeshVertex3@)">
+            <summary>
+            Locate the vertex hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="radius">The distance the vertex has to be within hit point.</param>
+            <param name="vertex">The hit vertex.</param>
+            <returns>True if the ray hit a vertex.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.LocateHalfedge(CGALDotNetGeometry.Shapes.Ray3d,System.Double,CGALDotNet.Polyhedra.MeshHalfedge3@)">
+            <summary>
+            Locate the edge hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="radius">The distance the edge has to be within hit point.</param>
+            <param name="edge">The hit edge.</param>
+            <returns>True if the ray hit a edge.</returns>
+        </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.DoesSelfIntersect">
             <summary>
             Tests if a set of faces of a triangulated surface mesh self-intersects.
@@ -6608,7 +7151,15 @@
             </summary>
             <returns>True/Fasle if a valid triangle polyhedra,or UNDETERMINED if not.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CGALDotNet.Polyhedra.Polyhedron3.FindIfValid(System.Int32)" -->
+        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.FindIfValid(System.Int32)">
+            <summary>
+            returns true if the polyhedral surface is combinatorially consistent.
+            For level == 1 the normalization of the border edges is checked too.
+            This method checks that each face is at least a triangle and that the
+            two incident facets of a non-border edge are distinct.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.FindBoundingBox">
             <summary>
             Computes the bounding box.
@@ -6716,18 +7267,6 @@
             <param name="density_control_factor">a factor to control density of the output mesh, 
             where larger values lead to denser refinements. Defalus to sqrt of 2.</param>
             <returns>The number of new vertices.</returns>
-        </member>
-        <member name="M:CGALDotNet.Polyhedra.Polyhedron3.IsotropicRemeshing(System.Double,System.Int32)">
-            <summary>
-            Remeshes a triangulated region of a polygon mesh.
-            This operation sequentially performs edge splits, edge collapses, edge flips, 
-            tangential relaxation and projection to the initial surface to generate 
-            a smooth mesh with a prescribed edge length.
-            </summary>
-            <param name="iterations">The number of times to perform the remeshing.</param>
-            <param name="target_edge_length">the edge length that is targeted in the remeshed patch. 
-            If 0 is passed then only the edge-flip, tangential relaxation, and projection steps will be done.</param>
-            <returns>The number of new vertices added.</returns>
         </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.Orient(CGALDotNet.Processing.ORIENTATE)">
             <summary>
@@ -6864,18 +7403,6 @@
             where larger values lead to denser refinements. Defalus to sqrt of 2.</param>
             <returns>The number of new vertices.</returns>
         </member>
-        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3`1.IsotropicRemeshing(System.Double,System.Int32)">
-            <summary>
-            Remeshes a triangulated region of a polygon mesh.
-            This operation sequentially performs edge splits, edge collapses, edge flips, 
-            tangential relaxation and projection to the initial surface to generate 
-            a smooth mesh with a prescribed edge length.
-            </summary>
-            <param name="iterations">The number of times to perform the remeshing.</param>
-            <param name="target_edge_length">the edge length that is targeted in the remeshed patch. 
-            If 0 is passed then only the edge-flip, tangential relaxation, and projection steps will be done.</param>
-            <returns>The number of new vertices added.</returns>
-        </member>
         <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3`1.Orient(CGALDotNet.Processing.ORIENTATE)">
             <summary>
             Orient the faces in the mesh.
@@ -6932,6 +7459,20 @@
             Find the min, max and average face areas in the mesh
             </summary>
             <returns>The min, max and average face areas in the mesh.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3`1.LocateFace(CGALDotNetGeometry.Shapes.Ray3d)">
+            <summary>
+            Locate the face the rays hits.
+            </summary>
+            <param name="ray">The ray.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3`1.ClosestFace(CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find the face closest to the point.
+            </summary>
+            <param name="point">The point.</param>
+            <returns>The hit result.</returns>
         </member>
         <member name="T:CGALDotNet.Polyhedra.SurfaceMesh3">
             <summary>
@@ -7087,7 +7628,13 @@
             <param name="edges">True to clear the edges index map.</param>
             <param name="halfedges">True to clear the halfedges index map.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CGALDotNet.Polyhedra.SurfaceMesh3.ClearNormalMaps(System.Boolean,System.Boolean)" -->
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.ClearNormalMaps(System.Boolean,System.Boolean)">
+            <summary>
+            Clear the normal maps.
+            </summary>
+            <param name="vertices">True to clear the vertex normal map.</param>
+            <param name="faces">True to clear the face normal map</param>
+        </member>
         <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.ClearProperyMaps">
             <summary>
             Clear the property maps.
@@ -7114,7 +7661,8 @@
             <param name="vertices"></param>
             <param name="faces"></param>
             <param name="edges"></param>
-            <param name="build"></param>
+            <param name="halfedges"></param>
+            <param name="force"></param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.AddVertex(CGALDotNetGeometry.Numerics.Point3d)">
             <summary>
@@ -7241,6 +7789,83 @@
             </summary>
             <param name="points">The point array.</param>
             <param name="count">The point arrays length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetSegment(System.Int32,CGALDotNetGeometry.Shapes.Segment3d@)">
+            <summary>
+            Get a halfedges segment.
+            </summary>
+            <param name="index">The halfedges index.</param>
+            <param name="segment">The segment.</param>
+            <returns>True if halfedge found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetSegments(CGALDotNetGeometry.Shapes.Segment3d[],System.Int32)">
+            <summary>
+            Get a segment for  each halfedge in the mesh.
+            </summary>
+            <param name="segments">The segment array.</param>
+            <param name="count">The segment array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetTriangle(System.Int32,CGALDotNetGeometry.Shapes.Triangle3d@)">
+            <summary>
+            Get the faces triangle. 
+            Presumes face is a triangle with no checks.
+            </summary>
+            <param name="index">The faces index.</param>
+            <param name="triangle">The faces triangle</param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetTriangles(CGALDotNetGeometry.Shapes.Triangle3d[],System.Int32)">
+            <summary>
+            Get a triangle for each face in the mesh.
+            Presumes all faces are triangles with no checks.
+            </summary>
+            <param name="triangles">The trainagle array.</param>
+            <param name="count">The traingle  arrays length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetVertex(System.Int32,CGALDotNet.Polyhedra.MeshVertex3@)">
+            <summary>
+            Get the mesh vertex.
+            </summary>
+            <param name="index">The vertices index.</param>
+            <param name="vertex">The vertex.</param>
+            <returns>True if the vertex was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetVertices(CGALDotNet.Polyhedra.MeshVertex3[],System.Int32)">
+            <summary>
+            Get the vertices in the mesh.
+            </summary>
+            <param name="vertices">The vertex array.</param>
+            <param name="count">The vertex array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetFace(System.Int32,CGALDotNet.Polyhedra.MeshFace3@)">
+            <summary>
+            Get the mesh face.
+            </summary>
+            <param name="index">The faces index.</param>
+            <param name="face">The face.</param>
+            <returns>True if the face was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetFaces(CGALDotNet.Polyhedra.MeshFace3[],System.Int32)">
+            <summary>
+            Get the faces in the mesh.
+            </summary>
+            <param name="faces">The face array.</param>
+            <param name="count">The face array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetHalfedge(System.Int32,CGALDotNet.Polyhedra.MeshHalfedge3@)">
+            <summary>
+            Get the mesh halfedge.
+            </summary>
+            <param name="index">The halfedges index.</param>
+            <param name="halfedge">The halfedge.</param>
+            <returns>True if the halfedge was found.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetHalfedges(CGALDotNet.Polyhedra.MeshHalfedge3[],System.Int32)">
+            <summary>
+            Get the halfedges in the mesh.
+            </summary>
+            <param name="halfedges">The halfedge array.</param>
+            <param name="count">The halfedge array length.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.VertexDegree(System.Int32)">
             <summary>
@@ -7474,6 +8099,7 @@
             Create a mesh consisting of one polygon face.
             </summary>
             <param name="points">The faces points</param>
+            <param name="count">The paoint array length.</param>
             <param name="xz">Should the y coord of the points be used for the z coord.</param>
         </member>
         <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.GetIndices(System.Int32[],System.Int32[])">
@@ -7659,6 +8285,46 @@
             <param name="includeBoundary">If point is on the boundary does it count a being contained.</param>
             <returns>True if the poly contains the point</returns>
         </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.LocateFace(CGALDotNetGeometry.Shapes.Ray3d)">
+            <summary>
+            Locate the face the rays hits.
+            </summary>
+            <param name="ray">The ray.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.ClosestFace(CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find the face closest to the point.
+            </summary>
+            <param name="point">The point.</param>
+            <returns>The hit result.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.LocateFace(CGALDotNetGeometry.Shapes.Ray3d,CGALDotNet.Polyhedra.MeshFace3@)">
+            <summary>
+            Locate the face hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="face">The hit face.</param>
+            <returns>True if the ray hit a face.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.LocateVertex(CGALDotNetGeometry.Shapes.Ray3d,System.Double,CGALDotNet.Polyhedra.MeshVertex3@)">
+            <summary>
+            Locate the vertex hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="radius">The distance the vertex has to be within hit point.</param>
+            <param name="vertex">The hit vertex.</param>
+            <returns>True if the ray hit a vertex.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.LocateHalfedge(CGALDotNetGeometry.Shapes.Ray3d,System.Double,CGALDotNet.Polyhedra.MeshHalfedge3@)">
+            <summary>
+            Locate the edge hit by the ray.
+            </summary>
+            <param name="ray">The ray.</param>
+            <param name="radius">The distance the edge has to be within hit point.</param>
+            <param name="edge">The hit edge.</param>
+            <returns>True if the ray hit a edge.</returns>
+        </member>
         <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.DoIntersect(CGALDotNet.Polyhedra.SurfaceMesh3,System.Boolean)">
             <summary>
             Returns true if there exists a face of this poly and 
@@ -7702,18 +8368,6 @@
             <param name="density_control_factor">a factor to control density of the output mesh, 
             where larger values lead to denser refinements. Defalus to sqrt of 2.</param>
             <returns>The number of new vertices.</returns>
-        </member>
-        <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.IsotropicRemeshing(System.Double,System.Int32)">
-            <summary>
-            Remeshes a triangulated region of a polygon mesh.
-            This operation sequentially performs edge splits, edge collapses, edge flips, 
-            tangential relaxation and projection to the initial surface to generate 
-            a smooth mesh with a prescribed edge length.
-            </summary>
-            <param name="iterations">The number of times to perform the remeshing.</param>
-            <param name="target_edge_length">the edge length that is targeted in the remeshed patch. 
-            If 0 is passed then only the edge-flip, tangential relaxation, and projection steps will be done.</param>
-            <returns>The number of new vertices added.</returns>
         </member>
         <member name="M:CGALDotNet.Polyhedra.SurfaceMesh3.Orient(CGALDotNet.Processing.ORIENTATE)">
             <summary>
@@ -7952,14 +8606,15 @@
             Remove the point at the index from the array.
             </summary>
             <param name="index">The points index.</param>
-            <param name="pointx">The point to insert.</param>
+            <param name="point">The point to insert.</param>
         </member>
-        <member name="M:CGALDotNet.Polylines.Polyline2.Insert(System.Int32,System.Int32,CGALDotNetGeometry.Numerics.Point2d[])">
+        <member name="M:CGALDotNet.Polylines.Polyline2.Insert(CGALDotNetGeometry.Numerics.Point2d[],System.Int32,System.Int32)">
             <summary>
             Remove a range of points from the array.
             </summary>
-            <param name="start">The starting index</param>
-            <param name="count">The number of points to remove.</param>
+            <param name="points">The points to insert.</param>
+            <param name="start">The starting index.</param>
+            <param name="count">The number of points to insert.</param>
         </member>
         <member name="M:CGALDotNet.Polylines.Polyline2.Add(CGALDotNetGeometry.Numerics.Point2d)">
             <summary>
@@ -8253,14 +8908,15 @@
             Remove the point at the index from the array.
             </summary>
             <param name="index">The points index.</param>
-            <param name="pointx">The point to insert.</param>
+            <param name="point">The point to insert.</param>
         </member>
-        <member name="M:CGALDotNet.Polylines.Polyline3.Insert(System.Int32,System.Int32,CGALDotNetGeometry.Numerics.Point3d[])">
+        <member name="M:CGALDotNet.Polylines.Polyline3.Insert(CGALDotNetGeometry.Numerics.Point3d[],System.Int32,System.Int32)">
             <summary>
             Remove a range of points from the array.
             </summary>
-            <param name="start">The starting index</param>
-            <param name="count">The number of points to remove.</param>
+            <param name="points">The points to insert.</param>
+            <param name="start">The starting index.</param>
+            <param name="count">The number of points to insert.</param>
         </member>
         <member name="M:CGALDotNet.Polylines.Polyline3.Add(CGALDotNetGeometry.Numerics.Point3d)">
             <summary>
@@ -8870,21 +9526,21 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.RandomLocationOnMesh(CGALDotNet.Polyhedra.Polyhedron3{CGALDotNet.EEK})">
+        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.RandomLocationOnMesh(CGALDotNet.Polyhedra.Polyhedron3{`0})">
             <summary>
             Find a random point on mesh surface.
             </summary>
             <param name="mesh">The mesh.</param>
             <returns>A random point on mesh surface.</returns>
         </member>
-        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.RandomLocationOnMesh(CGALDotNet.Polyhedra.SurfaceMesh3{CGALDotNet.EEK})">
+        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.RandomLocationOnMesh(CGALDotNet.Polyhedra.SurfaceMesh3{`0})">
             <summary>
             Find a random point on mesh surface.
             </summary>
             <param name="mesh">The mesh.</param>
             <returns>A random point on mesh surface.</returns>
         </member>
-        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.LocateFace(CGALDotNet.Polyhedra.Polyhedron3{CGALDotNet.EEK},CGALDotNetGeometry.Shapes.Ray3d)">
+        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.LocateFace(CGALDotNet.Polyhedra.Polyhedron3{`0},CGALDotNetGeometry.Shapes.Ray3d)">
             <summary>
             Find the face the ray intersects with.
             </summary>
@@ -8892,7 +9548,7 @@
             <param name="ray">Th ray.</param>
             <returns>The hit result with theface index, hit point and the barycentric coords.</returns>
         </member>
-        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.LocateFace(CGALDotNet.Polyhedra.SurfaceMesh3{CGALDotNet.EEK},CGALDotNetGeometry.Shapes.Ray3d)">
+        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.LocateFace(CGALDotNet.Polyhedra.SurfaceMesh3{`0},CGALDotNetGeometry.Shapes.Ray3d)">
             <summary>
             Find the face the ray intersects with.
             </summary>
@@ -8900,7 +9556,7 @@
             <param name="ray">Th ray.</param>
             <returns>The hit result with theface index, hit point and the barycentric coords.</returns>
         </member>
-        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.ClosestFace(CGALDotNet.Polyhedra.Polyhedron3{CGALDotNet.EEK},CGALDotNetGeometry.Numerics.Point3d)">
+        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.ClosestFace(CGALDotNet.Polyhedra.Polyhedron3{`0},CGALDotNetGeometry.Numerics.Point3d)">
             <summary>
             Find the closest face to the point.
             </summary>
@@ -8908,7 +9564,7 @@
             <param name="point">Th point.</param>
             <returns>The hit result with the face index, closest point and the barycentric coords.</returns>
         </member>
-        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.ClosestFace(CGALDotNet.Polyhedra.SurfaceMesh3{CGALDotNet.EEK},CGALDotNetGeometry.Numerics.Point3d)">
+        <member name="M:CGALDotNet.Processing.MeshProcessingLocate`1.ClosestFace(CGALDotNet.Polyhedra.SurfaceMesh3{`0},CGALDotNetGeometry.Numerics.Point3d)">
             <summary>
             Find the closest face to the point.
             </summary>
@@ -8995,7 +9651,23 @@
             <param name="dir">The direction vector.</param>
             <returns>The extuded mesh.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CGALDotNet.Processing.MeshProcessingMeshing`1.Fair(CGALDotNet.Polyhedra.Polyhedron3{`0},System.Int32,System.Int32)" -->
+        <member name="M:CGALDotNet.Processing.MeshProcessingMeshing`1.Fair(CGALDotNet.Polyhedra.Polyhedron3{`0},System.Int32,System.Int32)">
+            <summary>
+            Fairs a region on a triangle mesh based on a ring of k vertices from the index vertex.
+            The points of the selected vertices are relocated to yield an as-smooth-as-possible surface patch,
+            based on solving a linear bi-Laplacian system with boundary constraints
+            The region described by vertices might contain multiple disconnected components.
+            Note that the mesh connectivity is not altered in any way, only vertex locations get updated.
+            Fairing might fail if fixed vertices, which are used as boundary conditions, 
+            do not suffice to solve constructed linear system.
+            Note that if the vertex range to which fairing is applied contains all the vertices of the triangle mesh, 
+            fairing does not fail, but the mesh gets shrinked to the origin.
+            </summary>
+            <param name="mesh">A valid triangle mesh.</param>
+            <param name="index">The vertex index in the mesh to start hthe k ring region from.</param>
+            <param name="k_ring">The number of vertics to expand the region to.</param>
+            <returns>If the fairing was successfully run.</returns>
+        </member>
         <member name="M:CGALDotNet.Processing.MeshProcessingMeshing`1.Refine(CGALDotNet.Polyhedra.Polyhedron3{`0},System.Double)">
             <summary>
             Refines a triangle mesh
@@ -9887,7 +10559,7 @@
             If point is strictly outside the convex hull, p is linked to all visible points on the 
             convex hull to form the new triangulation.
              </summary>
-             <param name="point">The point to insert.</param>
+             <param name="points">The points to insert.</param>
              <param name="count">The ararys length.</param>
         </member>
         <member name="M:CGALDotNet.Triangulations.BaseTriangulation2.GetPoints(CGALDotNetGeometry.Numerics.Point2d[],System.Int32)">
@@ -9963,7 +10635,7 @@
             <summary>
             Get a array of all the triangles.
             </summary>
-            <param name="triangules">A array of triangules.</param>
+            <param name="triangles">A array of triangules.</param>
             <param name="count">The ararys length.</param>
         </member>
         <member name="M:CGALDotNet.Triangulations.BaseTriangulation2.GetCircumcenter(System.Int32,CGALDotNetGeometry.Numerics.Point2d@)">
@@ -10004,6 +10676,7 @@
             Locate the closest vertex to point.
             </summary>
             <param name="point">The point</param>
+            <param name="radius">The distance the point must be within to count as hitting the vertex.</param>
             <param name="vertex">The closest vertex.</param>
             <returns>True if point hit a face and found a vertex.</returns>
         </member>
@@ -10012,6 +10685,7 @@
             Locate the closest  edge and segment to point.
             </summary>
             <param name="point">The point</param>
+            <param name="radius">The distance the point must be within to count as hitting the edge.</param>
             <param name="edge">The closest edge.</param>
             <returns>True if the point hit a face and found a edge.</returns>
         </member>
@@ -10113,12 +10787,41 @@
             Returns the number of finite vertices.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Triangulations.BaseTriangulation3.TetrahedronCount" -->
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Triangulations.BaseTriangulation3.FiniteTetrahedronCount" -->
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Triangulations.BaseTriangulation3.EdgeCount" -->
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Triangulations.BaseTriangulation3.FiniteEdgeCount" -->
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Triangulations.BaseTriangulation3.TriangleCount" -->
-        <!-- Badly formed XML comment ignored for member "P:CGALDotNet.Triangulations.BaseTriangulation3.FiniteTriangleCount" -->
+        <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.TetrahedronCount">
+            <summary>
+            Returns the number of cells or 0 if Dimension less than 3.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.FiniteTetrahedronCount">
+            <summary>
+            The number of finite cells.
+            Returns 0 if Dimension less than 3.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.EdgeCount">
+            <summary>
+            The number of edges.
+            Returns 0 if Dimension less than 1.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.FiniteEdgeCount">
+            <summary>
+            The number of finite edges.
+            Returns 0 if Dimension less than 1.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.TriangleCount">
+            <summary>
+            The number of facets.
+            Returns 0 if Dimension less than 2.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.FiniteTriangleCount">
+            <summary>
+            The number of facets.
+            Returns 0 if Dimension less than 2.
+            </summary>
+        </member>
         <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.TetrahdronIndiceCount">
             <summary>
             
@@ -10379,6 +11082,7 @@
             Add a list of segments as constraint to the triangulation.
             </summary>
             <param name="segments">The segment array.</param>
+            <param name="count">The length of the segment array.</param>
         </member>
         <member name="M:CGALDotNet.Triangulations.ConstrainedDelaunayTriangulation2.GetConstraints(CGALDotNet.Triangulations.TriEdge2[],System.Int32)">
             <summary>
@@ -10579,6 +11283,7 @@
             Add a list of segments as constraint to the triangulation.
             </summary>
             <param name="segments">The segment array.</param>
+            <param name="count">The length of the segment array.</param>
         </member>
         <member name="M:CGALDotNet.Triangulations.ConstrainedTriangulation2.GetConstraints(CGALDotNet.Triangulations.TriEdge2[],System.Int32)">
             <summary>
@@ -10900,7 +11605,7 @@
             Insert the points of the polygon into the triagulation.
             May no have the same edges as polygon.
             </summary>
-            <param name="polygon">The polygon to insert/</param>
+            <param name="pwh">The polygon to insert/</param>
         </member>
         <member name="M:CGALDotNet.Triangulations.Triangulation2`1.ComputeHull">
             <summary>
@@ -11144,6 +11849,7 @@
             Returns a array of Point2d objects that is at least the size of count.
             </summary>
             <param name="count">The minimum size of the array.</param>
+            <param name="clear">Should the array be cleared first.</param>
             <returns>Returns a array of Point2d objects that is at least the size of count.</returns>
         </member>
         <member name="M:CGALDotNet.ArrayCache.Segment2dArray(System.Int32,System.Boolean)">
@@ -11151,6 +11857,7 @@
             Returns a array of Segment2d objects that is at least the size of count.
             </summary>
             <param name="count">The minimum size of the array.</param>
+            <param name="clear">Should the array be cleared first.</param>
             <returns>Returns a array of Segment2d objects that is at least the size of count.</returns>
         </member>
         <member name="M:CGALDotNet.ArrayCache.Point3dArray(System.Int32,System.Boolean)">
@@ -11158,6 +11865,7 @@
             Returns a array of Point3d objects that is at least the size of count.
             </summary>
             <param name="count">The minimum size of the array.</param>
+            <param name="clear">Should the array be cleared first.</param>
             <returns>Returns a array of Point3d objects that is at least the size of count.</returns>
         </member>
         <member name="M:CGALDotNet.ArrayCache.HPoint3dArray(System.Int32,System.Boolean)">
@@ -11165,6 +11873,7 @@
             Returns a array of HPoint3d objects that is at least the size of count.
             </summary>
             <param name="count">The minimum size of the array.</param>
+            <param name="clear">Should the array be cleared first.</param>
             <returns>Returns a array of HPoint3d objects that is at least the size of count.</returns>
         </member>
         <member name="M:CGALDotNet.ArrayCache.IntArray1(System.Int32,System.Boolean)">
@@ -11172,6 +11881,7 @@
             Returns a array of ints that is at least the size of count.
             </summary>
             <param name="count">The minimum size of the array.</param>
+            <param name="clear">Should the array be cleared first.</param>
             <returns>Returns a array of ints that is at least the size of count.</returns>
         </member>
         <member name="M:CGALDotNet.ArrayCache.IntArray2(System.Int32,System.Boolean)">
@@ -11179,6 +11889,7 @@
             Returns a array of ints that is at least the size of count.
             </summary>
             <param name="count">The minimum size of the array.</param>
+            <param name="clear">Should the array be cleared first.</param>
             <returns>Returns a array of ints that is at least the size of count.</returns>
         </member>
         <member name="M:CGALDotNet.ArrayCache.MakeNewArray(System.Array,System.Int32)">

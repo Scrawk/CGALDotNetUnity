@@ -22,7 +22,7 @@ namespace CGALDotNetUnity.Processing
 
         public string file;
 
-        private Polyhedron3<EEK> poly;
+        private Polyhedron3<EIK> poly;
 
         private GameObject m_object;
 
@@ -38,7 +38,7 @@ namespace CGALDotNetUnity.Processing
             int i = split.Length - 2;
             var name = i > 0 ? split[i] : "Mesh";
 
-            poly = new Polyhedron3<EEK>();
+            poly = new Polyhedron3<EIK>();
             poly.ReadOFF(filename);
             //poly.Triangulate();
 
@@ -66,7 +66,7 @@ namespace CGALDotNetUnity.Processing
             return bounds;
         }
 
-        private List<Polyline3<EEK>> Slice(Polyhedron3<EEK> poly, Bounds bounds, int count)
+        private List<Polyline3<EIK>> Slice(Polyhedron3<EIK> poly, Bounds bounds, int count)
         {
             var size = bounds.size;
             var half = size * 0.5f;
@@ -79,20 +79,20 @@ namespace CGALDotNetUnity.Processing
             var end = (center - half).ToCGALPoint3d();
             var increment = (end - start).Magnitude / count;
 
-            var slicer = MeshProcessingSlicer<EEK>.Instance;
+            var slicer = MeshProcessingSlicer<EIK>.Instance;
 
-            var lines = new List<Polyline3<EEK>>();
+            var lines = new List<Polyline3<EIK>>();
             slicer.Slice(poly, start, end, increment, lines);
 
             return lines;
         }
 
-        private GameObject CreateGameobject(string name, Polyhedron3<EEK> poly)
+        private GameObject CreateGameobject(string name, Polyhedron3<EIK> poly)
         {
             return poly.ToUnityMesh(name, material, false);
         }
 
-        private SegmentRenderer CreateLineRenderer(List<Polyline3<EEK>> lines, Color color)
+        private SegmentRenderer CreateLineRenderer(List<Polyline3<EIK>> lines, Color color)
         {
             var renderer = new SegmentRenderer();
             renderer.DefaultColor = color;

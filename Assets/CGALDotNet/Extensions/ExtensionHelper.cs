@@ -65,6 +65,28 @@ public static class ExtensionHelper
         return mesh;
     }
 
+    public static Mesh CreateMesh(Vector3[] points, Color[] colors, int[] indices)
+    {
+        Mesh mesh = new Mesh();
+        mesh.SetVertices(points);
+        mesh.SetColors(colors);
+        mesh.SetTriangles(indices, 0);
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+        return mesh;
+    }
+
+    public static Mesh CreateMesh(List<Vector3> points, List<Color> colors, List<int> indices)
+    {
+        Mesh mesh = new Mesh();
+        mesh.SetVertices(points);
+        mesh.SetColors(colors);
+        mesh.SetTriangles(indices, 0);
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+        return mesh;
+    }
+
     public static void SplitFaces(Point3d[] points, int[] indices, out Point3d[] splitPoints, out int[] splitIndices)
     {
         int triangles = indices.Length / 3;

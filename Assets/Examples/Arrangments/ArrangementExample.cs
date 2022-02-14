@@ -42,7 +42,7 @@ namespace CGALDotNetUnity.Arrangements
 
         private ArrFace2? SelectedFace;
 
-        private ArrHalfEdge2? SelectedEdge;
+        private ArrHalfedge2? SelectedEdge;
 
         private ArrVertex2? SelectedVertex;
 
@@ -150,7 +150,7 @@ namespace CGALDotNetUnity.Arrangements
         {
             UnselectAll();
 
-            if (arrangement.LocateEdge(point, 0.5, out ArrHalfEdge2 edge))
+            if (arrangement.LocateEdge(point, 0.5, out ArrHalfedge2 edge))
             {
                 SelectedEdge = edge;
                 BuildSelectionRenderer();
@@ -259,7 +259,7 @@ namespace CGALDotNetUnity.Arrangements
                 var edge = SelectedEdge.Value;
                 GUI.Label(new Rect(10, 70, textLen, textHeight), "Selected Edge = " + edge);
 
-                ArrHalfEdge2 twin;
+                ArrHalfedge2 twin;
                 arrangement.GetHalfEdge(edge.TwinIndex, out twin);
                 GUI.Label(new Rect(10, 90, textLen, textHeight), "Selected Twin = " + twin);
             }
