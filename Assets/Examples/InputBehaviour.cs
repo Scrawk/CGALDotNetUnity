@@ -228,6 +228,15 @@ namespace CGALDotNetUnity
 
         protected void DrawGrid(bool drawAxis = false)
         {
+            if (Grid == null)
+            {
+                Color gridAxixColor = new Color32(20, 20, 20, 255);
+                Color gridLineColor = new Color32(180, 180, 180, 255);
+
+                CreateGrid();
+                SetGridColor(gridLineColor, gridAxixColor);
+            }
+
             Grid.DrawAxis = drawAxis;
             Grid.Draw();
         }

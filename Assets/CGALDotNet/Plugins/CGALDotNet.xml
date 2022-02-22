@@ -892,7 +892,7 @@
         </member>
         <member name="M:CGALDotNet.CGALObject.Dispose">
             <summary>
-            Dispose the CGAl object.
+            Dispose the CGAL object.
             </summary>
         </member>
         <member name="M:CGALDotNet.CGALObject.ToString">
@@ -945,6 +945,11 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="F:CGALDotNet.Collections.NativeList`1.m_list">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:CGALDotNet.Collections.NativeList`1.#ctor">
             <summary>
             
@@ -961,6 +966,11 @@
             
             </summary>
             <param name="ptr"></param>
+        </member>
+        <member name="P:CGALDotNet.Collections.NativeList`1.IsSync">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:CGALDotNet.Collections.NativeList`1.ToString">
             <summary>
@@ -980,6 +990,11 @@
             </summary>
             <param name="i"></param>
             <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Clear">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:CGALDotNet.Collections.NativeList`1.Add(`0)">
             <summary>
@@ -1034,6 +1049,22 @@
             <param name="item"></param>
             <returns></returns>
         </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.RemoveAt(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.Reverse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Collections.NativeList`1.TrimExcess">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:CGALDotNet.Collections.NativeList`1.Get(System.Int32)">
             <summary>
             
@@ -1085,36 +1116,961 @@
             
             </summary>
         </member>
-        <member name="M:CGALDotNet.Collections.NativeList.Clear">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:CGALDotNet.Collections.NativeList.RemoveAt(System.Int32)">
-            <summary>
-            
-            </summary>
-            <param name="index"></param>
-        </member>
-        <member name="M:CGALDotNet.Collections.NativeList.Reverse">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:CGALDotNet.Collections.NativeList.TrimExcess">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="M:CGALDotNet.Collections.NativeList.ReleasePtr">
             <summary>
             
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Create a new matrix filled with zeros.
+            </summary>
+            <param name="rows">The number of rows.</param>
+            <param name="columns">The number of columns.</param>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.#ctor(System.Double[0:,0:])">
+            <summary>
+            Create a new matrix fill with the array contents.
+            </summary>
+            <param name="array">The array.</param>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.#ctor(System.Collections.Generic.IList{CGALDotNet.Eigen.EigenColumnVector})">
+            <summary>
+            Create a new matrix filled with the contents of the column vectors.
+            All column vectors must have the same dimension.
+            </summary>
+            <param name="columns"></param>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.#ctor(System.IntPtr)">
+            <summary>
+            Create a new matrix from a pointer.
+            </summary>
+            <param name="ptr"></param>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.Identity(System.Int32)">
+            <summary>
+            Create a identity matrix.
+            </summary>
+            <param name="size">The number of rows and columns of the matrix. Must be square.</param>
+            <returns>The identity matrix.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.Random(System.Int32,System.Int32,System.Double,System.Double,System.Int32)">
+            <summary>
+            Create a new matrix fill with random numbers.
+            </summary>
+            <param name="rows">The number of rows.</param>
+            <param name="columns">The number columns.</param>
+            <param name="min">The minimum random number generated.</param>
+            <param name="max">The maximum random number generated.</param>
+            <param name="seed">The random generators seed.</param>
+            <returns>The matrix.</returns>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Rows">
+            <summary>
+            The number of rows in the matrix.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Columns">
+            <summary>
+            The number of columns in the matrix.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Length">
+            <summary>
+            The total size of the matrix which is 
+            the rows times the number of columns.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Item(System.Int32)">
+            <summary>
+            The single dimension array accessor.
+            </summary>
+            <param name="i">The array index.</param>
+            <returns>The value at the index i.</returns>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Item(System.Int32,System.Int32)">
+            <summary>
+            The double dimension array accessor.
+            </summary>
+            <param name="i">The row index.</param>
+            <param name="j">The column index.</param>
+            <returns>The value at the index i,j.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.ToString">
+            <summary>
+            The matrix string info.
+            </summary>
+            <returns>The matrix string info.</returns>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Transpose">
+            <summary>
+            The matrix transposed.
+            Flips a matrix over its diagonal that is, 
+            it switches the row and column indices of the matrix.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Conjugate">
+            <summary>
+            The matrices conjugate.
+            The matrix obtained by replacing each element a(ij) with its complex conjugate, A^=(a^(ij)).
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Adjoint">
+            <summary>
+            The matrices adjoint.
+            The transpose of its cofactor matrix.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.IsInvertible">
+            <summary>
+            Is the matrix invertible.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Inverse">
+            <summary>
+            The inverse of a square matrix A, 
+            sometimes called a reciprocal matrix, 
+            is a matrix A^(-1) such that AA^(-1)=I.
+            DOes not check if the matrix is invertible.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Determinant">
+            <summary>
+            The determinant is a scalar value that is a 
+            function of the entries of a square matrix.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.Trace">
+            <summary>
+            The trace of a square matrix is defined to be the 
+            sum of elements on the main diagonal from the upper left to the lower right.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.IsSquare">
+            <summary>
+            A square matrix has the same number of rows and columns.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.IsDiagonal">
+            <summary>
+            A diagonal matrix is a matrix in which the entries 
+            outside the main diagonal are all zero.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.IsUpperTriangular">
+            <summary>
+            A square matrix is called upper triangular 
+            if all the entries below the main diagonal are zero.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Eigen.EigenMatrix.IsLowerTriangular">
+            <summary>
+            A square matrix is called lower triangular 
+            if all the entries above the main diagonal are zero.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.op_Multiply(CGALDotNet.Eigen.EigenMatrix,System.Double)">
+            <summary>
+            Multiple each component in matrix by the scalar.
+            </summary>
+            <param name="m">The matrix.</param>
+            <param name="s">The scalar.</param>
+            <returns>The matrix with each component multiplied by the scalar.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.op_Division(CGALDotNet.Eigen.EigenMatrix,System.Double)">
+            <summary>
+            Divide each component in matrix by the scalar.
+            </summary>
+            <param name="m">The matrix.</param>
+            <param name="s">The scalar.</param>
+            <returns>The matrix with each component divided by the scalar.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.op_Multiply(CGALDotNet.Eigen.EigenMatrix,CGALDotNet.Eigen.EigenMatrix)">
+            <summary>
+            Multiple the two matrices.
+            The first matrices number of columns must 
+            the same as the second matrices number of rows.
+            </summary>
+            <param name="m1">The first matrix.</param>
+            <param name="m2">The second matrix.</param>
+            <returns>The product matrix.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.op_Addition(CGALDotNet.Eigen.EigenMatrix,CGALDotNet.Eigen.EigenMatrix)">
+            <summary>
+            Add two matrices.
+            The matrices must be the same size.
+            </summary>
+            <param name="m1">The first matrix.</param>
+            <param name="m2">The second matrix.</param>
+            <returns>A matrix where each compoent is the sum of the other two matrices.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.op_Subtraction(CGALDotNet.Eigen.EigenMatrix,CGALDotNet.Eigen.EigenMatrix)">
+            <summary>
+            Subtract two matrices.
+            The matrices must be the same size.
+            </summary>
+            <param name="m1">The first matrix.</param>
+            <param name="m2">The second matrix.</param>
+            <returns>A matrix where each compoent is the difference of the other two matrices.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.op_Multiply(CGALDotNet.Eigen.EigenMatrix,CGALDotNet.Eigen.EigenColumnVector)">
+            <summary>
+            Multiple a matrix and a column vector.
+            </summary>
+            <param name="m">The matrix.</param>
+            <param name="v">The column vector.</param>
+            <returns>The product column vector.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.IsIdentity(System.Double)">
+            <summary>
+            Is this matrix the identity matrix.
+            </summary>
+            <param name="eps">The threshold the values in the 
+            matrix can be to the expected value.</param>
+            <returns>Is this matrix the identity matrix.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.IsZero(System.Double)">
+            <summary>
+            Is this matrix filled with zeros.
+            </summary>
+            <param name="eps">The threshold the values in the 
+            matrix can be to the expected value.</param>
+            <returns>Is this matrix filled with zeros.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.IsPositive">
+            <summary>
+            Are all the values in this matrix positive.
+            </summary>
+            <returns>Are all the values in this matrix positive.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.HasNAN">
+            <summary>
+            Does the matrix have a component that is nan.
+            </summary>
+            <returns>Does the matrix have a component that is nan.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.NoNAN">
+            <summary>
+            Replaces all nan values in the matrix with 0.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.IsFinite">
+            <summary>
+            Are all the values in the matrix finite (non-infinite and non-nan).
+            </summary>
+            <returns>Are all the values in the matrix finite (non-infinite and non-nan).</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.MakeFinite">
+            <summary>
+            Replaces all infinite and nan values in matrix with 0.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.IsConst(System.Double)">
+            <summary>
+            Are all the values in the matrix the same.
+            </summary>
+            <param name="eps">The threshold the values in the 
+            matrix can be to the expected value.</param>
+            <returns>Are all the values in the matrix the same.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.SubMatrix(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Create a sub matrix from this matrix.
+            </summary>
+            <param name="startRow">The row to start at.</param>
+            <param name="startCol">THe column to start at.</param>
+            <param name="rows">The number of rows.</param>
+            <param name="cols">The number of columns.</param>
+            <returns>A sub matrix from this matrix.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.SubMatrix(System.Int32,System.Int32)">
+            <summary>
+            Create a sub matrix from this matrix.
+            </summary>
+            <param name="rows">The number of rows.</param>
+            <param name="cols">The number of columns.</param>
+            <returns>A sub matrix from this matrix.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.Solve(CGALDotNet.Eigen.EigenColumnVector,CGALDotNet.Eigen.EIGEN_SOLVER)">
+            <summary>
+            Solve the linear system.
+            </summary>
+            <param name="v">The vector to solve.</param>
+            <param name="solver">The solver type.</param>
+            <returns>The solution vector.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.Solve(CGALDotNet.Eigen.EigenMatrix,CGALDotNet.Eigen.EIGEN_SOLVER)">
+            <summary>
+            Solve the linear system.
+            </summary>
+            <param name="v">The vector to solve.</param>
+            <param name="solver">The solver type.</param>
+            <returns>The solution vector.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.RelativeError(CGALDotNet.Eigen.EigenColumnVector,CGALDotNet.Eigen.EigenColumnVector)">
+            <summary>
+            Find the relative error from the linear system.
+            </summary>
+            <param name="v">The vector that was solved.</param>
+            <param name="x">The vector that was the solution.</param>
+            <returns>The relative error.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.RelativeError(CGALDotNet.Eigen.EigenMatrix,CGALDotNet.Eigen.EigenMatrix)">
+            <summary>
+            Find the relative error from the linear system.
+            </summary>
+            <param name="v">The vector that was solved.</param>
+            <param name="x">The vector that was the solution.</param>
+            <returns>The relative error.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.EigenValues(CGALDotNet.Eigen.EigenColumnVector@)">
+            <summary>
+            Find the eigen values of the matrix.
+            </summary>
+            <param name="values">The eigen values if found, null otherwise.</param>
+            <returns>True if the values could be determined.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.EigenVectors(CGALDotNet.Eigen.EigenMatrix@)">
+            <summary>
+            Find the eigen vectors of the matrix.
+            </summary>
+            <param name="vectors">The eigen vectors if found, null otherwise.</param>
+            <returns>True if the vectors could be determined.</returns>
+        </member>
+        <member name="M:CGALDotNet.Eigen.EigenMatrix.TryInverse(CGALDotNet.Eigen.EigenMatrix@)">
+            <summary>
+            Try and find the inverse of the matrix.
+            </summary>
+            <param name="inverse">The inverse if found, null otherwise.</param>
+            <returns>True if the inverse was found.</returns>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Box2`1">
+            <summary>
+            The generic IsoRectangle wrapper for a CGAL object.
+            </summary>
+            <typeparam name="K">The kernel type.</typeparam>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.#ctor(System.Double,System.Double)">
+            <summary>
+            Create box from min and max values.
+            </summary>
+            <param name="min">The min x and y value.</param>
+            <param name="max">The max x and y value.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            Create box from min and max points.
+            </summary>
+            <param name="min">The min point.</param>
+            <param name="max">The max point.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.#ctor(System.IntPtr)">
+            <summary>
+            Create from a pointer.
+            </summary>
+            <param name="ptr">The iso rectangle pointer.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.ToString">
+            <summary>
+            The iso rectangle as a string.
+            </summary>
+            <returns>The iso rectangle as a string.</returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.Translate(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            Translate the shape.
+            </summary>
+            <param name="translation">The amount to translate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.Rotate(CGALDotNetGeometry.Numerics.Degree)">
+            <summary>
+            Rotate the shape.
+            </summary>
+            <param name="rotation">The amount to rotate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.Scale(System.Double)">
+            <summary>
+            Scale the shape.
+            </summary>
+            <param name="scale">The amount to scale.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double)">
+            <summary>
+            Transform the rectangle.
+            </summary>
+            <param name="translation">The amount to translate.</param>
+            <param name="rotation">The amount to rotate</param>
+            <param name="scale">The amount to scale.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2`1.Copy">
+            <summary>
+            Create a deep copy of the rectangle.
+            </summary>
+            <returns>The deep copy.</returns>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Box2">
+            <summary>
+            The abstract iso rectangle definition.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.CGALKernel)">
+            <summary>
+            
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="kernel"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2.#ctor(CGALDotNet.CGALKernel,System.IntPtr)">
+            <summary>
+            Construct with a new kernel.
+            </summary>
+            <param name="kernel">The geometry kernel.</param>
+            <param name="ptr">The IsoRectangle pointer.</param>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Box2.Kernel">
+            <summary>
+            The iso rectangle kernel.
+            Contains the functions to the unmanaged CGAL object.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Box2.Shape">
+            <summary>
+            Convert to shape struct.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Box2.Min">
+            <summary>
+            The rectangles min point.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Box2.Max">
+            <summary>
+            The rectangles max point.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Box2.Area">
+            <summary>
+            The rectangles area.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Box2.IsDegenerate">
+            <summary>
+            Is the rectangle degenerate.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2.BoundedSide(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            The side the rectangle the point is on.
+            </summary>
+            <param name="point">The point.</param>
+            <returns>If the point is iside, outside or on boundary.</returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2.ContainsPoint(CGALDotNetGeometry.Numerics.Point2d,System.Boolean)">
+            <summary>
+            Does the rectangle contain the point.
+            </summary>
+            <param name="point">The point</param>
+            <param name="includeBoundary">Should a point on 
+            the boundary count as being inside.</param>
+            <returns>Does the rectangle contain the point</returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Box2.ReleasePtr">
+            <summary>
+            Release the unmanaged pointer.
             </summary>
         </member>
         <member name="T:CGALDotNet.Geometry.CGALIntersections">
             <summary>
             The static intersection class.
             </summary>
+            <summary>
+            The static intersection class.
+            </summary>
+            <summary>
+            The static intersection class.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Point2{CGALDotNet.EEK},CGALDotNet.Geometry.Line2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Point DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Line2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Line DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Ray2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Ray DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Segment2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Segment DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Triangle2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Box2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Box DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Point2{CGALDotNet.EEK},CGALDotNet.Geometry.Line2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Point Intersection functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Line2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Line Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Ray2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Ray Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Segment2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Triangle2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Box2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Box Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Point2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                         The Point SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Line2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Line SqrDistance functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Ray2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Ray SqrDistance functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Segment2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Segment SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Triangle2{CGALDotNet.EEK},CGALDotNet.Geometry.Point2{CGALDotNet.EEK})">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_DoIntersect_PointLine(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Point DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_DoIntersect_LinePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Linet DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_DoIntersect_RayPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_DoIntersect_SegmentPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_DoIntersect_TrianglePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_DoIntersect_BoxPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Box DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_Intersection_PointLine(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Point Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_Intersection_LinePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Line Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_Intersection_RayPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_Intersection_SegmentPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_Intersection_TrianglePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_Intersection_BoxPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Box Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_SqrDistance_PointPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                          The Point SqrDistance extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_SqrDistance_LinePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Line SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_SqrDistance_RayPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_SqrDistance_SegmentPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EEK_SqrDistance_TrianglePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Point2{CGALDotNet.EIK},CGALDotNet.Geometry.Line2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Point DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Line2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Line DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Ray2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Ray DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Segment2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Segment DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Triangle2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNet.Geometry.Box2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Box DoIntersect functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Point2{CGALDotNet.EIK},CGALDotNet.Geometry.Line2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Point Intersection functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Line2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Line Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Ray2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Ray Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Segment2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Triangle2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersection(CGALDotNet.Geometry.Box2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Box Intersection functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Point2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                         The Point SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Line2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Line SqrDistance functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Ray2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Ray SqrDistance functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Segment2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Segment SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNet.Geometry.Triangle2{CGALDotNet.EIK},CGALDotNet.Geometry.Point2{CGALDotNet.EIK})">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_DoIntersect_PointLine(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Point DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_DoIntersect_LinePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Linet DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_DoIntersect_RayPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_DoIntersect_SegmentPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_DoIntersect_TrianglePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_DoIntersect_BoxPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Box DoIntersect extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_Intersection_PointLine(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Point Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_Intersection_LinePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Line Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_Intersection_RayPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_Intersection_SegmentPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_Intersection_TrianglePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_Intersection_BoxPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Box Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_SqrDistance_PointPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                          The Point SqrDistance extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_SqrDistance_LinePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Line SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_SqrDistance_RayPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_SqrDistance_SegmentPoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Geometry_EIK_SqrDistance_TrianglePoint(System.IntPtr,System.IntPtr)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
         </member>
         <member name="M:CGALDotNet.Geometry.CGALIntersections.DoIntersect(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
             <summary>--------------------------------------------------------
@@ -1200,87 +2156,437 @@
             
             </summary>-----------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                         The Point SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Line SqrDistance functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Shapes.Line2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray SqrDistance functions
+            
+            </summary>--------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.SqrDistance(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle SqrDistance functions
+            
+            </summary>-----------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_DoIntersect_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
             <summary>--------------------------------------------------------
             
                             The Point DoIntersect extern functions
             
             </summary>------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_DoIntersect_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Linet DoIntersect extern functions
             
             </summary>------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_DoIntersect_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Ray DoIntersect extern functions
             
             </summary>------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_DoIntersect_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Segment DoIntersect extern functions
             
             </summary>------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_DoIntersect_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Triangle DoIntersect extern functions
             
             </summary>------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_DoIntersect_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_DoIntersect_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Box DoIntersect extern functions
             
             </summary>------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_Intersection_PointLine(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Shapes.Line2d)">
             <summary>--------------------------------------------------------
             
                             The Point Intersection extern functions
             
             </summary>-------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_Intersection_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Line Intersection extern functions
             
             </summary>-------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_Intersection_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Ray Intersection extern functions
             
             </summary>-------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_Intersection_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Segment Intersection extern functions
             
             </summary>-------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_Intersection_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Triangle Intersection extern functions
             
             </summary>-------------------------------------------------------
         </member>
-        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_EIK_Intersection_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_Intersection_BoxPoint(CGALDotNetGeometry.Shapes.Box2d,CGALDotNetGeometry.Numerics.Point2d)">
             <summary>--------------------------------------------------------
             
                             The Box Intersection extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_SqrDistance_PointPoint(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                          The Point SqrDistance extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_SqrDistance_LinePoint(CGALDotNetGeometry.Shapes.Line2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Line SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_SqrDistance_RayPoint(CGALDotNetGeometry.Shapes.Ray2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_SqrDistance_SegmentPoint(CGALDotNetGeometry.Shapes.Segment2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.CGALIntersections.Intersections_Shapes_EIK_SqrDistance_TrianglePoint(CGALDotNetGeometry.Shapes.Triangle2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle SqrDistance extern functions
+            
+            </summary>------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.Point2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Point2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.Vector2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Vector2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.HPoint2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The HPoint2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.Line2_Create(System.Double,System.Double,System.Double)">
+            <summary>--------------------------------------------------------
+            
+                            The Line2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.Ray2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.Segment2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.Triangle2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2.IsoRectangle2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The IsoRectangle2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Point2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Point2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Vector2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Vector2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.HPoint2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The HPoint2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Line2_Create(System.Double,System.Double,System.Double)">
+            <summary>--------------------------------------------------------
+            
+                            The Line2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Ray2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Segment2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Triangle2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.IsoRectangle2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The IsoRectancle2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Point2_EEK_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Point2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Vector2_EEK_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Vector2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.HPoint2_EEK_Create">
+            <summary>--------------------------------------------------------
+            
+                            The HPoint2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Line2_EEK_Create(System.Double,System.Double,System.Double)">
+            <summary>--------------------------------------------------------
+            
+                            The Line2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Ray2_EEK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Segment2_EEK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.Triangle2_EEK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EEK.IsoRectangle2_EEK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The IsoRectangle2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Point2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Point2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Vector2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Vector2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.HPoint2_Create">
+            <summary>--------------------------------------------------------
+            
+                            The HPoint2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Line2_Create(System.Double,System.Double,System.Double)">
+            <summary>--------------------------------------------------------
+            
+                            The Line2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Ray2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Segment2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Triangle2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.IsoRectangle2_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The IsoRectancle2 Class Functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Point2_EIK_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Point2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Vector2_EIK_Create">
+            <summary>--------------------------------------------------------
+            
+                            The Vector2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.HPoint2_EIK_Create">
+            <summary>--------------------------------------------------------
+            
+                            The HPoint2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Line2_EIK_Create(System.Double,System.Double,System.Double)">
+            <summary>--------------------------------------------------------
+            
+                            The Line2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Ray2_EIK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Ray2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Segment2_EIK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Segment2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.Triangle2_EIK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The Triangle2 extern functions
+            
+            </summary>-------------------------------------------------------
+        </member>
+        <member name="M:CGALDotNet.Geometry.GeometryKernel2_EIK.IsoRectangle2_EIK_Create(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>--------------------------------------------------------
+            
+                            The IsoRectangle2 extern functions
             
             </summary>-------------------------------------------------------
         </member>
@@ -1378,95 +2684,808 @@
             <typeparam name="K">The polygons kernel.</typeparam>
             <returns>The polygon.</returns>
         </member>
-        <member name="T:CGALDotNet.Geometry.IsoRectangle2`1">
-            <summary>
-            The generic IsoRectangle wrapper for a CGAL object.
-            </summary>
-            <typeparam name="K">The kernel type.</typeparam>
-        </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2`1.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
-            <summary>
-            Default constructor.
-            </summary>
-        </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2`1.#ctor(System.IntPtr)">
-            <summary>
-            Create from a pointer.
-            </summary>
-            <param name="ptr">The iso rectangle pointer.</param>
-        </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2`1.ToString">
-            <summary>
-            The iso rectangle as a string.
-            </summary>
-            <returns>The iso rectangle as a string.</returns>
-        </member>
-        <member name="T:CGALDotNet.Geometry.IsoRectangle2">
-            <summary>
-            The abstract iso rectangle definition.
-            </summary>
-        </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2.#ctor">
-            <summary>
-            Default constructor.
-            </summary>
-        </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.CGALKernel)">
+        <member name="T:CGALDotNet.Geometry.Line2`1">
             <summary>
             
             </summary>
-            <param name="min"></param>
-            <param name="max"></param>
+            <typeparam name="K"></typeparam>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Line2`1.Horizontal">
+            <summary>
+            A horizontal line on the x axis.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Line2`1.Vertical">
+            <summary>
+            A vertical line on the y axis.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d)">
+            <summary>
+            
+            </summary>
+            <param name="p"></param>
+            <param name="v"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.#ctor(System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="ptr"></param>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Line2`1.Opposite">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.Perpendicular(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.Translate(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            Translate the shape.
+            </summary>
+            <param name="translation">The amount to translate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.Rotate(CGALDotNetGeometry.Numerics.Degree)">
+            <summary>
+            Rotate the shape.
+            </summary>
+            <param name="rotation">The amount to rotate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.Scale(System.Double)">
+            <summary>
+            Scale the shape.
+            </summary>
+            <param name="scale">The amount to scale.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2`1.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="translation"></param>
+            <param name="rotation"></param>
+            <param name="scale"></param>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Line2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.#ctor(System.Double,System.Double,System.Double,CGALDotNet.CGALKernel)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
             <param name="kernel"></param>
         </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2.#ctor(CGALDotNet.CGALKernel,System.IntPtr)">
+        <member name="M:CGALDotNet.Geometry.Line2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.CGALKernel)">
             <summary>
-            Construct with a new kernel.
+            
             </summary>
-            <param name="kernel">The geometry kernel.</param>
-            <param name="ptr">The IsoRectangle pointer.</param>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <param name="kernel"></param>
         </member>
-        <member name="P:CGALDotNet.Geometry.IsoRectangle2.Kernel">
+        <member name="M:CGALDotNet.Geometry.Line2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d,CGALDotNet.CGALKernel)">
             <summary>
-            The iso rectangle kernel.
-            Contains the functions to the unmanaged CGAL object.
+            
             </summary>
+            <param name="p"></param>
+            <param name="v"></param>
+            <param name="kernel"></param>
         </member>
-        <member name="P:CGALDotNet.Geometry.IsoRectangle2.Min">
+        <member name="P:CGALDotNet.Geometry.Line2.Kernel">
             <summary>
-            The rectangles min point.
-            </summary>
-        </member>
-        <member name="P:CGALDotNet.Geometry.IsoRectangle2.Max">
-            <summary>
-            The rectangles max point.
+            
             </summary>
         </member>
-        <member name="P:CGALDotNet.Geometry.IsoRectangle2.Area">
+        <member name="P:CGALDotNet.Geometry.Line2.Shape">
             <summary>
-            The rectangles area.
+            Convert to shape struct.
             </summary>
         </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2.BoundedSide(CGALDotNetGeometry.Numerics.Point2d)">
+        <member name="P:CGALDotNet.Geometry.Line2.A">
             <summary>
-            The side the rectangle the point is on.
+            
             </summary>
-            <param name="point">The point.</param>
-            <returns>If the point is iside, outside or on boundary.</returns>
         </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2.ContainsPoint(CGALDotNetGeometry.Numerics.Point2d,System.Boolean)">
+        <member name="P:CGALDotNet.Geometry.Line2.B">
             <summary>
-            Does the rectangle contain the point.
+            
             </summary>
-            <param name="point">The point</param>
-            <param name="includeBoundary">Should a point on 
-            the boundary count as being inside.</param>
-            <returns>Does the rectangle contain the point</returns>
         </member>
-        <member name="M:CGALDotNet.Geometry.IsoRectangle2.ReleasePtr">
+        <member name="P:CGALDotNet.Geometry.Line2.C">
             <summary>
-            Release the unmanaged pointer.
+            
             </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Line2.IsDegenerate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Line2.IsHorizontal">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Line2.IsVertical">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Line2.Vector">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.HasOn(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.HasOnNegativeSide(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.HasOnPositiveSide(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.X_On_Y(System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.Y_On_X(System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Line2.ReleasePtr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Point2`1.UnitX">
+            <summary>
+            The unit x point.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Point2`1.UnitY">
+            <summary>
+            The unit y point.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Point2`1.Zero">
+            <summary>
+            A point of zeros.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Point2`1.One">
+            <summary>
+            A point of ones.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Point2`1.Half">
+            <summary>
+            A point of halfs.
+            </summary>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Ray2`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="K"></typeparam>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Ray2`1.UnitX">
+            <summary>
+            The unit x ray.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Ray2`1.UnitY">
+            <summary>
+            The unit y ray.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d)">
+            <summary>
+            
+            </summary>
+            <param name="position"></param>
+            <param name="direction"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.#ctor(System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="ptr"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2`1.Opposite">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2`1.Line">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.Translate(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            Translate the shape.
+            </summary>
+            <param name="translation">The amount to translate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.Rotate(CGALDotNetGeometry.Numerics.Degree)">
+            <summary>
+            Rotate the shape.
+            </summary>
+            <param name="rotation">The amount to rotate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.Scale(System.Double)">
+            <summary>
+            Scale the shape.
+            </summary>
+            <param name="scale">The amount to scale.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="translation"></param>
+            <param name="rotation"></param>
+            <param name="scale"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2`1.Copy">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Ray2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Vector2d,CGALDotNet.CGALKernel)">
+            <summary>
+            
+            </summary>
+            <param name="position"></param>
+            <param name="direction"></param>
+            <param name="kernel"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2.#ctor(CGALDotNet.CGALKernel,System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="kernel"></param>
+            <param name="ptr"></param>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2.Kernel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2.Shape">
+            <summary>
+            Convert to shape struct.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2.IsDegenerate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2.IsHorizontal">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2.IsVertical">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2.Position">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Ray2.Direction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2.HasOn(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Ray2.ReleasePtr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Segment2`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="K"></typeparam>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Segment2`1.Horizontal">
+            <summary>
+            A horizontal line on the x axis.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Segment2`1.Vertical">
+            <summary>
+            A vertical line on the y axis.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.#ctor(System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="ptr"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2`1.Line">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.Translate(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            Translate the shape.
+            </summary>
+            <param name="translation">The amount to translate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.Rotate(CGALDotNetGeometry.Numerics.Degree)">
+            <summary>
+            Rotate the shape.
+            </summary>
+            <param name="rotation">The amount to rotate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.Scale(System.Double)">
+            <summary>
+            Scale the shape.
+            </summary>
+            <param name="scale">The amount to scale.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="translation"></param>
+            <param name="rotation"></param>
+            <param name="scale"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2`1.Copy">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Segment2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.CGALKernel)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="kernel"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2.#ctor(CGALDotNet.CGALKernel,System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="kernel"></param>
+            <param name="ptr"></param>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.Kernel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.Shape">
+            <summary>
+            Convert to shape struct.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.A">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.B">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.Min">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.Max">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.IsDegenerate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.IsHorizontal">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.IsVertical">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.Vector">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Segment2.SqrLength">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2.HasOn(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Segment2.ReleasePtr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Triangle2`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="K"></typeparam>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.#ctor(System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="ptr"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.Translate(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            Translate the shape.
+            </summary>
+            <param name="translation">The amount to translate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.Rotate(CGALDotNetGeometry.Numerics.Degree)">
+            <summary>
+            Rotate the shape.
+            </summary>
+            <param name="rotation">The amount to rotate.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.Scale(System.Double)">
+            <summary>
+            Scale the shape.
+            </summary>
+            <param name="scale">The amount to scale.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="translation"></param>
+            <param name="rotation"></param>
+            <param name="scale"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2`1.Copy">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Triangle2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2.#ctor(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Point2d,CGALDotNet.CGALKernel)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+            <param name="kernel"></param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2.#ctor(CGALDotNet.CGALKernel,System.IntPtr)">
+            <summary>
+            
+            </summary>
+            <param name="kernel"></param>
+            <param name="ptr"></param>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.Kernel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.Shape">
+            <summary>
+            Convert to shape struct.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.A">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.B">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.C">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.IsDegenerate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.Area">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Triangle2.Orientation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2.BoundedSide(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2.OrientedSide(CGALDotNetGeometry.Numerics.Point2d)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Triangle2.ReleasePtr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Vector2`1">
+            <summary>
+            A Vector2 object with kernel type K.
+            </summary>
+            <typeparam name="K">The type of kernel.</typeparam>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Vector2`1.UnitX">
+            <summary>
+            The unit x vector.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Vector2`1.UnitY">
+            <summary>
+            The unit y vector.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Vector2`1.Zero">
+            <summary>
+            A vector of zeros.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Geometry.Vector2`1.One">
+            <summary>
+            A vector of ones.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2`1.#ctor">
+            <summary>
+            Create a new Vector.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2`1.#ctor(System.Double)">
+            <summary>
+            Create a new vector filled with the value.
+            </summary>
+            <param name="v">The value to fill.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2`1.#ctor(System.Double,System.Double)">
+            <summary>
+            Create a new vector with the values x and y.
+            </summary>
+            <param name="x">The vectors x value.</param>
+            <param name="y">The vectors y value.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2`1.#ctor(System.IntPtr)">
+            <summary>
+            Create a new vector from a existing pointer.
+            </summary>
+            <param name="ptr">The pointer object.</param>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Vector2`1.x">
+            <summary>
+            Access the x component.
+            </summary>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Vector2`1.y">
+            <summary>
+            Access the y component.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2`1.ToString">
+            <summary>
+            Vector information.
+            </summary>
+            <returns>The vectors string information.</returns>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2`1.Copy">
+            <summary>
+            Create a deep copy of the vector.
+            </summary>
+            <returns>The deep copy.</returns>
+        </member>
+        <member name="T:CGALDotNet.Geometry.Vector2">
+            <summary>
+            The vectors abstract bass class.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2.#ctor(CGALDotNet.CGALKernel)">
+            <summary>
+            Create a new vector with the kernel.
+            </summary>
+            <param name="kernel">The vectors kernel.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2.#ctor(System.Double,System.Double,CGALDotNet.CGALKernel)">
+            <summary>
+            Create a new vector from the x and y values.
+            </summary>
+            <param name="x">The vectors x value.</param>
+            <param name="y">The vectors y value.</param>
+            <param name="kernel">The vectors kernel.</param>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2.#ctor(CGALDotNet.CGALKernel,System.IntPtr)">
+            <summary>
+            Create a new vector from a existing pointer.
+            </summary>
+            <param name="kernel">The vectors kernel.</param>
+            <param name="ptr">The existing pointer.</param>
+        </member>
+        <member name="P:CGALDotNet.Geometry.Vector2.Kernel">
+            <summary>
+            The vectors kernel.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2.ReleasePtr">
+            <summary>
+            Release the vectors pointer.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Geometry.Vector2.ReleasePtr(System.IntPtr)">
+            <summary>
+            Release a pointer to a vector.
+            </summary>
+            <param name="ptr">The pointer to release.</param>
         </member>
         <member name="T:CGALDotNet.Hulls.HULL_METHOD">
             <summary>
@@ -3653,6 +5672,22 @@
             <param name="polygon">The other polygon.</param>
             <returns>Do the polygons intersect.</returns>
         </member>
+        <member name="M:CGALDotNet.Polygons.Polygon2`1.Intersection(CGALDotNet.Polygons.Polygon2{`0},System.Collections.Generic.List{CGALDotNet.Polygons.PolygonWithHoles2{`0}})">
+            <summary>
+            Do the polygons intersect.
+            </summary>
+            <param name="polygon">The other polygon.</param>
+            <param name="results">The intersection results.</param>
+            <returns>Do the polygons intersect.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polygons.Polygon2`1.Intersection(CGALDotNet.Polygons.PolygonWithHoles2{`0},System.Collections.Generic.List{CGALDotNet.Polygons.PolygonWithHoles2{`0}})">
+            <summary>
+            Do the polygons intersect.
+            </summary>
+            <param name="polygon">The other polygon.</param>
+            <param name="results">The intersection results.</param>
+            <returns>Do the polygons intersect.</returns>
+        </member>
         <member name="M:CGALDotNet.Polygons.Polygon2`1.Refine(System.Double)">
             <summary>
             Refine the polygon to a triangulation.
@@ -4040,7 +6075,7 @@
             </summary>
             <param name="translation">The amount to translate.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.Polygon2.Rotate(CGALDotNetGeometry.Numerics.Radian)">
+        <member name="M:CGALDotNet.Polygons.Polygon2.Rotate(CGALDotNetGeometry.Numerics.Degree)">
             <summary>
             Rotate the polygon.
             </summary>
@@ -4052,7 +6087,7 @@
             </summary>
             <param name="scale">The amount to scale.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.Polygon2.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Radian,System.Double)">
+        <member name="M:CGALDotNet.Polygons.Polygon2.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double)">
             <summary>
             Transform the polygon with a TRS matrix.
             </summary>
@@ -4078,11 +6113,10 @@
             </summary>
             <returns>The array.</returns>
         </member>
-        <member name="M:CGALDotNet.Polygons.Polygon2.ToList">
+        <member name="M:CGALDotNet.Polygons.Polygon2.ToList(System.Collections.Generic.List{CGALDotNetGeometry.Numerics.Point2d})">
             <summary>
-            Return all the points in the polygon in a list.
+            Get all the points in the polygon into a list.
             </summary>
-            <returns>The list.</returns>
         </member>
         <member name="M:CGALDotNet.Polygons.Polygon2.Convert``1">
             <summary>
@@ -5544,12 +7578,6 @@
             <param name="count">The ararys length.</param>
             <param name="holeIndex">If element type is a hole this is the holes index.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.GetAllPoints(System.Collections.Generic.List{CGALDotNetGeometry.Numerics.Point2d})">
-            <summary>
-            Get all the points in the polygon boundary and holes.
-            </summary>
-            <param name="points">The point array to copy into.</param>
-        </member>
         <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.SetPoint(CGALDotNet.Polygons.POLYGON_ELEMENT,System.Int32,CGALDotNetGeometry.Numerics.Point2d,System.Int32)">
             <summary>
             Set a polygons point.
@@ -5646,6 +7674,35 @@
             <param name="index">If element type is a hole this is the holes index.</param>
             <returns>The polygons area.</returns>
         </member>
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.GetEnumerator">
+            <summary>
+            Enumerate all points in the polygon.
+            </summary>
+            <returns>Each point in polygon.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Enumerate all points in the polygon.
+            </summary>
+            <returns>Each point in polygon.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.ToArray">
+            <summary>
+            Return all the points in the polygon in a array.
+            </summary>
+            <returns>The array.</returns>
+        </member>
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.ToList(System.Collections.Generic.List{CGALDotNetGeometry.Numerics.Point2d})">
+            <summary>
+            Get all the points in the polygons boundary into a list.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.GetAllPoints(System.Collections.Generic.List{CGALDotNetGeometry.Numerics.Point2d})">
+            <summary>
+            Get all the points in the polygon boundary and holes.
+            </summary>
+            <param name="points">The point array to copy into.</param>
+        </member>
         <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.ReleasePtr">
             <summary>
             Release the unmanaged resoures.
@@ -5687,13 +7744,13 @@
             <param name="translation">The amount to translate.</param>
             <param name="index">If element type is a hole this is the holes index.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Rotate(CGALDotNetGeometry.Numerics.Radian)">
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Rotate(CGALDotNetGeometry.Numerics.Degree)">
             <summary>
             Rotate the polygon.
             </summary>
             <param name="rotation">The amount to rotate in radians.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Rotate(CGALDotNet.Polygons.POLYGON_ELEMENT,CGALDotNetGeometry.Numerics.Radian,System.Int32)">
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Rotate(CGALDotNet.Polygons.POLYGON_ELEMENT,CGALDotNetGeometry.Numerics.Degree,System.Int32)">
             <summary>
             Rotate the polygon.
             </summary>
@@ -5715,7 +7772,7 @@
             <param name="scale">The amount to scale.</param>
             <param name="index">If element type is a hole this is the holes index.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Radian,System.Double)">
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Transform(CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double)">
             <summary>
             Transform the polygon.
             </summary>
@@ -5723,7 +7780,7 @@
             <param name="rotation">The amount to rotate in radians.</param>
             <param name="scale">The amount to scale.</param>
         </member>
-        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Transform(CGALDotNet.Polygons.POLYGON_ELEMENT,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Radian,System.Double,System.Int32)">
+        <member name="M:CGALDotNet.Polygons.PolygonWithHoles2.Transform(CGALDotNet.Polygons.POLYGON_ELEMENT,CGALDotNetGeometry.Numerics.Point2d,CGALDotNetGeometry.Numerics.Degree,System.Double,System.Int32)">
             <summary>
             Transform the polygon.
             </summary>

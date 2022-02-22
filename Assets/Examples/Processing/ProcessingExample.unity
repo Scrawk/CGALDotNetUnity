@@ -274,7 +274,6 @@ MonoBehaviour:
   vertexNormalColor: {r: 1, g: 0, b: 0, a: 0.49803922}
   faceNormalColor: {r: 0, g: 0, b: 1, a: 0.4745098}
   material: {fileID: 2100000, guid: d1f3a110c13e28445a7b7f1d0277a343, type: 2}
-  file: bunny00.off
 --- !u!1 &762780502
 GameObject:
   m_ObjectHideFlags: 0
