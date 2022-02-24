@@ -24,6 +24,8 @@ namespace CGALDotNetUnity.Geometry
 
         private bool isCreateed = false;
 
+        private int buildStamp;
+
         protected override void Start()
         {
             CreateDemo();
@@ -45,94 +47,90 @@ namespace CGALDotNetUnity.Geometry
             //Shape examples
 
             CreateIntersection(
-                "BoxTriangle",
                 new Box2d(-2.5, 2.5), 
                 new Triangle2d(new Point2d(0, 0), new Point2d(4, 0), new Point2d(0, 4)),
                 new Point2d(-30, 20)
                 );
 
             CreateIntersection(
-                "BoxBox",
                 new Box2d(-2.5, 2.5),
                 new Box2d(0, 4),
                 new Point2d(-20, 20)
                 );
 
             CreateIntersection(
-                "BoxRay",
                 new Box2d(-2.5, 2.5),
                 new Ray2d(new Point2d(-5, 0), new Vector2d(10,0)),
                 new Point2d(-10, 20)
                 );
 
             CreateIntersection(
-                "BoxSegment",
                 new Box2d(-2.5, 2.5),
                 new Segment2d(new Point2d(-5, 0), new Point2d(5, 0)),
                 new Point2d(-30, 10)
                 );
 
             CreateIntersection(
-                "BoxPolygon",
                 new Box2d(-2.5, 2.5),
-                PolygonFactory<EIK>.CreateCircle(new Point2d(2, 2), 2, 6),
+                PolygonFactory<EEK>.CreateCircle(new Point2d(2, 2), 2, 6),
                 new Point2d(-20, 10)
                 );
 
-            //EIK Geometry examples
+            CreateIntersection(
+                new Box2<EEK>(-2.5, 2.5),
+                PolygonFactory<EEK>.KochStar(new Point2d(-2, -2), 4, 1),
+                new Point2d(-10, 10)
+                );
+
+            //EEK Geometry examples
 
             CreateIntersection(
-                "BoxTriangle<EIK>",
-                new Box2<EIK>(-2.5, 2.5),
-                new Triangle2<EIK>(new Point2d(0, 0), new Point2d(4, 0), new Point2d(0, 4)),
+                new Box2<EEK>(-2.5, 2.5),
+                new Triangle2<EEK>(new Point2d(0, 0), new Point2d(4, 0), new Point2d(0, 4)),
                 new Point2d(30, 20)
                 );
 
             CreateIntersection(
-                "BoxBox<EIK>",
-                new Box2<EIK>(-2.5, 2.5),
-                new Box2<EIK>(0, 4),
+                new Box2<EEK>(-2.5, 2.5),
+                new Box2<EEK>(0, 4),
                 new Point2d(20, 20)
                 );
 
             CreateIntersection(
-                "BoxRay<EIK>",
-                new Box2<EIK>(-2.5, 2.5),
-                new Ray2<EIK>(new Point2d(-5, 0), new Vector2d(10, 0)),
+                new Box2<EEK>(-2.5, 2.5),
+                new Ray2<EEK>(new Point2d(-5, 0), new Vector2d(10, 0)),
                 new Point2d(10, 20)
                 );
 
             CreateIntersection(
-                "BoxSegment<EIK>",
-                new Box2<EIK>(-2.5, 2.5),
-                new Segment2<EIK>(new Point2d(-5, 0), new Point2d(5, 0)),
+                new Box2<EEK>(-2.5, 2.5),
+                new Segment2<EEK>(new Point2d(-5, 0), new Point2d(5, 0)),
                 new Point2d(30, 10)
                 );
 
             CreateIntersection(
-                "BoxPolygon<EIK>",
-                new Box2<EIK>(-2.5, 2.5),
-                PolygonFactory<EIK>.CreateCircle(new Point2d(2, 2), 2, 6),
+                new Box2<EEK>(-2.5, 2.5),
+                PolygonFactory<EEK>.CreateCircle(new Point2d(2, 2), 2, 6),
                 new Point2d(20, 10)
                 );
+
+            CreateIntersection(
+                new Box2<EEK>(-2.5, 2.5),
+                PolygonFactory<EEK>.KochStar(new Point2d(-2, -2), 4, 1),
+                new Point2d(10, 10)
+            );
         }
 
-        private void CreateIntersection(string name, Box2d box, Triangle2d tri, Point2d translate)
+        private void CreateIntersection(Box2d box, Triangle2d tri, Point2d translate)
         {
             box += translate;
             tri += translate;
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box);
-            Renderers["Box:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            var triPoly = PolygonFactory<EIK>.CreateTriangle(tri);
-            Renderers["Triangle:" + name] = Draw().
-            Faces(triPoly, faceColor).
-            Outline(triPoly, lineColor).
-            PopRenderer();
+            var triPoly = PolygonFactory<EEK>.CreateTriangle(tri);
+            DrawPolygon(triPoly, faceColor, lineColor);
 
             var result = CGALIntersections.Intersection(box, tri);
             if (result.Hit)
@@ -141,22 +139,16 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2d box, Box2d box2, Point2d translate)
+        private void CreateIntersection(Box2d box, Box2d box2, Point2d translate)
         {
             box += translate;
             box2 += translate;
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box);
-            Renderers["Box:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            var boxPoly2 = PolygonFactory<EIK>.CreateBox(box2);
-            Renderers["Box2:" + name] = Draw().
-            Faces(boxPoly2, faceColor).
-            Outline(boxPoly2, lineColor).
-            PopRenderer();
+            var boxPoly2 = PolygonFactory<EEK>.CreateBox(box2);
+            DrawPolygon(boxPoly2, faceColor, lineColor);
 
             var result = CGALIntersections.Intersection(box, box2);
             if (result.Hit)
@@ -165,18 +157,15 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2d box, Ray2d ray, Point2d translate)
+        private void CreateIntersection(Box2d box, Ray2d ray, Point2d translate)
         {
             box += translate;
             ray.Position += translate;
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box);
-            Renderers["Box:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            Renderers["Ray:" + name] = Draw().
+            Renderers["Shape:" + (buildStamp++)] = Draw().
             Outline(ray, lineColor).
             PopRenderer();
 
@@ -187,18 +176,15 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2d box, Segment2d seg, Point2d translate)
+        private void CreateIntersection(Box2d box, Segment2d seg, Point2d translate)
         {
             box += translate;
             seg += translate;
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box);
-            Renderers["Box:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            Renderers["Seg:" + name] = Draw().
+            Renderers["Shape:" + (buildStamp++)] = Draw().
             Outline(seg, lineColor).
             PopRenderer();
 
@@ -209,22 +195,16 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2<EIK> box, Triangle2<EIK> tri, Point2d translate)
+        private void CreateIntersection(Box2<EEK> box, Triangle2<EEK> tri, Point2d translate)
         {
             box.Translate(translate);
             tri.Translate(translate);
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box.Shape);
-            Renderers["Box<EIK>:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box.Shape);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            var triPoly = PolygonFactory<EIK>.CreateTriangle(tri.Shape);
-            Renderers["Triangle<EIK>:" + name] = Draw().
-            Faces(triPoly, faceColor).
-            Outline(triPoly, lineColor).
-            PopRenderer();
+            var triPoly = PolygonFactory<EEK>.CreateTriangle(tri.Shape);
+            DrawPolygon(triPoly, faceColor, lineColor);
 
             var result = CGALIntersections.Intersection(box, tri);
             if (result.Hit)
@@ -233,22 +213,16 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2<EIK> box, Box2<EIK> box2, Point2d translate)
+        private void CreateIntersection(Box2<EEK> box, Box2<EEK> box2, Point2d translate)
         {
             box.Translate(translate);
             box2.Translate(translate);
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box.Shape);
-            Renderers["Box<EIK>:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box.Shape);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            var boxPoly2 = PolygonFactory<EIK>.CreateBox(box2.Shape);
-            Renderers["Box2<EIK>:" + name] = Draw().
-            Faces(boxPoly2, faceColor).
-            Outline(boxPoly2, lineColor).
-            PopRenderer();
+            var boxPoly2 = PolygonFactory<EEK>.CreateBox(box2.Shape);
+            DrawPolygon(boxPoly2, faceColor, lineColor);
 
             var result = CGALIntersections.Intersection(box, box2);
             if (result.Hit)
@@ -257,18 +231,15 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2<EIK> box, Ray2<EIK> ray, Point2d translate)
+        private void CreateIntersection(Box2<EEK> box, Ray2<EEK> ray, Point2d translate)
         {
             box.Translate(translate);
             ray.Translate(translate);
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box.Shape);
-            Renderers["Box<EIK>:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box.Shape);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            Renderers["Ray<EIK>:" + name] = Draw().
+            Renderers["Shape:" + (buildStamp++)] = Draw().
             Outline(ray.Shape, lineColor).
             PopRenderer();
 
@@ -279,18 +250,15 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2<EIK> box, Segment2<EIK> seg, Point2d translate)
+        private void CreateIntersection(Box2<EEK> box, Segment2<EEK> seg, Point2d translate)
         {
             box.Translate(translate);
             seg.Translate(translate);
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box.Shape);
-            Renderers["Box<EIK>:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box.Shape);
+            DrawPolygon(boxPoly, faceColor, lineColor);
 
-            Renderers["Seg<EIK>:" + name] = Draw().
+            Renderers["Shape:" + (buildStamp++)] = Draw().
             Outline(seg.Shape, lineColor).
             PopRenderer();
 
@@ -301,126 +269,115 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
-        private void CreateIntersection(string name, Box2d box, Polygon2<EIK> polygon, Point2d translate)
+        private void CreateIntersection(Box2d box, Polygon2<EEK> polygon, Point2d translate)
         {
             box += translate;
             polygon.Translate(translate);
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box);
-            Renderers["Box:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box);
+            DrawPolygon(boxPoly, faceColor, lineColor);
+            DrawPolygon(polygon, faceColor, lineColor);
 
-            Renderers["Polygon<EIK>:" + name] = Draw().
-            Faces(polygon, faceColor).
-            Outline(polygon, lineColor).
-            PopRenderer();
-
-            var results = new List<PolygonWithHoles2<EIK>>();
+            var results = new List<PolygonWithHoles2<EEK>>();
             if (polygon.Intersection(boxPoly, results))
             {
-                int count = Renderers.Count;
                 foreach (var poly in results)
                 {
-                    Renderers["Intersection" + (count++)] = Draw().
-                    Faces(poly, intersectionColor).
-                    Outline(poly, intersectionColor).
-                    PopRenderer();
+                    DrawPolygon(poly, intersectionColor);
                 }
             }
         }
 
-        private void CreateIntersection(string name, Box2<EIK> box, Polygon2<EIK> polygon, Point2d translate)
+        private void CreateIntersection(Box2<EEK> box, Polygon2<EEK> polygon, Point2d translate)
         {
             box.Translate(translate);
             polygon.Translate(translate);
 
-            var boxPoly = PolygonFactory<EIK>.CreateBox(box.Shape);
-            Renderers["Box<EIK>:" + name] = Draw().
-            Faces(boxPoly, faceColor).
-            Outline(boxPoly, lineColor).
-            PopRenderer();
+            var boxPoly = PolygonFactory<EEK>.CreateBox(box.Shape);
+            DrawPolygon(boxPoly, faceColor, lineColor);
+            DrawPolygon(polygon, faceColor, lineColor);
 
-            Renderers["Polygon<EIK>:" + name] = Draw().
-            Faces(polygon, faceColor).
-            Outline(polygon, lineColor).
-            PopRenderer();
-
-            var results = new List<PolygonWithHoles2<EIK>>();
+            var results = new List<PolygonWithHoles2<EEK>>();
             if (polygon.Intersection(boxPoly, results))
             {
-                int count = Renderers.Count;
                 foreach (var poly in results)
                 {
-                    Renderers["Intersection" + (count++)] = Draw().
-                    Faces(poly, intersectionColor).
-                    Outline(poly, intersectionColor).
-                    PopRenderer();
+                    DrawPolygon(poly, intersectionColor);
                 }
             }
         }
 
         private void CreateRenderer(IntersectionResult2d result, Color col)
         {
-            int count = Renderers.Count;
 
             if (result.Type == INTERSECTION_RESULT_2D.POLYGON2)
             {
-                var polygon = result.Polygon<EIK>();
-
-                Renderers["Intersection" + count] = Draw().
-                Faces(polygon, col).
-                Outline(polygon, col).
-                PopRenderer();
+                var polygon = result.Polygon<EEK>();
+                DrawPolygon(polygon, intersectionColor);
             }
             else if(result.Type == INTERSECTION_RESULT_2D.POINT2)
             {
                 var point = result.Point;
 
-                Renderers["Intersection" + count] = Draw().
+                Renderers["Intersection:" + (buildStamp++)] = Draw().
                     Points(point, col, col).
                     PopRenderer();
             }
             else if (result.Type == INTERSECTION_RESULT_2D.LINE2)
             {
                 var geo = result.Line;
-                Renderers["Intersection" + count] = Draw().
+                Renderers["Intersection:" + (buildStamp++)] = Draw().
                     Outline(geo, col).
                     PopRenderer();
             }
             else if (result.Type == INTERSECTION_RESULT_2D.RAY2)
             {
                 var geo = result.Ray;
-                Renderers["Intersection" + count] = Draw().
+                Renderers["Intersection:" + (buildStamp++)] = Draw().
                     Outline(geo, col).
                     PopRenderer();
             }
             else if (result.Type == INTERSECTION_RESULT_2D.SEGMENT2)
             {
                 var geo = result.Segment;
-                Renderers["Intersection" + count] = Draw().
+                Renderers["Intersection:" + (buildStamp++)] = Draw().
                     Outline(geo, col).
                     PopRenderer();
             }
             else if (result.Type == INTERSECTION_RESULT_2D.BOX2)
             {
                 var polygon = PolygonFactory<EEK>.CreateBox(result.Box);
-
-                Renderers["Intersection" + count] = Draw().
-                Faces(polygon, col).
-                Outline(polygon, col).
-                PopRenderer();
+                DrawPolygon(polygon, intersectionColor);
             }
             else if (result.Type == INTERSECTION_RESULT_2D.TRIANGLE2)
             {
                 var polygon = PolygonFactory<EEK>.CreateTriangle(result.Triangle);
-
-                Renderers["Intersection" + count] = Draw().
-                Faces(polygon, col).
-                Outline(polygon, col).
-                PopRenderer();
+                DrawPolygon(polygon, intersectionColor);
             }
+        }
+
+        private void DrawPolygon(Polygon2<EEK> polygon, Color col)
+        {
+            Renderers["Polygon:" + (buildStamp++)] = Draw().
+            Faces(polygon, col).
+            Outline(polygon, col).
+            PopRenderer();
+        }
+
+        private void DrawPolygon(Polygon2<EEK> polygon, Color faceCol, Color outlineCol)
+        {
+            Renderers["Polygon:" + (buildStamp++)] = Draw().
+            Faces(polygon, faceCol).
+            Outline(polygon, outlineCol).
+            PopRenderer();
+        }
+
+        private void DrawPolygon(PolygonWithHoles2<EEK> polygon, Color col)
+        {
+            Renderers["Polygon:" + (buildStamp++)] = Draw().
+            Faces(polygon, col).
+            Outline(polygon, col).
+            PopRenderer();
         }
 
         private void OnPostRender()
