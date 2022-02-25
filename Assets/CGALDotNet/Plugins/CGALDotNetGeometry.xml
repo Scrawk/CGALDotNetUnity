@@ -10328,6 +10328,158 @@
             <param name="p">intersection point</param>
             <returns>if lines intersect</returns>
         </member>
+        <member name="T:CGALDotNetGeometry.Shapes.Line3d">
+            <summary>
+            A 3D Line struct represented by a position and a direction.
+            </summary>
+        </member>
+        <member name="F:CGALDotNetGeometry.Shapes.Line3d.Position">
+            <summary>
+            The Lines position.
+            </summary>
+        </member>
+        <member name="F:CGALDotNetGeometry.Shapes.Line3d.Direction">
+            <summary>
+            The Lines direction.
+            Might not be normalized.
+            </summary>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.#ctor(CGALDotNetGeometry.Numerics.Point3d,CGALDotNetGeometry.Numerics.Vector3d)">
+            <summary>
+            Construct a Line from a point and the direction.
+            </summary>
+            <param name="position">The Lines position.</param>
+            <param name="direction">The Lines direction (will be normalized)</param>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.op_Equality(CGALDotNetGeometry.Shapes.Line3d,CGALDotNetGeometry.Shapes.Line3d)">
+            <summary>
+            Check if the two Lines are equal.
+            </summary>
+            <param name="l1">The first Line.</param>
+            <param name="l2">The second Line.</param>
+            <returns>True if the two Lines are equal.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.op_Inequality(CGALDotNetGeometry.Shapes.Line3d,CGALDotNetGeometry.Shapes.Line3d)">
+            <summary>
+            Check if the two Lines are not equal.
+            </summary>
+            <param name="l1">The first Line.</param>
+            <param name="l2">The second Line.</param>
+            <returns>True if the two Lines are not equal.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.Equals(System.Object)">
+            <summary>
+            Is the Line equal to this object.
+            </summary>
+            <param name="obj">The object.</param>
+            <returns>Is the Line equal to this object.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.Equals(CGALDotNetGeometry.Shapes.Line3d)">
+            <summary>
+            Is the Line equal to the other Line.
+            </summary>
+            <param name="Line">The over Line.</param>
+            <returns>Is the Line equal to the other Line.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.GetHashCode">
+            <summary>
+            The Lines hashcode.
+            </summary>
+            <returns>The Lines hashcode.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.ToString">
+            <summary>
+            The Lines as a string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.Normalize">
+            <summary>
+            Normalize the lines direction.
+            </summary>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3d.Round(System.Int32)">
+            <summary>
+            Round the Lines position and direction.
+            </summary>
+            <param name="digits">number of digits to round to.</param>
+        </member>
+        <member name="T:CGALDotNetGeometry.Shapes.Line3f">
+            <summary>
+            A 3f Line struct represented by a position and a direction.
+            </summary>
+        </member>
+        <member name="F:CGALDotNetGeometry.Shapes.Line3f.Position">
+            <summary>
+            The Lines position.
+            </summary>
+        </member>
+        <member name="F:CGALDotNetGeometry.Shapes.Line3f.Direction">
+            <summary>
+            The Lines direction.
+            Might not be normalized.
+            </summary>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.#ctor(CGALDotNetGeometry.Numerics.Point3f,CGALDotNetGeometry.Numerics.Vector3f)">
+            <summary>
+            Construct a Line from a point and the direction.
+            </summary>
+            <param name="position">The Lines position.</param>
+            <param name="direction">The Lines direction (will be normalized)</param>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.op_Equality(CGALDotNetGeometry.Shapes.Line3f,CGALDotNetGeometry.Shapes.Line3f)">
+            <summary>
+            Check if the two Lines are equal.
+            </summary>
+            <param name="l1">The first Line.</param>
+            <param name="l2">The second Line.</param>
+            <returns>True if the two Lines are equal.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.op_Inequality(CGALDotNetGeometry.Shapes.Line3f,CGALDotNetGeometry.Shapes.Line3f)">
+            <summary>
+            Check if the two Lines are not equal.
+            </summary>
+            <param name="l1">The first Line.</param>
+            <param name="l2">The second Line.</param>
+            <returns>True if the two Lines are not equal.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.Equals(System.Object)">
+            <summary>
+            Is the Line equal to this object.
+            </summary>
+            <param name="obj">The object.</param>
+            <returns>Is the Line equal to this object.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.Equals(CGALDotNetGeometry.Shapes.Line3f)">
+            <summary>
+            Is the Line equal to the other Line.
+            </summary>
+            <param name="Line">The over Line.</param>
+            <returns>Is the Line equal to the other Line.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.GetHashCode">
+            <summary>
+            The Lines hashcode.
+            </summary>
+            <returns>The Lines hashcode.</returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.ToString">
+            <summary>
+            The Lines as a string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.Normalize">
+            <summary>
+            Normalize the lines direction.
+            </summary>
+        </member>
+        <member name="M:CGALDotNetGeometry.Shapes.Line3f.Round(System.Int32)">
+            <summary>
+            Round the Lines position and direction.
+            </summary>
+            <param name="digits">number of digits to round to.</param>
+        </member>
         <member name="T:CGALDotNetGeometry.Shapes.Plane3d">
             <summary>
             Plane struct defined by a position and direction.

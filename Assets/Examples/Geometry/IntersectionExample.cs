@@ -10,6 +10,10 @@ using UnityEngine;
 namespace CGALDotNetUnity.Geometry
 {
 
+    /// <summary>
+    /// Examples of intersection between CGALDotNet shape and geometry objects.
+    /// It is reconmended to use the EEK kernel for intersections.
+    /// </summary>
     public class IntersectionExample : InputBehaviour
     {
         private Color pointColor = new Color32(80, 80, 200, 255);
@@ -36,12 +40,18 @@ namespace CGALDotNetUnity.Geometry
             CreateDemo();
         }
 
+        /// <summary>
+        /// Create the scene objects.
+        /// </summary>
         private void CreateDemo()
         {
+            //If already created return.
             if (isCreateed) return;
             isCreateed = true;
 
+            //Init the base input
             base.Start();
+
             Renderers = new Dictionary<string, CompositeRenderer>();
 
             //Shape examples
@@ -121,20 +131,31 @@ namespace CGALDotNetUnity.Geometry
             );
         }
 
+        /// <summary>
+        /// Create th intersetion between a box and triangle.
+        /// </summary>
+        /// <param name="box">The box.</param>
+        /// <param name="tri">The trinagle.</param>
+        /// <param name="translate">THe objects positions.</param>
         private void CreateIntersection(Box2d box, Triangle2d tri, Point2d translate)
         {
             box += translate;
             tri += translate;
 
+            //To draw the shape its easest to convert shape to a polygon.
             var boxPoly = PolygonFactory<EEK>.CreateBox(box);
             DrawPolygon(boxPoly, faceColor, lineColor);
 
+            //To draw the shape its easest to convert shape to a polygon.
             var triPoly = PolygonFactory<EEK>.CreateTriangle(tri);
             DrawPolygon(triPoly, faceColor, lineColor);
 
+            //Test intersection.
             var result = CGALIntersections.Intersection(box, tri);
+
             if (result.Hit)
             {
+                //If there was a hit get the intersection shape and draw it.
                 CreateRenderer(result, intersectionColor);
             }
         }
@@ -165,6 +186,7 @@ namespace CGALDotNetUnity.Geometry
             var boxPoly = PolygonFactory<EEK>.CreateBox(box);
             DrawPolygon(boxPoly, faceColor, lineColor);
 
+            //only need to draw ray as a outline.
             Renderers["Shape:" + (buildStamp++)] = Draw().
             Outline(ray, lineColor).
             PopRenderer();
@@ -184,6 +206,7 @@ namespace CGALDotNetUnity.Geometry
             var boxPoly = PolygonFactory<EEK>.CreateBox(box);
             DrawPolygon(boxPoly, faceColor, lineColor);
 
+            //only need to draw segment as a outline.
             Renderers["Shape:" + (buildStamp++)] = Draw().
             Outline(seg, lineColor).
             PopRenderer();
@@ -307,16 +330,23 @@ namespace CGALDotNetUnity.Geometry
             }
         }
 
+        /// <summary>
+        /// Create the intersect shape and draw it.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="col"></param>
         private void CreateRenderer(IntersectionResult2d result, Color col)
         {
 
             if (result.Type == INTERSECTION_RESULT_2D.POLYGON2)
             {
+                //Intersection was a polygon.
                 var polygon = result.Polygon<EEK>();
                 DrawPolygon(polygon, intersectionColor);
             }
             else if(result.Type == INTERSECTION_RESULT_2D.POINT2)
             {
+                //Intersection was a point.
                 var point = result.Point;
 
                 Renderers["Intersection:" + (buildStamp++)] = Draw().
@@ -325,37 +355,50 @@ namespace CGALDotNetUnity.Geometry
             }
             else if (result.Type == INTERSECTION_RESULT_2D.LINE2)
             {
-                var geo = result.Line;
+                //Intersection was a line.
+                var line = result.Line;
+
                 Renderers["Intersection:" + (buildStamp++)] = Draw().
-                    Outline(geo, col).
+                    Outline(line, col).
                     PopRenderer();
             }
             else if (result.Type == INTERSECTION_RESULT_2D.RAY2)
             {
-                var geo = result.Ray;
+                //Intersection was a ray.
+                var ray = result.Ray;
+
                 Renderers["Intersection:" + (buildStamp++)] = Draw().
-                    Outline(geo, col).
+                    Outline(ray, col).
                     PopRenderer();
             }
             else if (result.Type == INTERSECTION_RESULT_2D.SEGMENT2)
             {
-                var geo = result.Segment;
+                //Intersection was a segment.
+                var segment = result.Segment;
+
                 Renderers["Intersection:" + (buildStamp++)] = Draw().
-                    Outline(geo, col).
+                    Outline(segment, col).
                     PopRenderer();
             }
             else if (result.Type == INTERSECTION_RESULT_2D.BOX2)
             {
+                //Intersection was a box, convert to polygon to draw.
                 var polygon = PolygonFactory<EEK>.CreateBox(result.Box);
                 DrawPolygon(polygon, intersectionColor);
             }
             else if (result.Type == INTERSECTION_RESULT_2D.TRIANGLE2)
             {
+                //Intersection was a triangle, convert to polygon to draw.
                 var polygon = PolygonFactory<EEK>.CreateTriangle(result.Triangle);
                 DrawPolygon(polygon, intersectionColor);
             }
         }
 
+        /// <summary>
+        /// Add a polygon renderer.
+        /// </summary>
+        /// <param name="polygon">The polygon.</param>
+        /// <param name="col">The polygons color.</param>
         private void DrawPolygon(Polygon2<EEK> polygon, Color col)
         {
             Renderers["Polygon:" + (buildStamp++)] = Draw().
@@ -364,6 +407,12 @@ namespace CGALDotNetUnity.Geometry
             PopRenderer();
         }
 
+        /// <summary>
+        /// Add a polygon renderer.
+        /// </summary>
+        /// <param name="polygon">The polygon.</param>
+        /// <param name="faceCol">The polygons face color.</param>
+        /// <param name="outlineCol">The polygons outlineCol color.</param>
         private void DrawPolygon(Polygon2<EEK> polygon, Color faceCol, Color outlineCol)
         {
             Renderers["Polygon:" + (buildStamp++)] = Draw().
@@ -372,6 +421,11 @@ namespace CGALDotNetUnity.Geometry
             PopRenderer();
         }
 
+        /// <summary>
+        /// Add a polygon renderer.
+        /// </summary>
+        /// <param name="polygon">The polygon.</param>
+        /// <param name="col">The polygons color.</param>
         private void DrawPolygon(PolygonWithHoles2<EEK> polygon, Color col)
         {
             Renderers["Polygon:" + (buildStamp++)] = Draw().
@@ -380,6 +434,9 @@ namespace CGALDotNetUnity.Geometry
             PopRenderer();
         }
 
+        /// <summary>
+        /// Draw the scene.
+        /// </summary>
         private void OnPostRender()
         {
             DrawGrid(true);
