@@ -4,7 +4,7 @@ using UnityEngine;
 
 using CGALDotNetGeometry.Numerics;
 using CGALDotNetGeometry.Shapes;
-using CGALDotNet.Marching;
+using CGALDotNetGeometry.Marching;
 
 namespace CGALDotNetUnity.Marching
 {

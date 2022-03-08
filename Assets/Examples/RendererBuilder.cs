@@ -13,7 +13,7 @@ using CGALDotNet.Polygons;
 using CGALDotNet.Geometry;
 using CGALDotNet.Triangulations;
 using CGALDotNet.Arrangements;
-using CGALDotNet.Nurbs;
+using CGALDotNetGeometry.Nurbs;
 using CGALDotNet.Meshing;
 using CGALDotNet.Polyhedra;
 

@@ -7,7 +7,7 @@ using Common.Unity.Drawing;
 
 using CGALDotNetGeometry.Numerics;
 using CGALDotNetGeometry.Shapes;
-using CGALDotNet.Nurbs;
+using CGALDotNetGeometry.Nurbs;
 
 namespace CGALDotNetUnity.Nurbs
 {

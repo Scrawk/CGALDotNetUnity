@@ -6,7 +6,7 @@ using Common.Unity.Drawing;
 using CGALDotNet;
 using CGALDotNetGeometry.Numerics;
 using CGALDotNetGeometry.Shapes;
-using CGALDotNet.Marching;
+using CGALDotNetGeometry.Marching;
 using CGALDotNet.Triangulations;
 
 namespace CGALDotNetUnity.Marching

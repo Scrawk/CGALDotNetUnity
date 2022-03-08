@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Common.Unity.Drawing;
 using CGALDotNet;
-using CGALDotNet.Nurbs;
+using CGALDotNetGeometry.Nurbs;
 using CGALDotNetGeometry.Numerics;
 
 namespace CGALDotNetUnity.Nurbs
