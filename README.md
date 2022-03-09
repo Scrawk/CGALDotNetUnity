@@ -31,3 +31,5 @@ Some common geomerty objects are referrenced in a [seperate project](https://git
 Work in progress. Only 64 bit windows binarys provided.
 
 The source code for CGALDotNet can be found in [this](https://github.com/Scrawk/CGALDotNet) repository.
+
+A page on the Uniy forums can be found [here](https://forum.unity.com/threads/cgaldotnet-a-c-computational-library-built-around-cgal.1250314/).
