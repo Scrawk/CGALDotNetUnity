@@ -49,13 +49,14 @@ namespace CGALDotNetUnity.Polygons
         /// <param name="points"></param>
         protected override void OnInputComplete(List<Point2d> points)
         {
-            //Create the polygon from tyhe points.
+            //Create the polygon from the points.
             //We just use the EIK kernel as its the fastest.
             Polygon = new Polygon2<EIK>(points.ToArray());
 
             //Polygon must be simple to continue.
             if (Polygon.IsSimple)
             {
+                //Polygons must be ccw.
                 if (!Polygon.IsCounterClockWise)
                     Polygon.Reverse();
 
@@ -151,14 +152,13 @@ namespace CGALDotNetUnity.Polygons
             //This draws the grid
             DrawGrid();
 
-            //This draws the line of points the user
-            //is creating but they dont for a polygon yet.
-            DrawInput(lineColor, pointColor, PointSize);
-
             //This draws the polygon and the input point.
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
-            
+
+            //This draws the line of points the user
+            //is creating but they dont for a polygon yet.
+            DrawInput(lineColor, pointColor, PointSize);
         }
 
         protected void OnGUI()

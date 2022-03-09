@@ -23,7 +23,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Point2d? Point;
 
-        private PolygonWithHoles2<EEK> Polygon;
+        private PolygonWithHoles2<EIK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
@@ -31,32 +31,46 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void Start()
         {
+            //Init base class
             base.Start();
+
+            //Set the input mode to polygons.
+            //Determines when OnInputComplete is called.
             SetInputMode(INPUT_MODE.POLYGON);
+
+            //Create the place to store the renderers that draw the shapes.
             Renderers = new Dictionary<string, CompositeRenderer>();
         }
 
-        public static PolygonWithHoles2<EEK> CreateKochStar()
+        /// <summary>
+        /// Creates a interesting polygon to use as a demo or debuging.
+        /// </summary>
+        /// <returns></returns>
+        public static PolygonWithHoles2<EIK> CreateKochStar()
         {
-            var koch = PolygonFactory<EEK>.KochStar(30, 3);
-            var hole = PolygonFactory<EEK>.CreateCircle(5, 32);
+            var koch = PolygonFactory<EIK>.KochStar(30, 3);
+            var hole = PolygonFactory<EIK>.CreateCircle(5, 32);
             hole.Reverse();
 
-            var polygon = new PolygonWithHoles2<EEK>(koch);
+            var polygon = new PolygonWithHoles2<EIK>(koch);
             polygon.AddHole(hole);
 
             return polygon;
         }
 
-        public static PolygonWithHoles2<EEK> CreateRoom()
+        /// <summary>
+        /// Creates a interesting polygon to use as a demo or debuging.
+        /// </summary>
+        /// <returns></returns>
+        public static PolygonWithHoles2<EIK> CreateRoom()
         {
-            var room = PolygonFactory<EEK>.CreateBox(-15, 15);
+            var room = PolygonFactory<EIK>.CreateBox(-15, 15);
 
-            var hole1 = PolygonFactory<EEK>.CreateBox(5, 10, false);
-            var hole2 = PolygonFactory<EEK>.CreateBox(-10, -5, false);
-            var hole3 = PolygonFactory<EEK>.CreateBox(new Point2d(-10,5), new Point2d(-5,10), false);
+            var hole1 = PolygonFactory<EIK>.CreateBox(5, 10, false);
+            var hole2 = PolygonFactory<EIK>.CreateBox(-10, -5, false);
+            var hole3 = PolygonFactory<EIK>.CreateBox(new Point2d(-10,5), new Point2d(-5,10), false);
 
-            var polygon = new PolygonWithHoles2<EEK>(room);
+            var polygon = new PolygonWithHoles2<EIK>(room);
             polygon.AddHole(hole1);
             polygon.AddHole(hole2);
             polygon.AddHole(hole3);
@@ -69,15 +83,20 @@ namespace CGALDotNetUnity.Polygons
 
             if(Polygon == null)
             {
-                var boundary = new Polygon2<EEK>(points.ToArray());
+                //Create the polygons boundary from the points.
+                //We just use the EIK kernel as its the fastest.
+                var boundary = new Polygon2<EIK>(points.ToArray());
 
+                //Polygon must be simple to continue.
                 if (boundary.IsSimple)
                 {
+                    //The boundary must be ccw.
                     if (!boundary.IsCounterClockWise)
                         boundary.Reverse();
 
-                    Polygon = new PolygonWithHoles2<EEK>(boundary);
+                    Polygon = new PolygonWithHoles2<EIK>(boundary);
 
+                    //Create renderer to draw polygon.
                     CreateRenderer("Polygon", Polygon);
                 }
                 else
@@ -87,17 +106,27 @@ namespace CGALDotNetUnity.Polygons
             }
             else if(AddHoles)
             {
-                var hole = new Polygon2<EEK>(points.ToArray());
+                //A polygon has already been created for the boundary
+                //so this polygon must be a hole.
+                var hole = new Polygon2<EIK>(points.ToArray());
 
+                //holes must be cw.
                 if (!hole.IsClockWise)
                     hole.Reverse();
 
+                //Holes must be simple, cw and be contained in the
+                //polygon and not intersect any other holes.
                 if (PolygonWithHoles2.IsValidHole(Polygon, hole))
                 {
                     Polygon.AddHole(hole);
                     int holes = Polygon.HoleCount;
+
+                    //We need to recreate the polygon 
+                    //renderer as well if a hole is added.  
                     CreateRenderer("Polygon", Polygon);
-                    CreateRenderer("Hole"+holes, hole);
+
+                    //Create the holes renderer.
+                    CreateRenderer("Hole" + holes, hole);
                 }
                 else
                 {
@@ -108,7 +137,14 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
-        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon)
+        /// <summary>
+        /// Create the renderer that daws the polygon.
+        /// This just ueses unitys GL to draw lies and points.
+        /// Its not very fast and just used for demos.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="polygon"></param>
+        private void CreateRenderer(string name, PolygonWithHoles2<EIK> polygon)
         {
             Renderers[name] = Draw().
             Faces(polygon, faceColor).
@@ -117,7 +153,7 @@ namespace CGALDotNetUnity.Polygons
             PopRenderer();
         }
 
-        private void CreateRenderer(string name, Polygon2<EEK> hole)
+        private void CreateRenderer(string name, Polygon2<EIK> hole)
         {
             Renderers[name] = Draw().
             Outline(hole, lineColor).
@@ -135,11 +171,18 @@ namespace CGALDotNetUnity.Polygons
             SetInputMode(INPUT_MODE.POLYGON);
         }
 
+        /// <summary>
+        /// Called when input mode is changed to point.
+        /// </summary>
+        /// <param name="point"></param>
         protected override void OnLeftClickDown(Point2d point)
         {
+            //save the point.
             Point = point;
+
+            //Create render to draw point.
             Renderers["Point"] = Draw().
-                Points(point, lineColor, redColor).
+                Points(Point.Value, lineColor, redColor, PointSize).
                 PopRenderer();
         }
 
@@ -159,15 +202,21 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
+        /// <summary>
+        /// Draw the renderers in post render.
+        /// </summary>
         private void OnPostRender()
         {
+            //This draws the grid
             DrawGrid();
-            
+
+            //This draws the polygon and the input point.
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
 
+            //This draws the line of points the user
+            //is creating but they dont for a polygon yet.
             DrawInput(lineColor, pointColor, PointSize);
-
         }
 
         protected void OnGUI()
