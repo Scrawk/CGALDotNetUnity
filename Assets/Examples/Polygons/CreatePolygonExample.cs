@@ -25,30 +25,46 @@ namespace CGALDotNetUnity.Polygons
 
         private Point2d? Point;
 
-        private Polygon2<EEK> Polygon;
+        private Polygon2<EIK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
         protected override void Start()
         {
+            //Init base class
             base.Start();
+
+            //Set the input mode to polygons.
+            //Determines when OnInputComplete is called.
             SetInputMode(INPUT_MODE.POLYGON);
+
+            //Create the place to store the renderers that draw the shapes.
             Renderers = new Dictionary<string, CompositeRenderer>();
         }
 
+        /// <summary>
+        /// This function is called once a set of at least 3 points has been 
+        /// placed and the last point is placed on the first point.
+        /// </summary>
+        /// <param name="points"></param>
         protected override void OnInputComplete(List<Point2d> points)
         {
-            Polygon = new Polygon2<EEK>(points.ToArray());
+            //Create the polygon from tyhe points.
+            //We just use the EIK kernel as its the fastest.
+            Polygon = new Polygon2<EIK>(points.ToArray());
 
+            //Polygon must be simple to continue.
             if (Polygon.IsSimple)
             {
                 if (!Polygon.IsCounterClockWise)
                     Polygon.Reverse();
 
-                SetInputMode(INPUT_MODE.POINT_CLICK);
+                //Create renderer to draw polygon.
                 CreateRenderer("Polygon", Polygon);
 
-                //Refine(Polygon);
+                //Change input mode to click.
+                //This will call OnLeftClickDown when left mouse clicked.
+                SetInputMode(INPUT_MODE.POINT_CLICK);
             }
             else
             {
@@ -58,13 +74,13 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
-        private void Refine(Polygon2<EEK> polygon)
-        {
-            var tri = polygon.Refine(2);
-            CreateRenderer("Refined", tri);
-            CreateRenderer("Hull", tri.ComputeHull(), Color.yellow);
-        }
-
+        /// <summary>
+        /// Create the renderer that daws the polygon.
+        /// This just ueses unitys GL to draw lies and points.
+        /// Its not very fast and just used for demos.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="polygon"></param>
         private void CreateRenderer(string name, Polygon2 polygon)
         {
             if(polygon.IsSimple)
@@ -77,6 +93,7 @@ namespace CGALDotNetUnity.Polygons
             }
             else
             {
+                //If not simple draw in red.
                 Renderers[name] = Draw().
                 Faces(polygon, redColor).
                 Outline(polygon, redColor).
@@ -99,6 +116,9 @@ namespace CGALDotNetUnity.Polygons
             PopRenderer();
         }
 
+        /// <summary>
+        /// Called when scene is cleared.
+        /// </summary>
         protected override void OnCleared()
         {
             Point = null;
@@ -108,22 +128,34 @@ namespace CGALDotNetUnity.Polygons
             SetInputMode(INPUT_MODE.POLYGON);
         }
 
+        /// <summary>
+        /// Called when input mode is changed to point.
+        /// </summary>
+        /// <param name="point"></param>
         protected override void OnLeftClickDown(Point2d point)
         {
+            //save the point.
             Point = point;
 
-            var array = new Point2d[] { Point.Value };
-
+            //Create render to draw point.
             Renderers["Point"] = Draw().
-                Points(array, lineColor, redColor, PointSize).
+                Points(Point.Value, lineColor, redColor, PointSize).
                 PopRenderer();
         }
 
+        /// <summary>
+        /// Draw the renderers in post render.
+        /// </summary>
         private void OnPostRender()
         {
+            //This draws the grid
             DrawGrid();
+
+            //This draws the line of points the user
+            //is creating but they dont for a polygon yet.
             DrawInput(lineColor, pointColor, PointSize);
 
+            //This draws the polygon and the input point.
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
             
