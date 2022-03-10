@@ -62,15 +62,15 @@ namespace CGALDotNetUnity.Polygons
         /// Creates a interesting polygon to use as a demo or debuging.
         /// </summary>
         /// <returns></returns>
-        public static PolygonWithHoles2<EIK> CreateRoom()
+        public static PolygonWithHoles2<EEK> CreateRoom()
         {
-            var room = PolygonFactory<EIK>.CreateBox(-15, 15);
+            var room = PolygonFactory<EEK>.CreateBox(-15, 15);
 
-            var hole1 = PolygonFactory<EIK>.CreateBox(5, 10, false);
-            var hole2 = PolygonFactory<EIK>.CreateBox(-10, -5, false);
-            var hole3 = PolygonFactory<EIK>.CreateBox(new Point2d(-10,5), new Point2d(-5,10), false);
+            var hole1 = PolygonFactory<EEK>.CreateBox(5, 10, false);
+            var hole2 = PolygonFactory<EEK>.CreateBox(-10, -5, false);
+            var hole3 = PolygonFactory<EEK>.CreateBox(new Point2d(-10,5), new Point2d(-5,10), false);
 
-            var polygon = new PolygonWithHoles2<EIK>(room);
+            var polygon = new PolygonWithHoles2<EEK>(room);
             polygon.AddHole(hole1);
             polygon.AddHole(hole2);
             polygon.AddHole(hole3);
