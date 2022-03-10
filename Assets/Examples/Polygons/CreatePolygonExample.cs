@@ -77,7 +77,7 @@ namespace CGALDotNetUnity.Polygons
 
         /// <summary>
         /// Create the renderer that daws the polygon.
-        /// This just ueses unitys GL to draw lies and points.
+        /// This just ueses unitys GL to draw lines and points.
         /// Its not very fast and just used for demos.
         /// </summary>
         /// <param name="name"></param>

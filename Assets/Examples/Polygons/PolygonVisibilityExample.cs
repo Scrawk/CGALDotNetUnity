@@ -31,8 +31,14 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void Start()
         {
+            //Init base class
             base.Start();
+
+            //Set the input mode to polygons.
+            //Determines when OnInputComplete is called.
             SetInputMode(INPUT_MODE.POLYGON);
+
+            //Create the place to store the renderers that draw the shapes.
             Renderers = new Dictionary<string, CompositeRenderer>();
         }
 
@@ -41,15 +47,21 @@ namespace CGALDotNetUnity.Polygons
 
             if (Polygon == null)
             {
+                //Create the polygons boundary from the points.
+                //We need to use EEK as a boolean op is used.
                 var boundary = new Polygon2<EEK>(points.ToArray());
 
+                //Polygon must be simple to continue.
                 if (boundary.IsSimple)
                 {
+                    //The boundary must be ccw.
                     if (!boundary.IsCounterClockWise)
                         boundary.Reverse();
 
+                    //Create the polygon
                     Polygon = new PolygonWithHoles2<EEK>(boundary);
 
+                    //Create renderer to draw polygon.
                     CreateRenderer("Polygon", Polygon, faceColor);
                 }
                 else
@@ -59,17 +71,24 @@ namespace CGALDotNetUnity.Polygons
             }
             else if (AddHoles)
             {
+                //A polygon has already been created for the boundary
+                //so this polygon must be a hole.
                 var hole = new Polygon2<EEK>(points.ToArray());
-
+                //holes must be cw.
                 if (!hole.IsClockWise)
                     hole.Reverse();
 
+                //Holes must be simple, cw and be contained in the
+                //polygon and not intersect any other holes.
                 if (PolygonWithHoles2.IsValidHole(Polygon, hole))
                 {
                     Polygon.AddHole(hole);
                     int holes = Polygon.HoleCount;
 
+                    //We need to recreate the polygon 
+                    //renderer as well if a hole is added. 
                     CreateRenderer("Polygon", Polygon, faceColor);
+                    //Create the holes renderer.
                     CreateRenderer("Hole" + holes, hole, faceColor);
                 }
                 else
@@ -81,6 +100,10 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
+        /// <summary>
+        /// Compute the visibilty from the point.
+        /// </summary>
+        /// <param name="point"></param>
         private void ComputeVisibility(Point2d point)
         {
             ClearRenderer("Polygon");
@@ -91,8 +114,10 @@ namespace CGALDotNetUnity.Polygons
             PolygonWithHoles2<EEK> region;
             if(PolygonVisibility<EEK>.Instance.ComputeVisibility(method, point, Polygon, out region))
             {
+                //Visibilty was successfully computed and is the region polygon
                 CreateRenderer("Region", region, regionColor);
 
+                //Take the difference with the original polygon for rendering.
                 var results = new List<PolygonWithHoles2<EEK>>();
                 PolygonBoolean2<EEK>.Instance.Op(POLYGON_BOOLEAN.DIFFERENCE, Polygon, region, results);
 

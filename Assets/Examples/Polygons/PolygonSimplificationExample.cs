@@ -18,7 +18,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Color lineColor = new Color32(0, 0, 0, 255);
 
-        private PolygonWithHoles2<EEK> Polygon, SimplifiedPolygon;
+        private PolygonWithHoles2<EIK> Polygon, SimplifiedPolygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
@@ -26,35 +26,48 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void Start()
         {
+            //Init base layer and turn input off.
             base.Start();
+            SetInputMode(INPUT_MODE.NONE);
             Renderers = new Dictionary<string, CompositeRenderer>();
 
-            var star = PolygonFactory<EEK>.KochStar(20, 3);
-            var circle = PolygonFactory<EEK>.CreateCircle(3, 32);
-            circle.Reverse();
+            var star = PolygonFactory<EIK>.KochStar(20, 3);
+            //var circle = PolygonFactory<EIK>.CreateCircle(3, 32);
+            //circle.Reverse();
 
-            Polygon = new PolygonWithHoles2<EEK>(star);
+            //Create a polygon to show before simplication
+            Polygon = new PolygonWithHoles2<EIK>(star);
             //Polygon.AddHole(circle);
             Polygon.Translate(new Point2d(-10, 0));
             CreateRenderer("Polygon", Polygon);
 
+            //Set some of the simplification params
             Param = PolygonSimplificationParams.Default;
             Param.threshold = 100;
             Param.stop = POLYGON_SIMP_STOP_FUNC.BELOW_THRESHOLD;
             Param.cost = POLYGON_SIMP_COST_FUNC.SQUARE_DIST;
 
+            //Perform the simplification
             Simplify();
         }
 
+        /// <summary>
+        /// Performs the simplification
+        /// </summary>
         private void Simplify()
         {
-            SimplifiedPolygon = PolygonSimplification2<EEK>.Instance.Simplify(Polygon, Param);
+            //Create a polygon to show after simplication
+            SimplifiedPolygon = PolygonSimplification2<EIK>.Instance.Simplify(Polygon, Param);
             SimplifiedPolygon.Translate(new Point2d(20, 0));
 
             CreateRenderer("Simplified", SimplifiedPolygon);
         }
 
-        private void CreateRenderer(string name, PolygonWithHoles2<EEK> polygon)
+        /// <summary>
+        /// Create the renderer that daws the polygon.
+        /// This just ueses unitys GL to draw lines and points.
+        /// Its not very fast 
+        private void CreateRenderer(string name, PolygonWithHoles2<EIK> polygon)
         {
             Renderers[name] = Draw().
                 Faces(polygon, faceColor).

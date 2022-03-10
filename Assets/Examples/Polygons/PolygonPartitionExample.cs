@@ -20,7 +20,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Color lineColor = new Color32(0, 0, 0, 255);
 
-        private Polygon2<EEK> Polygon;
+        private Polygon2<EIK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
@@ -28,26 +28,40 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void Start()
         {
+            //Init base class
             base.Start();
+
+            //Set the input mode to polygons.
+            //Determines when OnInputComplete is called.
             SetInputMode(INPUT_MODE.POLYGON);
+
+            //Create the place to store the renderers that draw the shapes.
             Renderers = new Dictionary<string, CompositeRenderer>();
         }
 
         protected override void OnInputComplete(List<Point2d> points)
         {
-            Polygon = new Polygon2<EEK>(points.ToArray());
+            //Create the polygon from the points.
+            //We just use the EIK kernel as its the fastest.
+            Polygon = new Polygon2<EIK>(points.ToArray());
 
+            //Polygon must be simple to continue.
             if (Polygon.IsSimple)
             {
+                //Polygons must be ccw.
                 if (!Polygon.IsCounterClockWise)
                     Polygon.Reverse();
 
+                //Perfom the partion algorithm
                 PartitionPolygon();
             }
 
             InputPoints.Clear();
         }
 
+        /// <summary>
+        /// Called when scene cleared.
+        /// </summary>
         protected override void OnCleared()
         {
             Polygon = null;
@@ -67,26 +81,42 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
+        /// <summary>
+        /// Draw the renderers in post render.
+        /// </summary>
         private void OnPostRender()
         {
+            //This draws the grid
             DrawGrid();
-            DrawInput(lineColor, pointColor, PointSize);
 
+            //This draws the polygon and the input point.
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
+
+            //This draws the line of points the user
+            //is creating but they dont for a polygon yet.
+            DrawInput(lineColor, pointColor, PointSize);
         }
 
+        /// <summary>
+        /// Perform the partition.
+        /// </summary>
         private void PartitionPolygon()
         {
             if (Polygon == null) return;
 
-            var results = new List<Polygon2<EEK>>();
-            PolygonPartition2<EEK>.Instance.Partition(Op, Polygon, results);
+            var results = new List<Polygon2<EIK>>();
+            PolygonPartition2<EIK>.Instance.Partition(Op, Polygon, results);
 
             CreateRenderer(results);
         }
 
-        private void CreateRenderer(List<Polygon2<EEK>> list)
+        /// <summary>
+        /// Create the renderer that daws the polygon.
+        /// This just ueses unitys GL to draw lies and points.
+        /// Its not very fast and just used for demos.
+        /// </summary>
+        private void CreateRenderer(List<Polygon2<EIK>> list)
         {
             Renderers.Clear();
             for (int i = 0; i < list.Count; i++)
