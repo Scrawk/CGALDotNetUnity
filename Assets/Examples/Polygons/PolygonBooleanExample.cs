@@ -32,28 +32,46 @@ namespace CGALDotNetUnity.Polygons
 
         protected override void Start()
         {
+            //Init base class
             base.Start();
-            SetInputMode(INPUT_MODE.POLYGON);
-            Renderers = new Dictionary<string, CompositeRenderer>();
-            Polygons = new List<PolygonWithHoles2<EEK>>();
 
-            ConsoleRedirect.Redirect();
+            //Set the input mode to polygons.
+            //Determines when OnInputComplete is called.
+            SetInputMode(INPUT_MODE.POLYGON);
+
+            //Create the place to store the renderers that draw the shapes.
+            Renderers = new Dictionary<string, CompositeRenderer>();
+
+            //Create a list to hold the polygons.
+            //Kernel should be EEK for boolean ops. 
+            //If EIK is used precision will be a issue.
+            Polygons = new List<PolygonWithHoles2<EEK>>();
         }
 
+        /// <summary>
+        /// This function is called once a set of at least 3 points has been 
+        /// placed and the last point is placed on the first point.
+        /// </summary>
+        /// <param name="points"></param>
         protected override void OnInputComplete(List<Point2d> points)
         {
+            
             if (Polygons.Count == 0)
             {
+                //if this is the first polygon create the boundary.
                 var boundary = new Polygon2<EEK>(points.ToArray());
 
                 if (boundary.IsSimple)
                 {
+                    //Must be simple and ccw.
                     if (!boundary.IsCounterClockWise)
                         boundary.Reverse();
 
+                    //If boundary is valid create a polygon with hole object.
                     var polygon = new PolygonWithHoles2<EEK>(boundary);
                     Polygons.Add(polygon);
 
+                    //As polygons are added rebuild renderers
                     for(int i = 0; i < Polygons.Count; i++)
                         CreateRenderer(i, Polygons[i]);
 
@@ -61,20 +79,37 @@ namespace CGALDotNetUnity.Polygons
             }
             else
             {
+                //This is not the first polygon created.
                 var polygon = new Polygon2<EEK>(points.ToArray());
 
                 if(polygon.IsSimple)
                 {
+                    //Must be simple and ccw.
                     if (!polygon.IsCounterClockWise)
                         polygon.Reverse();
 
+                    //create a tmp list of the polygons aready made
                     var tmp = new List<PolygonWithHoles2<EEK>>(Polygons);
                     Polygons.Clear();
 
                     foreach(var poly in tmp)
                     {
-                        if(PolygonBoolean2<EEK>.Instance.Op(Op, polygon, poly, Polygons))
+                        //for each polygon created perform
+                        //the boolean op agaist the new polygon.
+
+                        //you can use the boolean instance 
+                        //to save creating a new object.
+                        var boo = PolygonBoolean2<EEK>.Instance;
+
+                        //Checking input can be disabled if we know input is good
+                        //boo.CheckInput = false;
+
+                        if (boo.Op(Op, polygon, poly, Polygons))
                         {
+                            //If the op was successfull the results
+                            //will have been writen into the Polygon list.
+
+                            //Recreate the renderers to draw the polygons
                             for (int i = 0; i < Polygons.Count; i++)
                                 CreateRenderer(i, Polygons[i]);
 
@@ -88,6 +123,13 @@ namespace CGALDotNetUnity.Polygons
             InputPoints.Clear();
         }
 
+        /// <summary>
+        /// Create the renderer that daws the polygon.
+        /// This just ueses unitys GL to draw lies and points.
+        /// Its not very fast and just used for demos.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="polygon"></param>
         private void CreateRenderer(int id, PolygonWithHoles2<EEK> polygon)
         {
             Renderers["Polygon " + id] = Draw().
@@ -108,6 +150,9 @@ namespace CGALDotNetUnity.Polygons
             }
         }
 
+        /// <summary>
+        /// Called when scene is cleared.
+        /// </summary>
         protected override void OnCleared()
         {
             Polygons.Clear();
@@ -122,6 +167,7 @@ namespace CGALDotNetUnity.Polygons
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
+                //switch the op as tab pressed.
                 Op = CGALEnum.Next(Op);
 
                 //Triangulation polygons for symetric difference
@@ -132,14 +178,21 @@ namespace CGALDotNetUnity.Polygons
 
         }
 
+        /// <summary>
+        /// Draw the renderers in post render.
+        /// </summary>
         private void OnPostRender()
         {
+            //This draws the grid
             DrawGrid();
-            DrawInput(lineColor, pointColor, PointSize);
 
+            //This draws the polygon and the input point.
             foreach (var renderer in Renderers.Values)
                 renderer.Draw();
 
+            //This draws the line of points the user
+            //is creating but they dont for a polygon yet.
+            DrawInput(lineColor, pointColor, PointSize);
         }
 
         protected void OnGUI()
