@@ -48,13 +48,24 @@ namespace CGALDotNetUnity.Triangulations
 
         protected override void Start()
         {
+            //Init the base class.
             base.Start();
+
+            //Create the renderers to draw the triangulations.
             Renderers = new Dictionary<string, CompositeRenderer>();
+
+            //Set input mode to point. This will call OnLeftClickDown when mouse pressed.
             SetInputMode(INPUT_MODE.POINT_CLICK);
 
+            //Create the triangulation.
             CreateTriangulation(Type);
         }
 
+        /// <summary>
+        /// Create the trianglation given the type enum
+        /// and add 3 points to make a triangle.
+        /// </summary>
+        /// <param name="type">THe type to create</param>
         private void CreateTriangulation(TRIANGULATION2 type)
         {
             switch (type)
@@ -81,6 +92,11 @@ namespace CGALDotNetUnity.Triangulations
             BuildTriangulationRenderer();
         }
 
+        /// <summary>
+        /// Left click was down.
+        /// Could add a new point or select a element.
+        /// </summary>
+        /// <param name="point"></param>
         protected override void OnLeftClickDown(Point2d point)
         {
 
@@ -105,36 +121,63 @@ namespace CGALDotNetUnity.Triangulations
 
         }
 
+        /// <summary>
+        /// Add a new point to triangulation
+        /// </summary>
+        /// <param name="point"></param>
         private void AddPoint(Point2d point)
         {
             UnselectAll();
 
             triangulation.Insert(point);
+            //Must rebuild renderer.
             BuildTriangulationRenderer();
         }
 
+        /// <summary>
+        /// Try to select a point in triagulation.
+        /// </summary>
+        /// <param name="point">The left click point</param>
         private void SelectPoint(Point2d point)
         {
             UnselectAll();
 
-            if (triangulation.LocateVertex(point, 0.5, out TriVertex2 vert))
+            //If selection is with this distance
+            //to element it counts as being cliked on.
+            double radius = 0.5;
+
+            if (triangulation.LocateVertex(point, radius, out TriVertex2 vert))
             {
                 SelectedVertex = vert;
+                //Must rebuild renderer.
                 BuildSelectionRenderer();
             }
         }
 
+        /// <summary>
+        /// Try to select a edge in triagulation.
+        /// </summary>
+        /// <param name="point">The left click point</param>
         private void SelectEdge(Point2d point)
         {
             UnselectAll();
 
-            if (triangulation.LocateEdge(point, 0.5, out TriEdge2 edge))
+            //If selection is with this distance
+            //to element it counts as being cliked on.
+            double radius = 0.5;
+
+            if (triangulation.LocateEdge(point, radius, out TriEdge2 edge))
             {
                 SelectedEdge = edge;
+                //Must rebuild renderer.
                 BuildSelectionRenderer();
             }
         }
 
+        /// <summary>
+        /// Try to select a face in triagulation.
+        /// </summary>
+        /// <param name="point">The left click point</param>
         private void SelectFace(Point2d point)
         {
             UnselectAll();
@@ -145,12 +188,16 @@ namespace CGALDotNetUnity.Triangulations
                 {
                     SelectedFace = face;
                     SelectedTriangle = tri;
+                    //Must rebuild renderer.
                     BuildSelectionRenderer();
                 }
                 
             }
         }
 
+        /// <summary>
+        /// Unselects any elements that have been clicked on.
+        /// </summary>
         private void UnselectAll()
         {
             SelectedEdge = null;
@@ -162,6 +209,9 @@ namespace CGALDotNetUnity.Triangulations
             Renderers.Remove("Face");
         }
 
+        /// <summary>
+        /// Builds the triangulation renderer
+        /// </summary>
         private void BuildTriangulationRenderer()
         {
             Renderers["Triangulation"] = Draw().
@@ -184,6 +234,9 @@ namespace CGALDotNetUnity.Triangulations
             }
         }
 
+        /// <summary>
+        /// Builds the renderer for any selected elements
+        /// </summary>
         private void BuildSelectionRenderer()
         {
             if(SelectedVertex != null)
@@ -205,6 +258,12 @@ namespace CGALDotNetUnity.Triangulations
             }
         }
 
+        /// <summary>
+        /// Builds the Circumcircirles renderers. 
+        /// The Circumcircirles are the circles that 
+        /// pass through the triangle vertices and
+        /// are important in delaunay triangulation.
+        /// </summary>
         private void BuildCircumcircirles()
         {
             int count = triangulation.TriangleCount;
@@ -220,6 +279,9 @@ namespace CGALDotNetUnity.Triangulations
                 PopRenderer();
         }
 
+        /// <summary>
+        /// Clear everything when space bar pressed.
+        /// </summary>
         protected override void OnCleared()
         {
             UnselectAll();

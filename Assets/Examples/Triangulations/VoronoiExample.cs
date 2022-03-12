@@ -19,6 +19,8 @@ namespace CGALDotNetUnity.Triangulations
 
         private Color greenColor = new Color32(80, 200, 80, 255);
 
+        private Color pointColor = new Color32(80, 80, 200, 255);
+
         private Color faceColor = new Color32(80, 80, 200, 128);
 
         private Color lineColor = new Color32(0, 0, 0, 255);
@@ -62,13 +64,24 @@ namespace CGALDotNetUnity.Triangulations
 
             if(DrawTriangulation)
             {
-                Renderers["Triangulation"] = Draw().Outline(triangulation, blueColor).PopRenderer();
+                //Renderers["Triangulation"] = Draw().Outline(triangulation, blueColor).PopRenderer();
+
+                Renderers["Triangulation"] = Draw().
+                    Faces(triangulation, faceColor).
+                    Outline(triangulation, lineColor).
+                    Points(triangulation, lineColor, pointColor).
+                    PopRenderer();
             }
             
             if(DrawVoronoiSegments)
             {
                 var segments = triangulation.GetVoronoiSegments();
-                Renderers["Segments"] = Draw().Outline(segments, redColor).PopRenderer();
+               // Renderers["Segments"] = Draw().Outline(segments, redColor).PopRenderer();
+
+                Renderers["Segments"] = Draw().
+                    Outline(segments, redColor).
+                    Points(segments, lineColor, redColor).
+                    PopRenderer();
             }
 
             if(DrawVoronoiRays)
