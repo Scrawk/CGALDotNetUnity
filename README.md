@@ -10,6 +10,8 @@
 
 - [The CGAL Global Functions.](https://github.com/Scrawk/CGALDotNet/wiki/The-CGALGlobal-Functions)
 
+- [Unity Extensions](https://github.com/Scrawk/CGALDotNet/wiki/Unity-Extensions)
+
 # The Geometry Kernel.
 
 - [The Geometry Numerics.](https://github.com/Scrawk/CGALDotNet/wiki/The-Geometry-Numerics)
@@ -22,13 +24,25 @@
 
 # The Polygon Kernel.
 
-- [The Polygon Kernel.](https://github.com/Scrawk/CGALDotNet/wiki/The-Polygon-Kernel)
+- [The Polygon Object.](https://github.com/Scrawk/CGALDotNet/wiki/The-Polygon-Object)
 
-- [The Polygon With Holes Kernel.](https://github.com/Scrawk/CGALDotNet/wiki/The-Polygon-With-Holes-Kernel)
+- [The Polygon With Holes Object.](https://github.com/Scrawk/CGALDotNet/wiki/The-Polygon-With-Holes-Object)
 
-- [The Polygon Boolean Kernel.](https://github.com/Scrawk/CGALDotNet/wiki/The-Polygon-Boolean-Kernel)
+- [Polygon Boolean.](https://github.com/Scrawk/CGALDotNet/wiki/Polygon-Boolean)
 
-- [The Polygon Minkowski Kernel.](https://github.com/Scrawk/CGALDotNet/wiki/The-Polygon-Minkowski-Kernel)
+- [Polygon Minkowski.](https://github.com/Scrawk/CGALDotNet/wiki/Polygon-Minkowski)
+
+- [Polygon Offset.](https://github.com/Scrawk/CGALDotNet/wiki/Polygon-Offset)
+
+- [Polygon Simplification.](https://github.com/Scrawk/CGALDotNet/wiki/Polygon-Simplification)
+
+- [Polygon Visibility.](https://github.com/Scrawk/CGALDotNet/wiki/Polygon-Visibility)
+
+- [Polygon Partition.](https://github.com/Scrawk/CGALDotNet/wiki/Polygon-Partition)
+
+# The Triangulation Kernel
+
+- [Triangulation 2D](https://github.com/Scrawk/CGALDotNet/wiki/Triangulations-2D)
 
 Some common geomerty objects are referrenced in a [seperate project](https://github.com/Scrawk/CGALDotNetGeometry) so they can come under a different license.
 
