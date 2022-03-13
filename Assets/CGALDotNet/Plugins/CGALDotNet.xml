@@ -12527,6 +12527,13 @@
             The triangulations kernel.
             </summary>
         </member>
+        <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.BuildStamp">
+            <summary>
+            Returns the buildStamp.
+            The build stamp will change if 
+            the triangulation model has changed
+            </summary>
+        </member>
         <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.Dimension">
             <summary>
             Returns the dimension of the affine hull.
@@ -12574,7 +12581,7 @@
         </member>
         <member name="P:CGALDotNet.Triangulations.BaseTriangulation3.TetrahdronIndiceCount">
             <summary>
-            
+            The number of indices needed for the finite tetrahedrons.
             </summary>
         </member>
         <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.Clear">
@@ -12612,6 +12619,39 @@
             <param name="points">The points to insert.</param>
             <param name="count">The arrays length</param>
         </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.InsertInCell(System.Int32,CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Insert a vertex into a cell.
+            </summary>
+            <param name="index">The cells index.</param>
+            <param name="point">The point to insert.</param>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.Locate(CGALDotNetGeometry.Numerics.Point3d,CGALDotNet.Triangulations.TriCell3@)">
+            <summary>
+            If the point query lies inside the convex hull of the points, the cell that contains the query in its interior is returned.
+            If query lies on a facet, an edge or on a vertex, one of the cells having query on its boundary is returned.
+            If the point query lies outside the convex hull of the points, an infinite cell with vertices { p,q,r,∞} is
+            returned such that the tetrahedron(p, q, r, query) is positively oriented(the rest of the triangulation lies
+            on the other side of facet (p, q, r)).
+            Note that locate works even in degenerate dimensions: in dimension 2 (resp. 1, 0) the Cell_handle returned
+            is the one that represents the facet(resp.edge, vertex) containing the query point.
+            The optional argument start is used as a starting place for the search.
+            The optional argument could_lock_zone is used by the concurrency-safe version of the triangulation.When the
+            pointer is not null, the locate will try to lock all the cells along the walk. If it succeeds,
+            could_lock_zone is true, otherwise it is false. In any case, the locked cells are not unlocked by locate,
+            leaving this choice to the user. 
+            </summary>
+            <param name="point">The point to query</param>
+            <param name="cell">The cell thats closest to point.</param>
+            <returns>The closest cell to point.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetCircumcenters(CGALDotNetGeometry.Numerics.Point3d[],System.Int32)">
+            <summary>
+            Get the centroids of each cell.
+            </summary>
+            <param name="circumcenters">The array of points</param>
+            <param name="count">The array of points length</param>
+        </member>
         <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetPoints(CGALDotNetGeometry.Numerics.Point3d[],System.Int32)">
             <summary>
             Get all the points in the triangulation.
@@ -12625,24 +12665,62 @@
             </summary>
             <param name="points">The array to copy into.</param>
         </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetVertices(CGALDotNet.Triangulations.TriVertex3[],System.Int32)">
+            <summary>
+            Get the triangulation vertices.
+            </summary>
+            <param name="vertices">The vertex array.</param>
+            <param name="count">The vertex array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetVertex(System.Int32,CGALDotNet.Triangulations.TriVertex3@)">
+            <summary>
+            Get a triangulation vertex.
+            </summary>
+            <param name="index">The vertices index</param>
+            <param name="vertex">The vertex.</param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetCells(CGALDotNet.Triangulations.TriCell3[],System.Int32)">
+            <summary>
+            Get the triangulation vertices.
+            </summary>
+            <param name="cells">The vertex array.</param>
+            <param name="count">The vertex array length.</param>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetCell(System.Int32,CGALDotNet.Triangulations.TriCell3@)">
+            <summary>
+            Get a triangulation vertex.
+            </summary>
+            <param name="index">The vertices index</param>
+            <param name="cell">The vertex.</param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetSegmentIndices(System.Int32[],System.Int32)">
+            <summary>
+            Get the indices of the tetrahedron cells in the triangulation.
+            </summary>
+            <param name="indices">The indices array.</param>
+            <param name="count">The indices array length.</param>
+        </member>
         <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetTetrahedronIndices(System.Int32[],System.Int32)">
             <summary>
-            
+            Get the indices of the tetrahedron cells in the triangulation.
             </summary>
-            <param name="indices"></param>
-            <param name="count"></param>
+            <param name="indices">The indices array.</param>
+            <param name="count">The indices array length.</param>
         </member>
-        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetSegmentsIndices(System.Collections.Generic.List{CGALDotNetGeometry.Shapes.SegmentIndex})">
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetUniqueSegmentsIndices(System.Collections.Generic.List{CGALDotNetGeometry.Shapes.SegmentIndex})">
             <summary>
-            
+            Gets all the segment indices with no duplicates
             </summary>
-            <param name="segments"></param>
+            <param name="segments">The list to hold the segments.</param>
         </member>
-        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.TetrahedronToSegmentIndices">
+        <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.GetTetrahedronToSegmentIndices(System.Collections.Generic.List{CGALDotNetGeometry.Shapes.SegmentIndex})">
             <summary>
-            
+            Get the segment indices of all the tertrhdron in triangulation.
+            Will contain duplicate segments.
             </summary>
-            <returns></returns>
+            <returns>Get the segment indices of all the tertrhdron in triangulation.</returns>
         </member>
         <member name="M:CGALDotNet.Triangulations.BaseTriangulation3.Translate(CGALDotNetGeometry.Numerics.Point3d)">
             <summary>
@@ -13297,6 +13375,38 @@
             The kernel with the functions unique to the triangulation.
             </summary>
         </member>
+        <member name="M:CGALDotNet.Triangulations.DelaunayTriangulation3.Move(System.Int32,CGALDotNetGeometry.Numerics.Point3d,System.Boolean)">
+            <summary>
+            Move a vertex.
+            </summary>
+            <param name="index">The vertices index.</param>
+            <param name="point">The point to move to.</param>
+            <param name="ifNoCollision">Should the vertex only be moved if there is no coliision.</param>
+            <returns>If the vertex was moved.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.DelaunayTriangulation3.NearestVertex(CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find the index of the nearest vertex to the point.
+            </summary>
+            <param name="point">The point.</param>
+            <returns>The index of the nearest vertex to the point.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.DelaunayTriangulation3.NearestVertexInCell(System.Int32,CGALDotNetGeometry.Numerics.Point3d)">
+            <summary>
+            Find the index of the nearest vertex to the point.
+            Presumes poimt is in a cell.
+            </summary>
+            <param name="index">The cells index.</param>
+            <param name="point">The point.</param>
+            <returns>The index of the nearest vertex to the point.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.DelaunayTriangulation3.RemoveVertex(System.Int32)">
+            <summary>
+            Remobe a vertex.
+            </summary>
+            <param name="index">The vertex index.</param>
+            <returns>True if vertex was removed.</returns>
+        </member>
         <member name="M:CGALDotNet.Triangulations.DelaunayTriangulation3.Print(System.Text.StringBuilder)">
             <summary>
             
@@ -13501,6 +13611,132 @@
             </summary>
             <param name="builder"></param>
         </member>
+        <member name="T:CGALDotNet.Triangulations.TriCell3">
+            <summary>
+            From Index to HalfEdgeIndex must match layout
+            of the unmanaged TriFace2 in the TriFace2 header file.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriCell3.IsInfinite">
+            <summary>
+            Is this the infinite cell.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriCell3.Index">
+            <summary>
+            The cells index in the triangulation.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriCell3.VertexIndices">
+            <summary>
+            The cells 4 vertices.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriCell3.NeighborIndices">
+            <summary>
+            The cells 4 neighbor cells.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.op_Equality(CGALDotNet.Triangulations.TriCell3,CGALDotNet.Triangulations.TriCell3)">
+            <summary>
+            Are the two cells equal.
+            </summary>
+            <param name="f1">The first cell.</param>
+            <param name="f2">The second cell.</param>
+            <returns>True if the cells are equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.op_Inequality(CGALDotNet.Triangulations.TriCell3,CGALDotNet.Triangulations.TriCell3)">
+            <summary>
+            Are the two cells not equal.
+            </summary>
+            <param name="f1">The first cell.</param>
+            <param name="f2">The second cell.</param>
+            <returns>True if the cells are not equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.Equals(System.Object)">
+            <summary>
+            Are these objects equal.
+            </summary>
+            <param name="obj">The other object.</param>
+            <returns>True if the objects are equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.Equals(CGALDotNet.Triangulations.TriCell3)">
+            <summary>
+            Are these cells equal.
+            </summary>
+            <param name="cell">The other cell.</param>
+            <returns>True if the cells are equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.GetHashCode">
+            <summary>
+            The cells hash code.
+            </summary>
+            <returns>The cells hash code.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.GetVertexIndex(System.Int32)">
+            <summary>
+            Get a vertex index.
+            </summary>
+            <param name="i">The vertices index 0-3.</param>
+            <returns>The vertices index in the triangulation.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.GetNeighborIndex(System.Int32)">
+            <summary>
+            Get a neighbor cell index.
+            </summary>
+            <param name="i">The neighbor cell index 0-3.</param>
+            <returns>A neighbor cell index in the triangulation.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.EnumerateVertices(CGALDotNet.Triangulations.BaseTriangulation3)">
+            <summary>
+            Enumerate the vertices of the cell.
+            </summary>
+            <param name="tri">The triangle the vertices below too.</param>
+            <returns>The cell vertices.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.EnumerateVertices(CGALDotNet.Triangulations.TriVertex3[])">
+            <summary>
+            Enumerate the vertices of the cell.
+            </summary>
+            <param name="vertices">The vertices array.</param>
+            <returns>The cell vertices.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.EnumerateNeighbors(CGALDotNet.Triangulations.BaseTriangulation3)">
+            <summary>
+            Enumerate the vertices of the cell.
+            </summary>
+            <param name="tri">The triangle the vertices below too.</param>
+            <returns>The cell vertices.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.EnumerateNeighbors(CGALDotNet.Triangulations.TriCell3[])">
+            <summary>
+            Enumerate the neighbors of the cell.
+            </summary>
+            <param name="cells">The cell array.</param>
+            <returns>The cell neighbors.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.VerticesEqual(CGALDotNet.Triangulations.TriCell3,CGALDotNet.Triangulations.TriCell3)">
+            <summary>
+            Are the two vertex arrays equal.
+            </summary>
+            <param name="c1"></param>
+            <param name="c2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriCell3.NeighborEqual(CGALDotNet.Triangulations.TriCell3,CGALDotNet.Triangulations.TriCell3)">
+            <summary>
+            Are the two neighbor arrays equal.
+            </summary>
+            <param name="c1"></param>
+            <param name="c2"></param>
+            <returns></returns>
+        </member>
         <member name="T:CGALDotNet.Triangulations.TriEdge2">
             <summary>
             From Index to TwinIndex must match layout
@@ -13677,24 +13913,24 @@
         </member>
         <member name="F:CGALDotNet.Triangulations.TriVertex2.FaceIndex">
             <summary>
-            The one of the faces the vertex is connected to.
+            The one of the vertexs the vertex is connected to.
             </summary>
         </member>
         <member name="M:CGALDotNet.Triangulations.TriVertex2.op_Equality(CGALDotNet.Triangulations.TriVertex2,CGALDotNet.Triangulations.TriVertex2)">
             <summary>
-            Are the two faces equal.
+            Are the two vertexs equal.
             </summary>
-            <param name="v1">The first face.</param>
-            <param name="v2">The second face.</param>
-            <returns>True if the faces are equal.</returns>
+            <param name="v1">The first vertex.</param>
+            <param name="v2">The second vertex.</param>
+            <returns>True if the vertexs are equal.</returns>
         </member>
         <member name="M:CGALDotNet.Triangulations.TriVertex2.op_Inequality(CGALDotNet.Triangulations.TriVertex2,CGALDotNet.Triangulations.TriVertex2)">
             <summary>
-            Are the two faces not equal.
+            Are the two vertexs not equal.
             </summary>
-            <param name="v1">The first face.</param>
-            <param name="v2">The second face.</param>
-            <returns>True if the faces are not equal.</returns>
+            <param name="v1">The first vertex.</param>
+            <param name="v2">The second vertex.</param>
+            <returns>True if the vertexs are not equal.</returns>
         </member>
         <member name="M:CGALDotNet.Triangulations.TriVertex2.Equals(System.Object)">
             <summary>
@@ -13705,16 +13941,83 @@
         </member>
         <member name="M:CGALDotNet.Triangulations.TriVertex2.Equals(CGALDotNet.Triangulations.TriVertex2)">
             <summary>
-            Are these faces equal.
+            Are these vertexs equal.
             </summary>
-            <param name="face">The other face.</param>
-            <returns>True if the faces are equal.</returns>
+            <param name="vertex">The other vertex.</param>
+            <returns>True if the vertexs are equal.</returns>
         </member>
         <member name="M:CGALDotNet.Triangulations.TriVertex2.GetHashCode">
             <summary>
-            The faces hash code.
+            The vertexs hash code.
             </summary>
-            <returns>The faces hash code.</returns>
+            <returns>The vertexs hash code.</returns>
+        </member>
+        <member name="T:CGALDotNet.Triangulations.TriVertex3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriVertex3.Point">
+            <summary>
+            The vertices point.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriVertex3.IsInfinite">
+            <summary>
+            Is this a infinte vertex.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriVertex3.Degree">
+            <summary>
+            The vertices degree is the 
+            number of edges connecting to it.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriVertex3.Index">
+            <summary>
+            The vertices index in the triangulation.
+            </summary>
+        </member>
+        <member name="F:CGALDotNet.Triangulations.TriVertex3.CellIndex">
+            <summary>
+            The one of the cells the vertex is connected to.
+            </summary>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriVertex3.op_Equality(CGALDotNet.Triangulations.TriVertex3,CGALDotNet.Triangulations.TriVertex3)">
+            <summary>
+            Are the two vertices equal.
+            </summary>
+            <param name="v1">The first vertex.</param>
+            <param name="v2">The second vertex.</param>
+            <returns>True if the vertexs are equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriVertex3.op_Inequality(CGALDotNet.Triangulations.TriVertex3,CGALDotNet.Triangulations.TriVertex3)">
+            <summary>
+            Are the two vertices not equal.
+            </summary>
+            <param name="v1">The first vertex.</param>
+            <param name="v2">The second vertex.</param>
+            <returns>True if the vertexs are not equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriVertex3.Equals(System.Object)">
+            <summary>
+            Are these objects equal.
+            </summary>
+            <param name="obj">The other object.</param>
+            <returns>True if the objects are equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriVertex3.Equals(CGALDotNet.Triangulations.TriVertex3)">
+            <summary>
+            Are these vertexs equal.
+            </summary>
+            <param name="vertex">The other vertex.</param>
+            <returns>True if the vertexs are equal.</returns>
+        </member>
+        <member name="M:CGALDotNet.Triangulations.TriVertex3.GetHashCode">
+            <summary>
+            The vertexs hash code.
+            </summary>
+            <returns>The vertexs hash code.</returns>
         </member>
         <member name="T:CGALDotNet.ArrayCache">
             <summary>

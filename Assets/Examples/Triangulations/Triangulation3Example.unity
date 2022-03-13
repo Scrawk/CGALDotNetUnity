@@ -235,6 +235,7 @@ GameObject:
   - component: {fileID: 465998882}
   - component: {fileID: 465998886}
   - component: {fileID: 465998887}
+  - component: {fileID: 465998888}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -267,8 +268,8 @@ Camera:
   m_GameObject: {fileID: 465998880}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -308,8 +309,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 465998880}
-  m_LocalRotation: {x: 0.003244108, y: 0.9538486, z: -0.30009377, w: 0.010302366}
-  m_LocalPosition: {x: -0.36, y: 18.11, z: 26.64}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -10, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -371,6 +372,20 @@ MonoBehaviour:
   vertexMaterial: {fileID: 2100000, guid: 0760eede4a9db604f8699c03e3497a4c, type: 2}
   edgeMaterial: {fileID: 2100000, guid: 9100d3f5442282a4d9db03b0412e72e7, type: 2}
   hullMaterial: {fileID: 2100000, guid: e92f670c398a1e541b24f3dfb0b93fa5, type: 2}
+--- !u!114 &465998888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465998880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3944ee1c786f0de4a8bf1856c45c782a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vSyncCount: 1
+  targetFrameRate: 60
 --- !u!1 &762780502
 GameObject:
   m_ObjectHideFlags: 0
