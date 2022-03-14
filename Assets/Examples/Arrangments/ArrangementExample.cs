@@ -64,6 +64,12 @@ namespace CGALDotNetUnity.Arrangements
 
             Renderers.Clear();
             BuildArrangementRenderer();
+
+            var faces = new ArrFace2[arrangement.FaceCount];
+            arrangement.GetFaces(faces, faces.Length);
+
+            foreach (var face in faces)
+                Debug.Log(face);
         }
 
         protected override void OnInputComplete(List<Point2d> points)
@@ -180,6 +186,7 @@ namespace CGALDotNetUnity.Arrangements
         private void BuildArrangementRenderer()
         {
             Renderers["Arrangement"] = Draw().
+                Faces(arrangement, faceColor).
                 Outline(arrangement, lineColor).
                 Points(arrangement, lineColor, pointColor).
                 PopRenderer();

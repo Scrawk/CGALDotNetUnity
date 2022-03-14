@@ -16,6 +16,7 @@ using CGALDotNet.Arrangements;
 using CGALDotNetGeometry.Nurbs;
 using CGALDotNet.Meshing;
 using CGALDotNet.Polyhedra;
+using LibTessDotNet.Double;
 
 namespace CGALDotNetUnity
 {
@@ -88,6 +89,27 @@ namespace CGALDotNetUnity
 
             var points = new List<Point2d>();
             polygon.GetAllPoints(points);
+
+            var triangles = new FaceRenderer();
+            triangles.FaceMode = FACE_MODE.TRIANGLES;
+            triangles.Orientation = DRAW_ORIENTATION.XY;
+            triangles.DefaultColor = color;
+            triangles.Load(points.ToUnityVector2(), indices);
+            triangles.ZWrite = false;
+            triangles.SrcBlend = BlendMode.One;
+
+            Renderer.Add(triangles);
+
+            return Instance;
+        }
+
+        public RendererBuilder Faces(Arrangement2 arr, Color color)
+        {
+            var indices = new List<int>();
+            arr.Triangulate(indices);
+
+            var points = new Point2d[arr.VertexCount];
+            arr.GetPoints(points, points.Length);
 
             var triangles = new FaceRenderer();
             triangles.FaceMode = FACE_MODE.TRIANGLES;
@@ -207,24 +229,6 @@ namespace CGALDotNetUnity
             lines.Orientation = DRAW_ORIENTATION.XY;
             lines.DefaultColor = color;
             lines.Load(segments.ToUnityVector2(), indices, LINE_MODE.LINES);
-
-            Renderer.Add(lines);
-
-            return Instance;
-        }
-
-        public RendererBuilder TriangleOutline(Polygon2 polygon, Color color)
-        {
-            var indices = new List<int>();
-            polygon.Triangulate(indices);
-
-            var points = new List<Point2d>();
-            polygon.GetPoints(points);
-
-            var lines = new SegmentRenderer();
-            lines.Orientation = DRAW_ORIENTATION.XY;
-            lines.DefaultColor = color;
-            lines.Load(points.ToUnityVector2(), indices, LINE_MODE.TRIANGLES);
 
             Renderer.Add(lines);
 

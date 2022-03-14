@@ -43,6 +43,14 @@ namespace CGALDotNetUnity.Arrangements
                 new Segment2d(new Point2d(8,5), new Point2d(8,8))
             };
 
+            for(int i = 0; i < segments.Length; i++)
+            {
+                var seg = segments[i];
+                seg -= new Point2d(5, 5);
+                seg *= 2;
+                segments[i] = seg;
+            }
+
             SubCurves = SweepLine<EEK>.Instance.ComputeSubcurves(segments, segments.Length);
             Points = SweepLine<EEK>.Instance.ComputeIntersectionPoints(segments, segments.Length);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Common.Unity.Drawing;
+using Common.Unity.Utility;
 using CGALDotNet;
 using CGALDotNet.Polygons;
 using CGALDotNetGeometry.Numerics;
@@ -40,6 +41,10 @@ namespace CGALDotNetUnity.Polygons
 
             //Create the place to store the renderers that draw the shapes.
             Renderers = new Dictionary<string, CompositeRenderer>();
+
+            //ConsoleRedirect.Redirect();
+            //Polygon = PolygonFactory<EIK>.CreateBox(-5, 5);
+            //CreateRenderer("Polygon", Polygon);
         }
 
         /// <summary>
@@ -86,6 +91,9 @@ namespace CGALDotNetUnity.Polygons
         {
             if(polygon.IsSimple)
             {
+                //var t = new List<Triangle2d>();
+                //polygon.Triangulate(t);
+
                 Renderers[name] = Draw().
                 Faces(polygon, faceColor).
                 Outline(polygon, lineColor).

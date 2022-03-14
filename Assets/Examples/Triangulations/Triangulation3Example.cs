@@ -7,6 +7,7 @@ using CGALDotNet.Triangulations;
 using CGALDotNetGeometry.Numerics;
 using CGALDotNetGeometry.Shapes;
 using CGALDotNet.Polyhedra;
+using CGALDotNet.Extensions;
 using CGALDotNetGeometry.Extensions;
 
 using Common.Unity.Drawing;
@@ -70,28 +71,44 @@ namespace CGALDotNetUnity.Triangulations
                 m_hull = hull.ToUnityMesh("hull", hullMaterial);
             }
 
+            m_triangulation.PrintObjectToUnity();
+
             var points = new Point3d[m_triangulation.VertexCount];
             m_triangulation.GetPoints(points, points.Length);
- 
-            var verts = new TriVertex3[m_triangulation.VertexCount];
-            m_triangulation.GetVertices(verts, verts.Length);
+            points.Round(2);
 
-            var segments = new int[m_triangulation.EdgeCount];
-            m_triangulation.GetSegmentIndices(segments, segments.Length);
-
-            for (int i = 0; i < segments.Length / 2; i++)
+            foreach (var p in points)
             {
-                int i0 = segments[i * 2 + 0];
-                int i1 = segments[i * 2 + 1];
-
-                Debug.Log(i0 + " " + i1);
+                //Debug.Log(p);
             }
 
-                //var segments = new List<SegmentIndex>();
-                //m_triangulation.GetUniqueSegmentsIndices(segments);
-                //m_triangulation.GetTetrahedronToSegmentIndices(segments);
+            var verts = new TriVertex3[m_triangulation.VertexCount];
+            m_triangulation.GetVertices(verts, verts.Length);
+            verts.Round(2);
 
-                m_triangulationGO = new GameObject("Triangulation");
+            foreach (var v in verts)
+            {
+                //Debug.Log(v);
+            }
+
+            var segments = new Segment3d[m_triangulation.EdgeCount];
+            m_triangulation.GetSegments(segments, segments.Length);
+
+            Debug.Log("Segments = " + segments.Length);
+
+            //var triangles = new int[m_triangulation.TriangleCount * 3];
+            //m_triangulation.GetTriangleIndices(triangles, triangles.Length);
+
+            //var tetrahedrons = new int[m_triangulation.TetrahedronCount * 4];
+            //m_triangulation.GetTetrahedronIndices(tetrahedrons, tetrahedrons.Length);
+
+            //var cells = new TriCell3[m_triangulation.TetrahedronCount];
+            //m_triangulation.GetCells(cells, cells.Length);
+
+            //var segments2 = segments.RemoveDuplicateSegments();
+            //var triangles2 = triangles.RemoveDuplicateTriangles();
+
+            m_triangulationGO = new GameObject("Triangulation");
 
             if (vertexMaterial != null)
             {
@@ -118,37 +135,92 @@ namespace CGALDotNetUnity.Triangulations
 
             if (edgeMaterial != null)
             {
-                for (int i = 0; i < segments.Length/2; i++)
+                int edges = 0;
+                for (int i = 0; i < segments.Length; i++)
                 {
-                    int i0 = segments[i * 2 + 0];
-                    int i1 = segments[i * 2 + 1];
+                    var seg = segments[i];
+                    var a = seg.A;
+                    var b = seg.B;
 
-                    if (i0 < 0 || i0 >= points.Length) continue;
-                    if (i1 < 0 || i1 >= points.Length) continue;
+                    //Debug.Log("Create edge " + A + " " + B);
 
-                    var a = points[i0];
-                    var b = points[i1];
+                    if (!a.IsFinite)
+                    {
+                        //Debug.Log("a is not finite");
+                        //Debug.Log(a);
+                        continue;
+                    }
 
-                    if (!a.IsFinite || !b.IsFinite) continue;
+                    if (!b.IsFinite)
+                    {
+                        //Debug.Log("b is not finite");
+                        //Debug.Log(b);
+                        continue;
+                    }
 
                     CreateCylinderBetweenPoints(ToVector3(a), ToVector3(b), 0.1f);
+
+                    edges++;
+                    //Debug.Log("Create edge " + a + " " + b);
                 }
 
+                //Debug.Log("Created " + edges + " edges)");
 
                 /*
-                foreach (var seg in segments)
+                for (int i = 0; i < segments2.Count; i++)
                 {
-                    if (seg.A < 0 || seg.A >= points.Length) continue;
-                    if (seg.B < 0 || seg.B >= points.Length) continue;
+                    var s = segments2[i];
 
-                    var a = points[seg.A];
-                    var b = points[seg.B];
+                    if (s.A < 0 || s.A >= points.Length) continue;
+                    if (s.B < 0 || s.B >= points.Length) continue;
 
+                    var a = points[s.A];
+                    var b = points[s.B];
+        
                     if (!a.IsFinite || !b.IsFinite) continue;
 
                     CreateCylinderBetweenPoints(ToVector3(a), ToVector3(b), 0.1f);
                 }
                 */
+
+                /*
+                for (int i = 0; i < segments.Length/ 2; i++)
+                {
+                    int A = segments[i * 2 + 0];
+                    int B = segments[i * 2 + 1];
+
+                    if (A < 0 || A >= points.Length) continue;
+                    if (B < 0 || B >= points.Length) continue;
+
+                    var a = points[A];
+                    var b = points[B];
+
+                    if (!a.IsFinite || !b.IsFinite) continue;
+
+                    CreateCylinderBetweenPoints(ToVector3(a), ToVector3(b), 0.1f);
+                }
+
+                /*
+                for (int i = 0; i < triangles2.Count; i++)
+                {
+                    var t = triangles2[i];
+
+                    //if (t.A < 0 || t.A >= points.Length) continue;
+                    //if (t.B < 0 || t.B >= points.Length) continue;
+                    //if (t.C < 0 || t.C >= points.Length) continue;
+
+                    var a = points[t.A];
+                    var b = points[t.B];
+                    var c = points[t.C];
+
+                    if (!a.IsFinite || !b.IsFinite || !c.IsFinite) continue;
+
+                    //CreateCylinderBetweenPoints(ToVector3(a), ToVector3(b), 0.1f);
+                    //CreateCylinderBetweenPoints(ToVector3(a), ToVector3(c), 0.1f);
+                    //CreateCylinderBetweenPoints(ToVector3(c), ToVector3(b), 0.1f);
+                }
+                */
+
             }
         }
 
@@ -169,6 +241,8 @@ namespace CGALDotNetUnity.Triangulations
             cylinder.transform.up = offset;
             cylinder.transform.localScale = scale;
 
+            Debug.Log(scale);
+
             m_edges.Add(cylinder);
         }
 
@@ -184,6 +258,8 @@ namespace CGALDotNetUnity.Triangulations
                     Transform objectHit = hit.transform;
 
                     int i = int.Parse(objectHit.name);
+
+                    Debug.Log(i);
 
                     if (m_triangulation.GetVertex(i, out TriVertex3 vert))
                     {
