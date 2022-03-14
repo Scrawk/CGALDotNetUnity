@@ -295,8 +295,8 @@ namespace CGALDotNetUnity
 
             if (SnapPoint > 0.0f)
             {
-                p.x = Mathf.Round(p.x * SnapPoint) / SnapPoint;
-                p.y = Mathf.Round(p.y * SnapPoint) / SnapPoint;
+                p.x = Mathf.Round(p.x / SnapPoint) * SnapPoint;
+                p.y = Mathf.Round(p.y / SnapPoint) * SnapPoint;
             }
 
             return new Point2d(p.x, p.y);

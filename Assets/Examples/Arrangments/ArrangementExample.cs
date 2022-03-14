@@ -48,13 +48,20 @@ namespace CGALDotNetUnity.Arrangements
 
         protected override void Start()
         {
+            //Init base layer and enable snapping
             base.Start();
-            Renderers = new Dictionary<string, CompositeRenderer>();
             SetInputMode(INPUT_MODE.POINT_CLICK);
+            //Snap to each 0.5 unit on grid.
+            SnapPoint = 0.5f;
+
+            Renderers = new Dictionary<string, CompositeRenderer>();
 
             CreateArrangement();
         }
 
+        /// <summary>
+        /// Create the initial square arranggment.
+        /// </summary>
         private void CreateArrangement()
         {
             arrangement = new Arrangement2<EEK>();
@@ -64,14 +71,12 @@ namespace CGALDotNetUnity.Arrangements
 
             Renderers.Clear();
             BuildArrangementRenderer();
-
-            var faces = new ArrFace2[arrangement.FaceCount];
-            arrangement.GetFaces(faces, faces.Length);
-
-            foreach (var face in faces)
-                Debug.Log(face);
         }
 
+        /// <summary>
+        /// Add a segment or polygon dependinmg on input mode.
+        /// </summary>
+        /// <param name="points"></param>
         protected override void OnInputComplete(List<Point2d> points)
         {
             if(Mode == INPUT_MODE.SEGMENT)
@@ -89,6 +94,10 @@ namespace CGALDotNetUnity.Arrangements
             }
         }
 
+        /// <summary>
+        /// When left click down add point or select a object depending on mode.
+        /// </summary>
+        /// <param name="point"></param>
         protected override void OnLeftClickDown(Point2d point)
         {
             switch (ClickMode)
@@ -112,30 +121,72 @@ namespace CGALDotNetUnity.Arrangements
 
         }
 
+        /// <summary>
+        /// Add a single point.
+        /// </summary>
+        /// <param name="point"></param>
         private void AddPoint(Point2d point)
         {
             UnselectAll();
 
+            //Insert into arrangment
             arrangement.InsertPoint(point);
+
             BuildArrangementRenderer();
+            AddSnapTargets();
         }
 
+        /// <summary>
+        /// Add a edge.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         private void AddEdge(Point2d a, Point2d b)
         {
             UnselectAll();
 
+            //Insert into arrangment
+            //Always check for other intersections 
             arrangement.InsertSegment(a, b, false);
+
+            //Build renderer and add snap targets
             BuildArrangementRenderer();
+            AddSnapTargets();
         }
 
+        /// <summary>
+        /// Add a poygon.
+        /// </summary>
+        /// <param name="points"></param>
         private void AddPolygon(List<Point2d> points)
         {
             var polygon = new Polygon2<EEK>(points.ToArray());
 
-            arrangement.InsertPolygon(polygon, false);
+            //Insert into arrangment
+            //Always check for other intersections
+             arrangement.InsertPolygon(polygon, false);
+
+            //Build renderer and add snap targets
             BuildArrangementRenderer();
+            AddSnapTargets();
         }
 
+        /// <summary>
+        /// All the points in arrangment should be snap targets.
+        /// </summary>
+        private void AddSnapTargets()
+        {
+            var points = new Point2d[arrangement.VertexCount];
+            arrangement.GetPoints(points, points.Length);
+
+            ClearSnapTargets();
+            AddSnapTargets(points);
+        }
+
+        /// <summary>
+        /// Try and select a face.
+        /// </summary>
+        /// <param name="point"></param>
         private void SelectFace(Point2d point)
         {
             UnselectAll();
@@ -152,6 +203,10 @@ namespace CGALDotNetUnity.Arrangements
             }
         }
 
+        /// <summary>
+        /// Try and select a edge.
+        /// </summary>
+        /// <param name="point"></param>
         private void SelectEdge(Point2d point)
         {
             UnselectAll();
@@ -163,6 +218,10 @@ namespace CGALDotNetUnity.Arrangements
             }
         }
 
+        /// <summary>
+        /// Try and select a vertex.
+        /// </summary>
+        /// <param name="point"></param>
         private void SelectVertex(Point2d point)
         {
             UnselectAll();
@@ -174,6 +233,9 @@ namespace CGALDotNetUnity.Arrangements
             }
         }
 
+        /// <summary>
+        /// Unselect all objects.
+        /// </summary>
         private void UnselectAll()
         {
             SelectedFace = null;
@@ -183,15 +245,21 @@ namespace CGALDotNetUnity.Arrangements
             Renderers.Remove("Edge");
         }
 
+        /// <summary>
+        /// Build the arrangmentss renderer.
+        /// </summary>
         private void BuildArrangementRenderer()
         {
             Renderers["Arrangement"] = Draw().
-                Faces(arrangement, faceColor).
+                //Faces(arrangement, faceColor).
                 Outline(arrangement, lineColor).
                 Points(arrangement, lineColor, pointColor).
                 PopRenderer();
         }
 
+        /// <summary>
+        /// Build the renderer for any selected objects
+        /// </summary>
         private void BuildSelectionRenderer()
         {
             if (SelectedVertex != null)
@@ -211,11 +279,15 @@ namespace CGALDotNetUnity.Arrangements
             }
         }
 
+        /// <summary>
+        /// Clear and reset everthing.
+        /// </summary>
         protected override void OnCleared()
         {
             UnselectAll();
             Renderers.Clear();
             CreateArrangement();
+            ClearSnapTargets();
         }
 
         protected override void Update()
