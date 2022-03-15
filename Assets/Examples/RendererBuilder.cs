@@ -16,7 +16,6 @@ using CGALDotNet.Arrangements;
 using CGALDotNetGeometry.Nurbs;
 using CGALDotNet.Meshing;
 using CGALDotNet.Polyhedra;
-using LibTessDotNet.Double;
 
 namespace CGALDotNetUnity
 {

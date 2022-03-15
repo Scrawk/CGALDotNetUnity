@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using CGALDotNetGeometry.Numerics;
-using LibTessDotNet.Double;
 
 namespace CGALDotNet.Polygons
 {
