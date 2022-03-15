@@ -39,6 +39,8 @@ namespace CGALDotNetUnity.Processing
 
         private NormalRenderer m_vertNormalRenderer, m_faceNormalRenderer;
 
+        private VertexRenderer m_pointRenderer;
+
         private string m_info;
 
         private double m_refineFactor = 3;
@@ -78,8 +80,9 @@ namespace CGALDotNetUnity.Processing
             m_object = go;
         }
 
-        private void CreateFeatureRenderer(List<int> edges)
+        private void RenderEdgeFeature(List<int> edges)
         {
+            ClearLast();
             m_featureRenderer = new SegmentRenderer();
             m_featureRenderer.DefaultColor = Color.red;
 
@@ -93,7 +96,41 @@ namespace CGALDotNetUnity.Processing
                     m_featureRenderer.Load(a, b);
                 }
             }
-    
+        }
+
+        private void RenderEdgeFeature(int a, int b)
+        {
+            ClearLast();
+            m_featureRenderer = new SegmentRenderer();
+            m_featureRenderer.DefaultColor = Color.red;
+
+            var A = m_mesh.GetPoint(a);
+            var B = m_mesh.GetPoint(b);
+
+            m_featureRenderer.Load(A.ToUnityVector3(), B.ToUnityVector3());
+        }
+
+        private void RenderFaceFeature(List<Point3d> points)
+        {
+            ClearLast();
+            m_featureRenderer = new SegmentRenderer();
+            m_featureRenderer.DefaultColor = Color.red;
+
+            int count = points.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var a = points[MathUtil.Wrap(i + 0, count)].ToUnityVector3();
+                var b = points[MathUtil.Wrap(i + 1, count)].ToUnityVector3();
+                m_featureRenderer.Load(a, b);
+            }
+        }
+
+        private void RenderVertexFeature(Point3d point)
+        {
+            ClearLast();
+            m_pointRenderer = new VertexRenderer(0.005f);
+            m_pointRenderer.DefaultColor = Color.red;
+            m_pointRenderer.Load(point.ToUnityVector3());
         }
 
         private void CreateWireFrame()
@@ -156,6 +193,7 @@ namespace CGALDotNetUnity.Processing
             m_featureRenderer = null;
             m_vertNormalRenderer = null;
             m_faceNormalRenderer = null;
+            m_pointRenderer = null;
             m_info = "";
         }
 
@@ -188,6 +226,12 @@ namespace CGALDotNetUnity.Processing
                 m_faceNormalRenderer.Draw();
             }
 
+            if (m_pointRenderer != null && m_pointRenderer.Enabled)
+            {
+                m_pointRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
+                m_pointRenderer.Draw();
+            }
+
         }
 
         private void OnLeftClick()
@@ -203,6 +247,12 @@ namespace CGALDotNetUnity.Processing
                     {
                         m_hitFace = face;
                         m_info = "Hit Face = " + m_hitFace.ToString();
+
+                        List<Point3d> points = new List<Point3d>();
+                        foreach(var v in face.EnumerateVertices(m_mesh))
+                            points.Add(v.Point);
+
+                        RenderFaceFeature(points);
                     }
                     else
                     {
@@ -216,6 +266,8 @@ namespace CGALDotNetUnity.Processing
                         m_hitVertex = vertex;
                         m_hitVertex.Value.Point.Round(4);
                         m_info = "Hit Vertex = " + m_hitVertex.ToString();
+
+                        RenderVertexFeature(m_hitVertex.Value.Point);
                     }
                     else
                     {
@@ -228,6 +280,8 @@ namespace CGALDotNetUnity.Processing
                     {
                         m_hitEdge = edge;
                         m_info = "Hit Halfedge = " + m_hitEdge.ToString();
+
+                        RenderEdgeFeature(edge.Source, edge.Target);
                     }
                     else
                     {
@@ -366,7 +420,7 @@ namespace CGALDotNetUnity.Processing
                     var edges = new List<int>();
                     processor.DetectSharpEdges(m_mesh, new Degree(m_featureAngle), edges);
                     m_info = "Feature edges " + edges.Count;
-                    CreateFeatureRenderer(edges);
+                    RenderEdgeFeature(edges);
                 }
             }
         }
@@ -390,13 +444,23 @@ namespace CGALDotNetUnity.Processing
             {
                 GUI.Label(new Rect(10, 10, textLen, textHeight), "Tab to toggle selection mode.");
                 GUI.Label(new Rect(10, 30, textLen, textHeight), string.Format("Left click to select {0}.", m_selectionMode));
-                GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("F1 to toggle wireframe."));
-                GUI.Label(new Rect(10, 70, textLen, textHeight), string.Format("F2 to toggle vertex normals."));
-                GUI.Label(new Rect(10, 90, textLen, textHeight), string.Format("F3 to toggle face normals."));
-                GUI.Label(new Rect(10, 110, textLen, textHeight), string.Format("F4 to refine with factor {0}.", m_refineFactor));
-                GUI.Label(new Rect(10, 130, textLen, textHeight), string.Format("F5 perform isotropic remeshing with target edge length {0}.", m_targetEdgeLen));
-                GUI.Label(new Rect(10, 150, textLen, textHeight), string.Format("F6 to dected sharp edges with angle {0}.", m_featureAngle));
-                GUI.Label(new Rect(10, 170, textLen, textHeight), m_info);
+
+                if(m_hitVertex != null)
+                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit vertex {0}.", m_hitVertex));
+
+                if (m_hitFace != null)
+                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit face {0}.", m_hitFace));
+
+                if (m_hitEdge != null)
+                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit edge {0}.", m_hitEdge));
+
+                GUI.Label(new Rect(10, 90, textLen, textHeight), string.Format("F1 to toggle wireframe."));
+                GUI.Label(new Rect(10, 110, textLen, textHeight), string.Format("F2 to toggle vertex normals."));
+                GUI.Label(new Rect(10, 130, textLen, textHeight), string.Format("F3 to toggle face normals."));
+                GUI.Label(new Rect(10, 150, textLen, textHeight), string.Format("F4 to refine with factor {0}.", m_refineFactor));
+                GUI.Label(new Rect(10, 170, textLen, textHeight), string.Format("F5 perform isotropic remeshing with target edge length {0}.", m_targetEdgeLen));
+                GUI.Label(new Rect(10, 190, textLen, textHeight), string.Format("F6 to dected sharp edges with angle {0}.", m_featureAngle));
+                GUI.Label(new Rect(10, 210, textLen, textHeight), m_info);
             }
 
         }
