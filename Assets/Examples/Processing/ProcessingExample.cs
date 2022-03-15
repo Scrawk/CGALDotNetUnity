@@ -446,13 +446,13 @@ namespace CGALDotNetUnity.Processing
                 GUI.Label(new Rect(10, 30, textLen, textHeight), string.Format("Left click to select {0}.", m_selectionMode));
 
                 if(m_hitVertex != null)
-                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit vertex {0}.", m_hitVertex));
+                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit vertex {0}.", m_hitVertex.Value));
 
                 if (m_hitFace != null)
-                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit face {0}.", m_hitFace));
+                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit face {0}.", m_hitFace.Value));
 
                 if (m_hitEdge != null)
-                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit edge {0}.", m_hitEdge));
+                    GUI.Label(new Rect(10, 50, textLen, textHeight), string.Format("Hit edge {0}.", m_hitEdge.Value));
 
                 GUI.Label(new Rect(10, 90, textLen, textHeight), string.Format("F1 to toggle wireframe."));
                 GUI.Label(new Rect(10, 110, textLen, textHeight), string.Format("F2 to toggle vertex normals."));
