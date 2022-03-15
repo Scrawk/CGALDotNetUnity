@@ -46,6 +46,12 @@
 
 - [Triangulation 3D](https://github.com/Scrawk/CGALDotNet/wiki/Triangulations-3D) 
 
+# The Arrangements Kernel
+
+- [Arrangements 2D](https://github.com/Scrawk/CGALDotNet/wiki/Arrangements-2D)
+
+- [Sweep Line 2D](https://github.com/Scrawk/CGALDotNet/wiki/Sweep-Line-2D) 
+
 Some common geomerty objects are referrenced in a [seperate project](https://github.com/Scrawk/CGALDotNetGeometry) so they can come under a different license.
 
 Work in progress. Only 64 bit windows binarys provided.
@@ -53,3 +59,5 @@ Work in progress. Only 64 bit windows binarys provided.
 The source code for CGALDotNet can be found in [this](https://github.com/Scrawk/CGALDotNet) repository.
 
 A page on the Unity forums can be found [here](https://forum.unity.com/threads/cgaldotnet-a-c-computational-library-built-around-cgal.1250314/).
+
+
