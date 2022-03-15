@@ -103,27 +103,6 @@ namespace CGALDotNetUnity
             return Instance;
         }
 
-        public RendererBuilder Faces(Arrangement2 arr, Color color)
-        {
-            var indices = new List<int>();
-            arr.Triangulate(indices);
-
-            var points = new Point2d[arr.VertexCount];
-            arr.GetPoints(points, points.Length);
-
-            var triangles = new FaceRenderer();
-            triangles.FaceMode = FACE_MODE.TRIANGLES;
-            triangles.Orientation = DRAW_ORIENTATION.XY;
-            triangles.DefaultColor = color;
-            triangles.Load(points.ToUnityVector2(), indices);
-            triangles.ZWrite = false;
-            triangles.SrcBlend = BlendMode.One;
-
-            Renderer.Add(triangles);
-
-            return Instance;
-        }
-
         public RendererBuilder Faces(BaseTriangulation2 tri, Color color)
         {
             var indices = new int[tri.IndiceCount];

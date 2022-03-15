@@ -78,6 +78,8 @@ namespace CGALDotNetUnity.Polyhedra
 
             m_capsule = CreateCapsule(new Vector3(-3, 0, 6));
 
+            //m_dual = CreateDual(new Vector3(-3, 0, 6));
+
         }
 
         private void OnRenderObject()
@@ -228,6 +230,22 @@ namespace CGALDotNetUnity.Polyhedra
             return poly.ToUnityMesh("Capsule", material, true);
         }
 
+        /*
+        private GameObject CreateDual(Vector3 translation)
+        {
+            var poly = SurfaceMeshFactory<EIK>.CreateIcosahedron();
+            poly.Translate(translation.ToCGALPoint3d());
+            //poly.Subdivide(2);
+
+            var dual = poly.CreateDualMesh();
+
+            if (drawSegments)
+                DrawSegments(dual);
+
+            return dual.ToUnityMesh("Dual", material, true);
+        }
+
+        */
         private void DrawSegments(SurfaceMesh3 poly)
         {
             m_wireframeRender = RendererBuilder.CreateWireframeRenderer(poly, lineColor, m_wireframeRender);

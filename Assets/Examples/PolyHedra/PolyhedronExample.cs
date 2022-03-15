@@ -86,9 +86,9 @@ namespace CGALDotNetUnity.Polyhedra
 
             m_cone = CreateCone(new Vector3(-1, 0, 6));
 
-            m_capsule = CreateCapsule(new Vector3(-3, 0, 6));
+            //m_capsule = CreateCapsule(new Vector3(-3, 0, 6));
 
-            //m_dual = CreateDual(new Vector3(-3, 0, 6));
+            m_dual = CreateDual(new Vector3(-3, 0, 6));
 
         }
 
