@@ -53,6 +53,8 @@ namespace Common.Unity.Cameras
         CameraState m_TargetCameraState = new CameraState();
         CameraState m_InterpolatingCameraState = new CameraState();
 
+        public float speed = 1f;
+
         [Header("Movement Settings")]
         [Tooltip("Exponential boost factor on translation, controllable by mouse wheel.")]
         public float boost = 3.5f;
@@ -121,7 +123,7 @@ namespace Common.Unity.Cameras
             }
             
             // Translation
-            var translation = GetInputTranslationDirection() * Time.deltaTime;
+            var translation = GetInputTranslationDirection() * Time.deltaTime * speed;
 
             // Speed up movement when shift key held
             if (Input.GetKey(KeyCode.LeftShift))

@@ -246,7 +246,7 @@ namespace CGALDotNetUnity.Polyhedra
             poly.Translate(translation.ToCGALPoint3d());
             poly.Subdivide(2);
 
-            var dual = poly.CreateDualMesh();
+            var dual = poly.Dual();
 
             if (drawSegments)
                 DrawSegments(dual);

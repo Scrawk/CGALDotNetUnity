@@ -26,7 +26,7 @@ namespace CGALDotNetUnity.Polygons
 
         private Point2d? Point;
 
-        private Polygon2<EIK> Polygon;
+        private Polygon2<EEK> Polygon;
 
         private Dictionary<string, CompositeRenderer> Renderers;
 
@@ -41,10 +41,6 @@ namespace CGALDotNetUnity.Polygons
 
             //Create the place to store the renderers that draw the shapes.
             Renderers = new Dictionary<string, CompositeRenderer>();
-
-            //ConsoleRedirect.Redirect();
-            //Polygon = PolygonFactory<EIK>.CreateBox(-5, 5);
-            //CreateRenderer("Polygon", Polygon);
         }
 
         /// <summary>
@@ -55,8 +51,8 @@ namespace CGALDotNetUnity.Polygons
         protected override void OnInputComplete(List<Point2d> points)
         {
             //Create the polygon from the points.
-            //We just use the EIK kernel as its the fastest.
-            Polygon = new Polygon2<EIK>(points.ToArray());
+            //We just use the EEK kernel as its the fastest.
+            Polygon = new Polygon2<EEK>(points.ToArray());
 
             //Polygon must be simple to continue.
             if (Polygon.IsSimple)
