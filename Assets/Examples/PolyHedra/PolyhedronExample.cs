@@ -256,7 +256,7 @@ namespace CGALDotNetUnity.Polyhedra
 
         private void DrawSegments(Polyhedron3 poly)
         {
-            m_wireframeRender = RendererBuilder.CreateWireframeRenderer(poly, lineColor, m_wireframeRender);
+            m_wireframeRender = RendererBuilder.CreateWireframeRenderer(poly, lineColor, 0, m_wireframeRender);
         }
 
     }

@@ -20,6 +20,8 @@ namespace CGALDotNetUnity.Processing
 
         public Color lineColor = Color.black;
 
+        public int slices = 20;
+
         public string file;
 
         private Polyhedron3<EIK> poly;
@@ -46,7 +48,7 @@ namespace CGALDotNetUnity.Processing
 
             var bounds = LookAt(m_object);
 
-            var lines = Slice(poly, bounds, 20);
+            var lines = Slice(poly, bounds, slices);
 
             m_renderer = CreateLineRenderer(lines, lineColor);
         }

@@ -723,7 +723,7 @@ namespace CGALDotNetUnity
             return renderer;
         }
 
-        public static SegmentRenderer CreateWireframeRenderer(IMesh poly, Color col, SegmentRenderer renderer = null)
+        public static SegmentRenderer CreateWireframeRenderer(IMesh poly, Color col, float expand, SegmentRenderer renderer = null)
         {
 
             if (renderer == null)
@@ -735,6 +735,17 @@ namespace CGALDotNetUnity
             var polyCount = poly.GetPolygonalCount();
             var points = new Point3d[poly.VertexCount];
             poly.GetPoints(points, points.Length);
+
+            if (expand > 0)
+            {
+                var normals = new Vector3d[poly.VertexCount];
+                poly.GetVertexNormals(normals, normals.Length);
+
+                for (int i = 0; i < poly.VertexCount; i++)
+                {
+                    points[i] = points[i] + normals[i] * expand;
+                }
+            }
 
             var vectors = points.ToUnityVector3();
             var indices = poly.GetPolygonalIndices();

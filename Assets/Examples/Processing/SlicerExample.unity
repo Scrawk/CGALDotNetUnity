@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.45090133, g: 0.5007955, b: 0.5745391, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -267,8 +267,8 @@ Camera:
   m_GameObject: {fileID: 465998880}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -328,6 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2223c8b8b0021418bdacd2ac82b8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 1
   boost: 2
   positionLerpTime: 0.2
   mouseSensitivityCurve:
@@ -370,6 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: d1f3a110c13e28445a7b7f1d0277a343, type: 2}
   lineColor: {r: 0, g: 0, b: 0, a: 1}
+  slices: 100
   file: bunny00.off
 --- !u!1 &762780502
 GameObject:
@@ -457,11 +459,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762780502}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.8937784, y: -0.102771714, z: -0.26440692, w: 0.3474007}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 145.483, y: 41.322006, z: 26.481995}

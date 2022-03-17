@@ -35,7 +35,7 @@ namespace CGALDotNetUnity.Polyhedra
                 m_mesh = poly.ToUnityMesh("Mesh", material, true);
                 m_mesh.transform.position = new Vector3(0, 0.5f, 0);
 
-                m_wireframeRender = RendererBuilder.CreateWireframeRenderer(poly, Color.black);
+                m_wireframeRender = RendererBuilder.CreateWireframeRenderer(poly, Color.black, 0);
             }
 
         }
