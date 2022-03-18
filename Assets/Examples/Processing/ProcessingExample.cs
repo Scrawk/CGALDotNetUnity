@@ -34,9 +34,9 @@ namespace CGALDotNetUnity.Processing
 
         private Polyhedron3<EIK> m_mesh;
 
-        private GameObject m_object, m_original;
+        private GameObject m_object;
 
-        private SegmentRenderer m_wireframeObj, m_wireframeOriginal, m_featureRenderer;
+        private SegmentRenderer  m_wireframe, m_featureRenderer;
 
         private NormalRenderer m_vertNormalRenderer, m_faceNormalRenderer;
 
@@ -65,14 +65,9 @@ namespace CGALDotNetUnity.Processing
 
         }
 
-        private GameObject CreateGameobject(string name, Polyhedron3 poly, Vector3 pos, Quaternion rot, Vector3 scale)
+        private GameObject CreateGameobject(string name, Polyhedron3 poly)
         {
             var go = poly.ToUnityMesh(name, material, false);
-            go.transform.position = pos;
-            go.transform.rotation = rot;
-            go.transform.localScale = scale;
-            go.SetActive(true);
-
             return go;
         }
 
@@ -131,36 +126,20 @@ namespace CGALDotNetUnity.Processing
 
         private void CreateWireFrameObj()
         {
-            bool enabled = m_wireframeObj != null ? m_wireframeObj.Enabled : true;
-            m_wireframeObj = RendererBuilder.CreateWireframeRenderer(m_mesh, lineColor, wireframeOffset);
-            m_wireframeObj.Enabled = enabled;
-        }
-
-        private void CreateWireFrameOriginal()
-        {
-            bool enabled = m_wireframeOriginal != null ? m_wireframeOriginal.Enabled : true;
-            m_wireframeOriginal = RendererBuilder.CreateWireframeRenderer(m_mesh, lineColor, wireframeOffset);
-            m_wireframeOriginal.Enabled = enabled;
+            bool enabled = m_wireframe != null ? m_wireframe.Enabled : true;
+            m_wireframe = RendererBuilder.CreateWireframeRenderer(m_mesh, lineColor, wireframeOffset);
+            m_wireframe.Enabled = enabled;
         }
 
         private void ToggleWireFrame()
         {
-            if (m_wireframeObj == null)
+            if (m_wireframe == null)
             {
-                m_wireframeObj = RendererBuilder.CreateWireframeRenderer(m_mesh, lineColor, wireframeOffset);
+                m_wireframe = RendererBuilder.CreateWireframeRenderer(m_mesh, lineColor, wireframeOffset);
             }
-            else if(m_wireframeObj != null)
+            else if(m_wireframe != null)
             {
-                m_wireframeObj.Enabled = !m_wireframeObj.Enabled;
-            }
-
-            if (m_wireframeOriginal == null)
-            {
-                m_wireframeOriginal = RendererBuilder.CreateWireframeRenderer(m_mesh, lineColor, wireframeOffset);
-            }
-            else if (m_wireframeOriginal != null)
-            {
-                m_wireframeOriginal.Enabled = !m_wireframeOriginal.Enabled;
+                m_wireframe.Enabled = !m_wireframe.Enabled;
             }
         }
 
@@ -168,7 +147,7 @@ namespace CGALDotNetUnity.Processing
         {
             if (m_vertNormalRenderer == null)
             {
-                m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(m_mesh, vertexNormalColor, wireframeOffset);
+                m_vertNormalRenderer = RendererBuilder.CreateVertexNormalRenderer(m_mesh, vertexNormalColor, 0.01f);
             }
             else if (m_vertNormalRenderer != null)
             {
@@ -180,7 +159,7 @@ namespace CGALDotNetUnity.Processing
         {
             if (m_faceNormalRenderer == null)
             {
-                m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(m_mesh, faceNormalColor, wireframeOffset);
+                m_faceNormalRenderer = RendererBuilder.CreateFaceNormalRenderer(m_mesh, faceNormalColor, 0.01f);
             }
             else if (m_faceNormalRenderer != null)
             {
@@ -203,43 +182,36 @@ namespace CGALDotNetUnity.Processing
 
         private void OnRenderObject()
         {
-            if(m_object != null && m_wireframeObj != null && m_wireframeObj.Enabled)
+            if(m_object != null && m_wireframe != null && m_wireframe.Enabled)
             {
-                m_wireframeObj.SetColor(lineColor);
-                m_wireframeObj.LocalToWorld = m_object.transform.localToWorldMatrix;
-                m_wireframeObj.Draw();
-            }
-
-            if (m_original != null && m_wireframeOriginal != null && m_wireframeOriginal.Enabled)
-            {
-                m_wireframeOriginal.SetColor(lineColor);
-                m_wireframeOriginal.LocalToWorld = m_original.transform.localToWorldMatrix;
-                m_wireframeOriginal.Draw();
+                m_wireframe.SetColor(lineColor);
+                //m_wireframe.LocalToWorld = m_object.transform.localToWorldMatrix;
+                m_wireframe.Draw();
             }
 
             if (m_featureRenderer != null && m_featureRenderer.Enabled)
             {
-                m_featureRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
+                //m_featureRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
                 m_featureRenderer.Draw();
             }
 
             if (m_vertNormalRenderer != null && m_vertNormalRenderer.Enabled)
             {
                 m_vertNormalRenderer.SetColor(vertexNormalColor);
-                m_vertNormalRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
+                //m_vertNormalRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
                 m_vertNormalRenderer.Draw();
             }
 
             if (m_faceNormalRenderer != null && m_faceNormalRenderer.Enabled)
             {
                 m_faceNormalRenderer.SetColor(faceNormalColor);
-                m_faceNormalRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
+                //m_faceNormalRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
                 m_faceNormalRenderer.Draw();
             }
 
             if (m_pointRenderer != null && m_pointRenderer.Enabled)
             {
-                m_pointRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
+                //m_pointRenderer.LocalToWorld = m_object.transform.localToWorldMatrix;
                 m_pointRenderer.Draw();
             }
 
@@ -311,14 +283,8 @@ namespace CGALDotNetUnity.Processing
                 m_object = null;
             }
 
-            if (m_original != null)
-            {
-                DestroyImmediate(m_original);
-                m_original = null;
-            }
-
             m_mesh = null;
-            m_wireframeObj = null;
+            m_wireframe = null;
             m_featureRenderer = null;
             m_vertNormalRenderer = null;
             m_faceNormalRenderer = null;
@@ -358,66 +324,62 @@ namespace CGALDotNetUnity.Processing
                 {
                     ClearScene();
 
-                    var pos1 = new Vector3(-0.5f, 0, 0.5f);
-                    var pos2 = new Vector3(0.5f, 0, 0.5f);
+                    var pos = new Vector3(0, 0, 0);
                     var rot = Quaternion.Euler(0, 180, 0);
                     var scale = Vector3.one;
 
                     LoadMesh("bunny00.off");
-                    m_original = CreateGameobject("bunny", m_mesh, pos1, rot, scale);
-                    m_object = CreateGameobject("Bunny", m_mesh, pos2, rot, scale);
+
+                    m_mesh.Transform(pos.ToCGALPoint3d(), rot.ToCGALQuaternion3d(), scale.ToCGALPoint3d());
+                    m_object = CreateGameobject("Bunny", m_mesh);
 
                     CreateWireFrameObj();
-                    CreateWireFrameOriginal();
-
                 }
                 else if (Input.GetKeyDown(KeyCode.F2))
                 {
                     ClearScene();
 
-                    var pos1 = new Vector3(-0.5f, 0, 0);
-                    var pos2 = new Vector3(0.5f, 0, 0);
+                    var pos = new Vector3(0, 0, 0);
                     var rot = Quaternion.identity;
                     var scale = Vector3.one;
 
                     LoadMesh("elephant.off");
-                    m_original = CreateGameobject("elephant", m_mesh, pos1, rot, scale);
-                    m_object = CreateGameobject("elephant", m_mesh, pos2, rot, scale);
+
+                    m_mesh.Transform(pos.ToCGALPoint3d(), rot.ToCGALQuaternion3d(), scale.ToCGALPoint3d());
+                    m_object = CreateGameobject("elephant", m_mesh);
 
                     CreateWireFrameObj();
-                    CreateWireFrameOriginal();
+  
                 }
                 else if (Input.GetKeyDown(KeyCode.F3))
                 {
                     ClearScene();
 
-                    var pos1 = new Vector3(-2f, 0, 4);
-                    var pos2 = new Vector3(2f, 0, 4);
+                    var pos = new Vector3(0, 0, 4);
                     var rot = Quaternion.Euler(-90, 0, 180);
                     var scale = new Vector3(0.1f, 0.1f, 0.1f);
 
                     LoadMesh("mannequin-devil.off");
-                    m_original = CreateGameobject("mannequin", m_mesh, pos1, rot, scale);
-                    m_object = CreateGameobject("mannequin", m_mesh, pos2, rot, scale);
+
+                    m_mesh.Transform(pos.ToCGALPoint3d(), rot.ToCGALQuaternion3d(), scale.ToCGALPoint3d());
+                    m_object = CreateGameobject("mannequin", m_mesh);
 
                     CreateWireFrameObj();
-                    CreateWireFrameOriginal();
                 }
                 else if (Input.GetKeyDown(KeyCode.F4))
                 {
                     ClearScene();
 
-                    var pos1 = new Vector3(-0.5f, 0, 0);
-                    var pos2 = new Vector3(0.5f, 0, 0);
+                    var pos = new Vector3(0, 0, 0);
                     var rot = Quaternion.Euler(180, 90, 0);
                     var scale = Vector3.one;
 
                     LoadMesh("fandisk.off");
-                    m_original = CreateGameobject("fandisk", m_mesh, pos1, rot, scale);
-                    m_object = CreateGameobject("fandisk", m_mesh, pos2, rot, scale);
+
+                    m_mesh.Transform(pos.ToCGALPoint3d(), rot.ToCGALQuaternion3d(), scale.ToCGALPoint3d());
+                    m_object = CreateGameobject("fandisk", m_mesh);
 
                     CreateWireFrameObj();
-                    CreateWireFrameOriginal();
                 }
             }
             else
@@ -447,12 +409,9 @@ namespace CGALDotNetUnity.Processing
                     m_info = "New vertices added " + new_verts;
 
                     var name = m_object.name;
-                    var pos = m_object.transform.position;
-                    var rot = m_object.transform.rotation;
-                    var scale = m_object.transform.localScale;
 
                     DestroyObject(m_object);
-                    m_object = CreateGameobject(name, m_mesh, pos, rot, scale);
+                    m_object = CreateGameobject(name, m_mesh);
 
                     CreateWireFrameObj();
                 }
@@ -469,12 +428,9 @@ namespace CGALDotNetUnity.Processing
                     m_info = "New vertices added " + new_verts;
 
                     var name = m_object.name;
-                    var pos = m_object.transform.position;
-                    var rot = m_object.transform.rotation;
-                    var scale = m_object.transform.localScale;
 
                     DestroyObject(m_object);
-                    m_object = CreateGameobject(name, m_mesh, pos, rot, scale);
+                    m_object = CreateGameobject(name, m_mesh);
                     CreateWireFrameObj();
                 }
                 else if (Input.GetKeyDown(KeyCode.F6))
@@ -485,6 +441,19 @@ namespace CGALDotNetUnity.Processing
                     processor.DetectSharpEdges(m_mesh, new Degree(m_featureAngle), edges);
                     m_info = "Feature edges " + edges.Count;
                     RenderEdgeFeature(edges);
+                }
+                else if (Input.GetKeyDown(KeyCode.F7))
+                {
+                    var processor = SubdivisionSurface<EIK>.Instance;
+
+                    processor.Subdivide(SUBDIVISION_METHOD.LOOP, m_mesh, 1);
+
+                    var name = m_object.name;
+         
+                    DestroyObject(m_object);
+                    m_object = CreateGameobject(name, m_mesh);
+                    CreateWireFrameObj();
+
                 }
 
             }
