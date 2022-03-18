@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 using CGALDotNet;
 using CGALDotNetGeometry.Numerics;
@@ -38,6 +39,7 @@ public static class ExtensionHelper
     public static Mesh CreateMesh(Point3d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();
+        mesh.indexFormat = IndexFormat.UInt32;
         mesh.SetVertices(points.ToUnityVector3());
         mesh.SetTriangles(indices, 0);
         mesh.RecalculateBounds();
@@ -48,6 +50,7 @@ public static class ExtensionHelper
     public static Mesh CreateMeshXZ(Point2d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();
+        mesh.indexFormat = IndexFormat.UInt32;
         mesh.SetVertices(points.ToUnityVector3XZ());
         mesh.SetTriangles(indices, 0);
         mesh.RecalculateBounds();
@@ -58,6 +61,7 @@ public static class ExtensionHelper
     public static Mesh CreateMesh(Point2d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();
+        mesh.indexFormat = IndexFormat.UInt32;
         mesh.SetVertices(points.ToUnityVector3());
         mesh.SetTriangles(indices, 0);
         mesh.RecalculateBounds();
@@ -68,6 +72,7 @@ public static class ExtensionHelper
     public static Mesh CreateMesh(Vector3[] points, Color[] colors, int[] indices)
     {
         Mesh mesh = new Mesh();
+        mesh.indexFormat = IndexFormat.UInt32;
         mesh.SetVertices(points);
         mesh.SetColors(colors);
         mesh.SetTriangles(indices, 0);
@@ -79,6 +84,7 @@ public static class ExtensionHelper
     public static Mesh CreateMesh(List<Vector3> points, List<Color> colors, List<int> indices)
     {
         Mesh mesh = new Mesh();
+        mesh.indexFormat = IndexFormat.UInt32;
         mesh.SetVertices(points);
         mesh.SetColors(colors);
         mesh.SetTriangles(indices, 0);

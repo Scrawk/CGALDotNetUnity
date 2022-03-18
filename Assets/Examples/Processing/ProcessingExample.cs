@@ -58,7 +58,7 @@ namespace CGALDotNetUnity.Processing
 
         private MeshHalfedge3? m_hitEdge;
 
-        private float wireframeOffset = 0.004f;
+        private float wireframeOffset = 0.002f;
 
         private void Start()
         {
@@ -71,16 +71,7 @@ namespace CGALDotNetUnity.Processing
             go.transform.position = pos;
             go.transform.rotation = rot;
             go.transform.localScale = scale;
-
-            return go;
-        }
-
-        private GameObject CreateGameobject(Polyhedron3 poly, GameObject obj)
-        {
-            var go = poly.ToUnityMesh(obj.name, material, false);
-            go.transform.position = obj.transform.position;
-            go.transform.rotation = obj.transform.rotation;
-            go.transform.localScale = obj.transform.localScale;
+            go.SetActive(true);
 
             return go;
         }
@@ -206,7 +197,8 @@ namespace CGALDotNetUnity.Processing
             var name = i > 0 ? split[i] : "Mesh";
 
             m_mesh = new Polyhedron3<EIK>();
-            m_mesh.ReadOFF(filename);;
+            m_mesh.ReadOFF(filename);
+
         }
 
         private void OnRenderObject()
@@ -342,6 +334,14 @@ namespace CGALDotNetUnity.Processing
             m_info = "";
         }
 
+        private void DestroyObject(GameObject go)
+        {
+            if (go == null) return;
+
+            go.SetActive(false);
+            DestroyImmediate(go);
+        }
+
         private void Update()
         {
 
@@ -446,7 +446,13 @@ namespace CGALDotNetUnity.Processing
                     int new_verts = m_mesh.Refine(m_refineFactor);
                     m_info = "New vertices added " + new_verts;
 
-                    m_object = CreateGameobject(m_mesh, m_object);
+                    var name = m_object.name;
+                    var pos = m_object.transform.position;
+                    var rot = m_object.transform.rotation;
+                    var scale = m_object.transform.localScale;
+
+                    DestroyObject(m_object);
+                    m_object = CreateGameobject(name, m_mesh, pos, rot, scale);
 
                     CreateWireFrameObj();
                 }
@@ -459,13 +465,16 @@ namespace CGALDotNetUnity.Processing
                     var minmax = m_mesh.FindMinMaxAvgEdgeLength();
                     m_targetEdgeLen = Math.Round(minmax.Average, 4);
 
-                    //Debug.Log("MinMax edge lengths " + minmax);
-
                     int new_verts = processor.IsotropicRemeshing(m_mesh, m_targetEdgeLen, 1);
                     m_info = "New vertices added " + new_verts;
 
-                    m_object = CreateGameobject(m_mesh, m_object);
+                    var name = m_object.name;
+                    var pos = m_object.transform.position;
+                    var rot = m_object.transform.rotation;
+                    var scale = m_object.transform.localScale;
 
+                    DestroyObject(m_object);
+                    m_object = CreateGameobject(name, m_mesh, pos, rot, scale);
                     CreateWireFrameObj();
                 }
                 else if (Input.GetKeyDown(KeyCode.F6))
@@ -477,6 +486,7 @@ namespace CGALDotNetUnity.Processing
                     m_info = "Feature edges " + edges.Count;
                     RenderEdgeFeature(edges);
                 }
+
             }
         }
 
