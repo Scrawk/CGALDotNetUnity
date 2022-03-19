@@ -11,7 +11,8 @@ namespace CGALDotNet.Polyhedra
     public static class IMeshExtension
     {
 
-        public static GameObject ToUnityMesh(this IMesh poly, string name, Material material, bool splitFaces = true)
+        public static GameObject ToUnityMesh<K>(this Polyhedron3<K> poly, string name, Material material, bool splitFaces = true)
+            where K : CGALKernel, new()
         {
             if (!poly.IsValid)
             {
@@ -20,8 +21,34 @@ namespace CGALDotNet.Polyhedra
             }
 
             if (!poly.IsTriangle)
+            {
+                poly = poly.Copy();
                 poly.Triangulate();
+            }
 
+            return IMeshToUnityMesh(poly, name, material, splitFaces);
+        }
+
+        public static GameObject ToUnityMesh<K>(this SurfaceMesh3<K> poly, string name, Material material, bool splitFaces = true)
+            where K : CGALKernel, new()
+        {
+            if (!poly.IsValid)
+            {
+                Debug.Log("Polyhedron3 is not valid");
+                return new GameObject(name);
+            }
+
+            if (!poly.IsTriangle)
+            {
+                poly = poly.Copy();
+                poly.Triangulate();
+            }
+
+            return IMeshToUnityMesh(poly, name, material, splitFaces);
+        }
+
+        private static GameObject IMeshToUnityMesh(this IMesh poly, string name, Material material, bool splitFaces = true) 
+        {
             int count = poly.VertexCount;
             if (count == 0)
             {

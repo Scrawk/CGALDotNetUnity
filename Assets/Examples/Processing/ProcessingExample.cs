@@ -65,7 +65,7 @@ namespace CGALDotNetUnity.Processing
 
         }
 
-        private GameObject CreateGameobject(string name, Polyhedron3 poly)
+        private GameObject CreateGameobject(string name, Polyhedron3<EIK> poly)
         {
             var go = poly.ToUnityMesh(name, material, false);
             return go;
