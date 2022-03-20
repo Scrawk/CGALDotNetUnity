@@ -8829,12 +8829,21 @@
             A tetrahedron is added to the polyhedral surface
             with its vertices initialized to p1, p2, p3, and p4.
             </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <param name="p3"></param>
+            <param name="p4"></param>
+            <returns>A edge in the tetrahdron.</returns>
         </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.MakeTriangle(CGALDotNetGeometry.Numerics.Point3d,CGALDotNetGeometry.Numerics.Point3d,CGALDotNetGeometry.Numerics.Point3d)">
             <summary>
             A triangle with border edges is added to the 
             polyhedral surface with its vertices initialized to p1, p2, and p3.
             </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <param name="p3"></param>
+            <returns>A edge in the triangle.</returns>
         </member>
         <member name="M:CGALDotNet.Polyhedra.Polyhedron3.CreateMesh(CGALDotNetGeometry.Numerics.Point3d[],System.Int32[],System.Int32[])">
             <summary>

@@ -50,6 +50,8 @@ namespace CGALDotNetUnity.Processing
 
         private double m_targetEdgeLen = 0.05;
 
+        private double m_simplifyAmount = 0.5;
+
         private SELECT_MODE m_selectionMode = SELECT_MODE.FACE;
 
         private MeshFace3? m_hitFace;
@@ -453,7 +455,18 @@ namespace CGALDotNetUnity.Processing
                     DestroyObject(m_object);
                     m_object = CreateGameobject(name, m_mesh);
                     CreateWireFrameObj();
+                }
+                else if (Input.GetKeyDown(KeyCode.F8))
+                {
+                    var processor = SurfaceSimplification<EIK>.Instance;
 
+                    processor.Simplify(m_mesh, m_simplifyAmount);
+
+                    var name = m_object.name;
+
+                    DestroyObject(m_object);
+                    m_object = CreateGameobject(name, m_mesh);
+                    CreateWireFrameObj();
                 }
 
             }
@@ -462,7 +475,7 @@ namespace CGALDotNetUnity.Processing
         protected void OnGUI()
         {
             int textLen = 1000;
-            int textHeight = 25;
+            int textHeight = 1000;
             GUI.color = Color.black;
 
             if (m_mesh == null)
@@ -496,7 +509,9 @@ namespace CGALDotNetUnity.Processing
                 GUI.Label(new Rect(10, 150, textLen, textHeight), string.Format("F4 to refine with factor {0}.", m_refineFactor));
                 GUI.Label(new Rect(10, 170, textLen, textHeight), string.Format("F5 perform isotropic remeshing with target edge length {0}.", m_targetEdgeLen));
                 GUI.Label(new Rect(10, 190, textLen, textHeight), string.Format("F6 to dected sharp edges with angle {0}.", m_featureAngle));
-                GUI.Label(new Rect(10, 210, textLen, textHeight), m_info);
+                GUI.Label(new Rect(10, 210, textLen, textHeight), string.Format("F7 to subdivide once."));
+                GUI.Label(new Rect(10, 230, textLen, textHeight), string.Format("F8 to simplify {0}.", m_simplifyAmount));
+                GUI.Label(new Rect(10, 250, textLen, textHeight), m_info);
             }
 
         }
