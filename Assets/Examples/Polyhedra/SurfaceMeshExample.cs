@@ -99,7 +99,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Cube", material, true);
+            return poly.ToUnityMesh("Cube", material, null, true);
         }
 
         private GameObject CreateUVSphere(Vector3 translation)
@@ -111,7 +111,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("UV sphere", material, true);
+            return poly.ToUnityMesh("UV sphere", material, null, true);
         }
 
         private GameObject CreateNormalizedCube(Vector3 translation)
@@ -123,7 +123,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Normalized cube", material, true);
+            return poly.ToUnityMesh("Normalized cube", material, null, true);
         }
 
         private GameObject CreateTetrahedron(Vector3 translation)
@@ -134,7 +134,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Tetrahedron", material, true);
+            return poly.ToUnityMesh("Tetrahedron", material, null, true);
         }
 
         private GameObject CreateIcosahedron(Vector3 translation)
@@ -145,7 +145,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Icosahedron", material, true);
+            return poly.ToUnityMesh("Icosahedron", material, null, true);
         }
 
         private GameObject CreateOctohedron(Vector3 translation)
@@ -156,7 +156,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Octahedron", material, true);
+            return poly.ToUnityMesh("Octahedron", material, null, true);
         }
 
         private GameObject CreateDodecahedron(Vector3 translation)
@@ -167,7 +167,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Dodecahedron", material, true);
+            return poly.ToUnityMesh("Dodecahedron", material, null, true);
         }
 
         private GameObject CreatePlane(Vector3 translation)
@@ -179,7 +179,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Plane", material, true);
+            return poly.ToUnityMesh("Plane", material, null, true);
         }
 
         private GameObject CreateTorus(Vector3 translation)
@@ -191,7 +191,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Torus", material, true);
+            return poly.ToUnityMesh("Torus", material, null, true);
         }
 
         private GameObject CreateCylinder(Vector3 translation)
@@ -203,7 +203,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Cylinder", material, true);
+            return poly.ToUnityMesh("Cylinder", material, null, true);
         }
 
         private GameObject CreateCone(Vector3 translation)
@@ -215,7 +215,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Cone", material, true);
+            return poly.ToUnityMesh("Cone", material, null, true);
         }
 
         private GameObject CreateCapsule(Vector3 translation)
@@ -227,7 +227,7 @@ namespace CGALDotNetUnity.Polyhedra
             if (drawSegments)
                 DrawSegments(poly);
 
-            return poly.ToUnityMesh("Capsule", material, true);
+            return poly.ToUnityMesh("Capsule", material, null, true);
         }
 
         /*

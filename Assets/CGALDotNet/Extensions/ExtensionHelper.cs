@@ -47,6 +47,18 @@ public static class ExtensionHelper
         return mesh;
     }
 
+    public static Mesh CreateMesh(Point3d[] points, Color[] colors, int[] indices)
+    {
+        Mesh mesh = new Mesh();
+        mesh.indexFormat = IndexFormat.UInt32;
+        mesh.SetVertices(points.ToUnityVector3());
+        mesh.SetColors(colors);
+        mesh.SetTriangles(indices, 0);
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+        return mesh;
+    }
+
     public static Mesh CreateMeshXZ(Point2d[] points, int[] indices)
     {
         Mesh mesh = new Mesh();

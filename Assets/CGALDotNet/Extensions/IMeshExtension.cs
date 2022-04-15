@@ -26,10 +26,10 @@ namespace CGALDotNet.Polyhedra
                 poly.Triangulate();
             }
 
-            return IMeshToUnityMesh(poly, name, material, splitFaces);
+            return IMeshToUnityMesh(poly, name, material, null, splitFaces);
         }
 
-        public static GameObject ToUnityMesh<K>(this SurfaceMesh3<K> poly, string name, Material material, bool splitFaces = true)
+        public static GameObject ToUnityMesh<K>(this SurfaceMesh3<K> poly, string name, Material material, Color[] colors = null, bool splitFaces = true)
             where K : CGALKernel, new()
         {
             if (!poly.IsValid)
@@ -44,10 +44,10 @@ namespace CGALDotNet.Polyhedra
                 poly.Triangulate();
             }
 
-            return IMeshToUnityMesh(poly, name, material, splitFaces);
+            return IMeshToUnityMesh(poly, name, material, colors, splitFaces);
         }
 
-        private static GameObject IMeshToUnityMesh(this IMesh poly, string name, Material material, bool splitFaces = true) 
+        private static GameObject IMeshToUnityMesh(this IMesh poly, string name, Material material, Color[] colors, bool splitFaces = true) 
         {
             int count = poly.VertexCount;
             if (count == 0)
@@ -72,7 +72,11 @@ namespace CGALDotNet.Polyhedra
             }
             else
             {
-                mesh = ExtensionHelper.CreateMesh(points, indices);
+                if(colors != null)
+                    mesh = ExtensionHelper.CreateMesh(points, colors, indices);
+                else
+                    mesh = ExtensionHelper.CreateMesh(points, indices);
+
             }
 
             return ExtensionHelper.CreateGameobject(name, mesh, Vector3.zero, material);
