@@ -114,19 +114,38 @@ public static class ExtensionHelper
 
         for (int i = 0; i < triangles; i++)
         {
-            var a = points[indices[i * 3 + 0]];
-            var b = points[indices[i * 3 + 1]];
-            var c = points[indices[i * 3 + 2]];
-
-            splitPoints[i * 3 + 0] = a;
-            splitPoints[i * 3 + 1] = b;
-            splitPoints[i * 3 + 2] = c;
+            splitPoints[i * 3 + 0] = points[indices[i * 3 + 0]];
+            splitPoints[i * 3 + 1] = points[indices[i * 3 + 1]];
+            splitPoints[i * 3 + 2] = points[indices[i * 3 + 2]];
 
             splitIndices[i * 3 + 0] = i * 3 + 0;
             splitIndices[i * 3 + 1] = i * 3 + 1;
             splitIndices[i * 3 + 2] = i * 3 + 2;
         }
+    }
 
+    public static void SplitFaces(Point3d[] points, Color[] colors, int[] indices, out Point3d[] splitPoints, out Color[] splitColors, out int[] splitIndices)
+    {
+        int triangles = indices.Length / 3;
+
+        splitPoints = new Point3d[triangles * 3];
+        splitColors = new Color[triangles * 3];
+        splitIndices = new int[triangles * 3];
+
+        for (int i = 0; i < triangles; i++)
+        {
+            splitPoints[i * 3 + 0] = points[indices[i * 3 + 0]];
+            splitPoints[i * 3 + 1] = points[indices[i * 3 + 1]];
+            splitPoints[i * 3 + 2] = points[indices[i * 3 + 2]];
+
+            splitColors[i * 3 + 0] = colors[indices[i * 3 + 0]];
+            splitColors[i * 3 + 1] = colors[indices[i * 3 + 1]];
+            splitColors[i * 3 + 2] = colors[indices[i * 3 + 2]];
+
+            splitIndices[i * 3 + 0] = i * 3 + 0;
+            splitIndices[i * 3 + 1] = i * 3 + 1;
+            splitIndices[i * 3 + 2] = i * 3 + 2;
+        }
     }
 
 }

@@ -10,8 +10,13 @@ namespace CGALDotNet.Polyhedra
 {
     public static class IMeshExtension
     {
-
         public static GameObject ToUnityMesh<K>(this Polyhedron3<K> poly, string name, Material material, bool splitFaces = true)
+                where K : CGALKernel, new()
+        {
+            return ToUnityMesh(poly, name, material, null, splitFaces);
+        }
+
+        public static GameObject ToUnityMesh<K>(this Polyhedron3<K> poly, string name, Material material, Color[] colors, bool splitFaces = true)
             where K : CGALKernel, new()
         {
             if (!poly.IsValid)
@@ -26,10 +31,16 @@ namespace CGALDotNet.Polyhedra
                 poly.Triangulate();
             }
 
-            return IMeshToUnityMesh(poly, name, material, null, splitFaces);
+            return IMeshToUnityMesh(poly, name, material, colors, splitFaces);
         }
 
-        public static GameObject ToUnityMesh<K>(this SurfaceMesh3<K> poly, string name, Material material, Color[] colors = null, bool splitFaces = true)
+        public static GameObject ToUnityMesh<K>(this SurfaceMesh3<K> poly, string name, Material material, bool splitFaces = true)
+        where K : CGALKernel, new()
+        {
+            return ToUnityMesh(poly, name, material, null, splitFaces);
+        }
+
+        public static GameObject ToUnityMesh<K>(this SurfaceMesh3<K> poly, string name, Material material, Color[] colors, bool splitFaces = true)
             where K : CGALKernel, new()
         {
             if (!poly.IsValid)
@@ -67,8 +78,16 @@ namespace CGALDotNet.Polyhedra
 
             if (splitFaces)
             {
-                ExtensionHelper.SplitFaces(points, indices, out Point3d[] splitPoints, out int[] spliIndices);
-                mesh = ExtensionHelper.CreateMesh(splitPoints, spliIndices);
+                if(colors != null)
+                {
+                    ExtensionHelper.SplitFaces(points, colors, indices, out Point3d[] splitPoints, out Color[] splitColors, out int[] spliIndices);
+                    mesh = ExtensionHelper.CreateMesh(splitPoints, splitColors, spliIndices);
+                }
+                else
+                {
+                    ExtensionHelper.SplitFaces(points, indices, out Point3d[] splitPoints, out int[] spliIndices);
+                    mesh = ExtensionHelper.CreateMesh(splitPoints, spliIndices);
+                }
             }
             else
             {
@@ -76,7 +95,6 @@ namespace CGALDotNet.Polyhedra
                     mesh = ExtensionHelper.CreateMesh(points, colors, indices);
                 else
                     mesh = ExtensionHelper.CreateMesh(points, indices);
-
             }
 
             return ExtensionHelper.CreateGameobject(name, mesh, Vector3.zero, material);
