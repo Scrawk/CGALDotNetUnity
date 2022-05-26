@@ -41,7 +41,7 @@ namespace CGALDotNetUnity.Processing
 
             m_mesh = new SurfaceMesh3<EEK>();
             m_mesh.ReadOFF(filename);
-            m_mesh.Rotate(Quaternion3d.RotateY(180));
+            m_mesh.Rotate(Quaternion3d.RotateY(new Degree(180)));
 
             var ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
 

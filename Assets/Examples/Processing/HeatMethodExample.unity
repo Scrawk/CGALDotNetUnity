@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: eb1e3f572cdf1054d9e4241650a261a6, type: 2}
-  file: bunny00.off
+  file: elephant.off
   wireframeColor: {r: 0, g: 0, b: 0, a: 0.57254905}
 --- !u!1 &762780502
 GameObject:
